@@ -1,0 +1,136 @@
+import { useEffect, useState } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { CalendarCheck, Download } from "lucide-react";
+import QRCodeSVG from "qrcode";
+
+const EventSuccess = () => {
+  const { slug } = useParams();
+  const navigate = useNavigate();
+  const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
+  const [eventCode, setEventCode] = useState<string>("");
+  const [eventName, setEventName] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    loadEventAndGenerateQR();
+  }, [slug]);
+
+  const loadEventAndGenerateQR = async () => {
+    try {
+      const { data: eventData, error } = await supabase
+        .from("events")
+        .select("name, slug, id")
+        .eq("slug", slug)
+        .single();
+
+      if (error) throw error;
+
+      setEventName(eventData.name);
+      
+      // Generate 6-digit event code from event ID
+      const code = Math.abs(parseInt(eventData.id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
+        .toString()
+        .padStart(6, "0");
+      setEventCode(code);
+
+      // Generate QR code
+      const eventUrl = `${window.location.origin}/event/${eventData.slug}?ref=qr`;
+      const qrUrl = await QRCodeSVG.toDataURL(eventUrl, {
+        width: 400,
+        margin: 2,
+        color: {
+          dark: "#000000",
+          light: "#FFFFFF",
+        },
+      });
+      setQrCodeUrl(qrUrl);
+    } catch (error) {
+      console.error("Error loading event:", error);
+      navigate("/dashboard");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDownload = () => {
+    const link = document.createElement("a");
+    link.href = qrCodeUrl;
+    link.download = `${slug}-qr-code.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
+      <Card className="max-w-md w-full shadow-2xl">
+        <CardContent className="pt-8 pb-6 px-6 space-y-6">
+          {/* Success Icon */}
+          <div className="flex justify-center">
+            <div className="bg-success/10 p-4 rounded-full">
+              <CalendarCheck className="h-12 w-12 text-success" />
+            </div>
+          </div>
+
+          {/* Title and Description */}
+          <div className="text-center space-y-2">
+            <h1 className="text-3xl font-bold">Event Created!</h1>
+            <p className="text-muted-foreground">
+              Your event is ready. Share the QR code or event code with attendees.
+            </p>
+          </div>
+
+          {/* Event Code */}
+          <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
+            <p className="text-sm text-muted-foreground">Event Code</p>
+            <p className="text-4xl font-bold tracking-wider">{eventCode}</p>
+          </div>
+
+          {/* QR Code */}
+          {qrCodeUrl && (
+            <div className="flex justify-center">
+              <div className="bg-white p-4 rounded-lg shadow-inner">
+                <img src={qrCodeUrl} alt="Event QR Code" className="w-64 h-64" />
+              </div>
+            </div>
+          )}
+
+          {/* Action Buttons */}
+          <div className="space-y-3">
+            <Button
+              onClick={handleDownload}
+              variant="outline"
+              className="w-full"
+              disabled={!qrCodeUrl}
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Download QR Code
+            </Button>
+
+            <Link to={`/event/${slug}`} className="block">
+              <Button className="w-full rounded-full h-12 text-base font-medium">
+                View Event Dashboard
+              </Button>
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default EventSuccess;

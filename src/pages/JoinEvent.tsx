@@ -1,0 +1,153 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+const JoinEvent = () => {
+  const [eventCode, setEventCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isOwnEvent, setIsOwnEvent] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  // Check if coming from dashboard, default to home
+  const fromDashboard = location.state?.fromDashboard;
+  const backPath = fromDashboard ? "/dashboard" : "/";
+  const backText = fromDashboard ? "Back to Dashboard" : "Back to Home";
+
+  const generateEventCode = (eventId: string): string => {
+    return Math.abs(parseInt(eventId.replace(/-/g, "").substring(0, 8), 16) % 1000000)
+      .toString()
+      .padStart(6, "0");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!eventCode.trim()) {
+      toast.error("Please enter an event code");
+      return;
+    }
+
+    setIsLoading(true);
+    setIsOwnEvent(false);
+    
+    try {
+      // Get current user
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+
+      // Fetch all events to find matching code
+      const { data: events, error } = await supabase
+        .from("events")
+        .select("id, slug, organizer_id");
+
+      if (error) throw error;
+
+      // Find event with matching code
+      const matchingEvent = events?.find(event => 
+        generateEventCode(event.id) === eventCode.trim()
+      );
+
+      if (!matchingEvent) {
+        toast.error("Event not found. Please check the code and try again.");
+        return;
+      }
+
+      // Check if user is the organizer
+      if (userId && matchingEvent.organizer_id === userId) {
+        setIsOwnEvent(true);
+        return;
+      }
+
+      // Navigate to event page
+      navigate(`/event/${matchingEvent.slug}`);
+    } catch (error) {
+      console.error("Error finding event:", error);
+      toast.error("Failed to find event. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-subtle flex flex-col items-center justify-center p-4">
+      <div className="w-full max-w-md mb-8">
+        <Link to={backPath} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+          <ArrowLeft className="h-4 w-4" />
+          {backText}
+        </Link>
+      </div>
+
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="text-center space-y-4">
+          <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
+            <QrCode className="h-8 w-8 text-primary-foreground" />
+          </div>
+          <CardTitle className="text-2xl">Join an Event</CardTitle>
+          <CardDescription className="text-base">
+            Enter your numeric event code to check in
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {isOwnEvent && (
+              <Alert className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  You are the host of this event. Visit your dashboard to see the event details.
+                </AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="eventCode">Event Code</Label>
+              <Input
+                id="eventCode"
+                type="text"
+                placeholder="Enter 6-digit code"
+                value={eventCode}
+                onChange={(e) => setEventCode(e.target.value)}
+                className="text-center text-lg tracking-wider"
+                maxLength={20}
+                disabled={isLoading}
+              />
+            </div>
+
+            <div className="pt-2">
+              {isOwnEvent ? (
+                <Link to="/dashboard">
+                  <Button
+                    type="button"
+                    className="w-full h-12 text-base font-medium rounded-full"
+                  >
+                    Go to Dashboard
+                  </Button>
+                </Link>
+              ) : (
+                <Button
+                  type="submit"
+                  className="w-full h-12 text-base font-medium rounded-full"
+                  disabled={isLoading}
+                >
+                  {isLoading ? "Finding Event..." : "Continue to Check-In"}
+                </Button>
+              )}
+            </div>
+
+            <p className="text-sm text-muted-foreground text-center">
+              You can also scan a QR code at the event entrance
+            </p>
+          </form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default JoinEvent;

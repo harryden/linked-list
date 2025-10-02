@@ -1,0 +1,41 @@
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Landing from "./pages/Landing";
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
+import CreateEvent from "./pages/CreateEvent";
+import EventPage from "./pages/EventPage";
+import EventSuccess from "./pages/EventSuccess";
+import Demo from "./pages/Demo";
+import JoinEvent from "./pages/JoinEvent";
+import NotFound from "./pages/NotFound";
+
+const queryClient = new QueryClient();
+
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/create-event" element={<CreateEvent />} />
+          <Route path="/join-event" element={<JoinEvent />} />
+          <Route path="/event/:slug" element={<EventPage />} />
+          <Route path="/event-success/:slug" element={<EventSuccess />} />
+          <Route path="/demo" element={<Demo />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
+
+export default App;
