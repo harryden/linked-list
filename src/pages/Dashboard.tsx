@@ -106,7 +106,7 @@ const Dashboard = () => {
       // Fetch the event by slug
       const { data: eventData, error: eventError } = await supabase
         .from("events")
-        .select("id")
+        .select("id, organizer_id")
         .eq("slug", eventSlug)
         .single();
 
@@ -121,6 +121,13 @@ const Dashboard = () => {
       if (!session) {
         toast.error("Please sign in to check in");
         navigate("/auth");
+        return;
+      }
+
+      // Check if the user is the organizer
+      if (session.user.id === eventData.organizer_id) {
+        toast.info("Hey, this is your own event! Share the QR code at the event to let others check in.");
+        navigate(`/event/${eventSlug}`);
         return;
       }
 
