@@ -10,7 +10,8 @@ import {
 } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { QrCode, Linkedin, Shield, Users, Lock } from "lucide-react";
+import { Linkedin, Shield, Users, Lock } from "lucide-react";
+import linkbackLogo from "@/assets/linkback-logo.png";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,9 +48,8 @@ const Auth = () => {
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <QrCode className="h-10 w-10 text-primary" />
-            <span className="text-3xl font-bold">LinkBack</span>
+        <Link to="/" className="inline-flex items-center mb-4">
+            <img src={linkbackLogo} alt="LinkBack" className="h-16 w-auto" />
           </Link>
           <p className="text-xl text-muted-foreground">
             Professional event check-in

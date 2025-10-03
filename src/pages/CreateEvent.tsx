@@ -11,9 +11,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { QrCode, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
+import linkbackLogo from "@/assets/linkback-logo.png";
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
@@ -85,9 +86,8 @@ const CreateEvent = () => {
     <div className="min-h-screen bg-gradient-subtle">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+        <Link to="/dashboard" className="flex items-center">
+            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
           </Link>
         </div>
       </header>

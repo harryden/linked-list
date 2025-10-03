@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { QrCode, ArrowRight, Check } from "lucide-react";
+import linkbackLogo from "@/assets/linkback-logo.png";
 
 const Demo = () => {
   return (
@@ -15,9 +16,8 @@ const Demo = () => {
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+        <Link to="/" className="flex items-center">
+            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
           </Link>
           <Link to="/auth">
             <Button variant="outline" className="rounded-full">

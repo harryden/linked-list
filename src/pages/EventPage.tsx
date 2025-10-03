@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
+import linkbackLogo from "@/assets/linkback-logo.png";
 
 interface Event {
   id: string;
@@ -311,12 +312,8 @@ const EventPage = () => {
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            to={currentUserId ? "/dashboard" : "/"}
-            className="flex items-center gap-2"
-          >
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+        <Link to={currentUserId ? "/dashboard" : "/"} className="flex items-center">
+            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
           </Link>
           {!currentUserId && (
             <Link to="/auth">
