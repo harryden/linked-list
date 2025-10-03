@@ -1,17 +1,25 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { useMyProfile } from "@/hooks/useSupabaseData";
 import { toast } from "sonner";
 import { QrCode } from "lucide-react";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
   const [status, setStatus] = useState<"loading" | "error">("loading");
+  const [userId, setUserId] = useState<string | null>(null);
+  const [hasHandledProfile, setHasHandledProfile] = useState(false);
+
+  const {
+    data: _profile,
+    isLoading: isProfileLoading,
+    error: profileError,
+  } = useMyProfile(userId ?? undefined);
 
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        // Check for error in URL params
         const params = new URLSearchParams(window.location.search);
         const error = params.get("error");
         const errorDescription = params.get("error_description");
@@ -24,7 +32,6 @@ const AuthCallback = () => {
           return;
         }
 
-        // Wait for session to be established
         const {
           data: { session },
           error: sessionError,
@@ -45,27 +52,10 @@ const AuthCallback = () => {
           return;
         }
 
-        // Verify profile exists
-        const { data: profile, error: profileError } = await supabase
-          .from("profiles")
-          .select("*")
-          .eq("id", session.user.id)
-          .single();
-
-        if (profileError && profileError.code !== "PGRST116") {
-          console.error("Profile fetch error:", profileError);
-          toast.error("Failed to load profile");
-          setStatus("error");
-          setTimeout(() => navigate("/auth"), 2000);
-          return;
-        }
-
-        // Success! Redirect to dashboard
-        toast.success("Successfully authenticated!");
-        navigate("/dashboard");
-      } catch (error: any) {
+        setUserId(session.user.id);
+      } catch (error: unknown) {
         console.error("Auth callback error:", error);
-        toast.error(error.message || "Authentication failed");
+        toast.error(error instanceof Error ? error.message : "Authentication failed");
         setStatus("error");
         setTimeout(() => navigate("/auth"), 2000);
       }
@@ -73,6 +63,25 @@ const AuthCallback = () => {
 
     handleAuthCallback();
   }, [navigate]);
+
+  useEffect(() => {
+    if (!userId || isProfileLoading || hasHandledProfile) {
+      return;
+    }
+
+    if (profileError) {
+      console.error("Profile fetch error:", profileError);
+      toast.error("Failed to load profile");
+      setStatus("error");
+      setHasHandledProfile(true);
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
+
+    toast.success("Successfully authenticated!");
+    setHasHandledProfile(true);
+    navigate("/dashboard");
+  }, [hasHandledProfile, isProfileLoading, navigate, profileError, userId]);
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">

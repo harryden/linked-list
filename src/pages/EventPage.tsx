@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -21,126 +21,111 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
-
-interface Event {
-  id: string;
-  name: string;
-  slug: string;
-  starts_at?: string;
-  linkedin_event_url?: string;
-  organizer_id: string;
-  location?: string;
-}
-
-interface Attendee {
-  id: string;
-  name: string;
-  headline?: string;
-  avatar_url?: string;
-  linkedin_id?: string;
-}
-
-interface Organizer {
-  id: string;
-  name: string;
-  headline?: string;
-  linkedin_id?: string;
-  avatar_url?: string;
-}
+import {
+  useAttendances,
+  useEvent,
+  useJoinEvent,
+  useMyProfile,
+  type ProfileRow,
+} from "@/hooks/useSupabaseData";
 
 const EventPage = () => {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [event, setEvent] = useState<Event | null>(null);
-  const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [isAttending, setIsAttending] = useState(false);
-  const [isOrganizer, setIsOrganizer] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [showQRDialog, setShowQRDialog] = useState(false);
-  const [eventCode, setEventCode] = useState<string>("");
-  const [organizer, setOrganizer] = useState<Organizer | null>(null);
 
   useEffect(() => {
-    loadEventData();
-  }, [slug]);
+    let isMounted = true;
 
-  const loadEventData = async () => {
-    try {
-      // Get current user
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const userId = session?.user?.id || null;
-      setCurrentUserId(userId);
+    const loadSession = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-      // Fetch event
-      const { data: eventData, error: eventError } = await supabase
-        .from("events")
-        .select("*")
-        .eq("slug", slug)
-        .single();
+        if (!isMounted) {
+          return;
+        }
 
-      if (eventError) throw eventError;
-      setEvent(eventData);
-      setIsOrganizer(userId === eventData.organizer_id);
-
-      // Fetch organizer profile
-      const { data: organizerData } = await supabase
-        .from("profiles")
-        .select("id, name, headline, linkedin_id, avatar_url")
-        .eq("id", eventData.organizer_id)
-        .single();
-
-      if (organizerData) {
-        setOrganizer(organizerData);
-      }
-
-      // Generate 6-digit event code from event ID
-      const code = Math.abs(
-        parseInt(eventData.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
-      )
-        .toString()
-        .padStart(6, "0");
-      setEventCode(code);
-
-      // Check if user is attending
-      if (userId) {
-        const { data: attendanceData } = await supabase
-          .from("attendances")
-          .select("id")
-          .eq("event_id", eventData.id)
-          .eq("user_id", userId)
-          .single();
-
-        setIsAttending(!!attendanceData);
-
-        // If attending or organizer, load attendee list
-        if (attendanceData || userId === eventData.organizer_id) {
-          await loadAttendees(eventData.id);
+        setCurrentUserId(session?.user?.id ?? null);
+      } catch (error) {
+        console.error("Error loading session:", error);
+      } finally {
+        if (isMounted) {
+          setIsSessionLoading(false);
         }
       }
-    } catch (error: any) {
-      console.error("Error loading event:", error);
+    };
+
+    loadSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const eventIdentifier = slug ? { slug } : undefined;
+  const {
+    data: event,
+    isLoading: isEventLoading,
+    error: eventError,
+  } = useEvent(eventIdentifier);
+
+  useEffect(() => {
+    if (eventError) {
+      console.error("Error loading event:", eventError);
       toast.error("Failed to load event");
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [eventError]);
 
-  const loadAttendees = async (eventId: string) => {
-    const { data: attendancesData } = await supabase
-      .from("attendances")
-      .select("user_id, profiles(*)")
-      .eq("event_id", eventId);
+  const { data: organizerProfile } = useMyProfile(event?.organizer_id);
 
-    if (attendancesData) {
-      const attendeesList = attendancesData
-        .map((a: any) => a.profiles)
-        .filter(Boolean);
-      setAttendees(attendeesList);
+  const {
+    data: userAttendance,
+    isLoading: isUserAttendanceLoading,
+  } = useAttendances({
+    eventId: event?.id,
+    userId: currentUserId ?? undefined,
+    enabled: Boolean(event?.id && currentUserId),
+  });
+
+  const isOrganizer = Boolean(
+    currentUserId && event && currentUserId === event.organizer_id,
+  );
+
+  const isAttending = (userAttendance?.length ?? 0) > 0;
+
+  const canViewAttendees = Boolean(event && (isOrganizer || isAttending));
+
+  const { data: attendeeRecords, isLoading: isAttendeesLoading } = useAttendances({
+    eventId: event?.id,
+    includeProfiles: true,
+    enabled: canViewAttendees,
+  });
+
+  const attendees = useMemo(() => {
+    return (attendeeRecords ?? [])
+      .map((record) => record.profiles)
+      .filter(Boolean) as ProfileRow[];
+  }, [attendeeRecords]);
+
+  const eventCode = useMemo(() => {
+    if (!event?.id) {
+      return "";
     }
-  };
+
+    return Math.abs(
+      parseInt(event.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
+    )
+      .toString()
+      .padStart(6, "0");
+  }, [event?.id]);
+
+  const isLoading = isSessionLoading || isEventLoading || isUserAttendanceLoading;
+
+  const joinEvent = useJoinEvent();
 
   const handleCheckIn = async () => {
     if (!currentUserId) {
@@ -148,28 +133,32 @@ const EventPage = () => {
       return;
     }
 
+    if (!event?.id) {
+      toast.error("Event not found");
+      return;
+    }
+
     try {
-      const { error } = await supabase.from("attendances").insert({
-        event_id: event!.id,
-        user_id: currentUserId,
+      await joinEvent.mutateAsync({
+        eventId: event.id,
+        userId: currentUserId,
         source: "manual",
       });
 
-      if (error) {
-        if (error.code === "23505") {
-          // Unique constraint violation
-          toast.info("You're already checked in!");
-        } else {
-          throw error;
-        }
-      } else {
-        toast.success("Checked in successfully!");
-        setIsAttending(true);
-        await loadAttendees(event!.id);
+      toast.success("Checked in successfully!");
+    } catch (error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as { code?: string }).code === "23505"
+      ) {
+        toast.info("You're already checked in!");
+        return;
       }
-    } catch (error: any) {
+
+      console.error("Failed to check in:", error);
       toast.error("Failed to check in");
-      console.error(error);
     }
   };
 
@@ -204,10 +193,8 @@ const EventPage = () => {
     );
   }
 
-  const canViewAttendees = isAttending || isOrganizer;
-
   // Show centered check-in card for non-attendees
-  if (!currentUserId || (!isAttending && !isOrganizer)) {
+  if (!currentUserId || !canViewAttendees) {
     return (
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
         <Card className="w-full max-w-md shadow-2xl">
@@ -244,10 +231,10 @@ const EventPage = () => {
                     <span>{event.location}</span>
                   </div>
                 )}
-                {organizer && (
+                {organizerProfile && (
                   <div className="flex items-center justify-center gap-2">
                     <Users className="h-4 w-4" />
-                    <span>Hosted by {organizer.name}</span>
+                    <span>Hosted by {organizerProfile.name}</span>
                   </div>
                 )}
               </div>
@@ -260,9 +247,12 @@ const EventPage = () => {
                   onClick={handleCheckIn}
                   size="lg"
                   className="w-full rounded-full h-12 text-base font-medium flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white"
+                  disabled={joinEvent.isPending}
                 >
                   <Linkedin className="h-5 w-5" />
-                  Check In with LinkedIn
+                  {joinEvent.isPending
+                    ? "Checking In..."
+                    : "Check In with LinkedIn"}
                 </Button>
 
                 <p className="text-xs text-center text-muted-foreground px-4">
@@ -371,33 +361,46 @@ const EventPage = () => {
                       <span>{event.location}</span>
                     </div>
                   )}
-                  {organizer && (
+                  {organizerProfile && (
                     <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
                     <Avatar className="h-12 w-12">
-                      <AvatarImage src={organizer.avatar_url} />
+                      <AvatarImage src={organizerProfile.avatar_url} />
                       <AvatarFallback className="bg-primary text-primary-foreground">
-                        {organizer.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        {organizerProfile.name
+                          .split(" ")
+                          .map((n) => n[0])
+                          .join("")
+                          .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-muted-foreground mb-0.5">Hosted by</p>
-                      <p className="font-semibold text-foreground">{organizer.name}</p>
-                      {organizer.headline && (
-                        <p className="text-sm text-muted-foreground truncate">{organizer.headline}</p>
+                      <p className="font-semibold text-foreground">
+                        {organizerProfile.name}
+                      </p>
+                      {organizerProfile.headline && (
+                        <p className="text-sm text-muted-foreground truncate">
+                          {organizerProfile.headline}
+                        </p>
                       )}
                     </div>
                     <Button 
                       className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white"
                       onClick={() => {
-                        if (organizer.linkedin_id) {
-                          window.open(`https://www.linkedin.com/in/${organizer.linkedin_id}`, '_blank');
+                        if (organizerProfile.linkedin_id) {
+                          window.open(
+                            `https://www.linkedin.com/in/${organizerProfile.linkedin_id}`,
+                            "_blank",
+                          );
                         } else {
                           toast.info("LinkedIn profile not available");
                         }
                       }}
                     >
                       <Linkedin className="h-4 w-4" />
-                      {currentUserId === organizer.id ? 'View Your Profile' : 'View Profile'}
+                      {currentUserId === organizerProfile.id
+                        ? "View Your Profile"
+                        : "View Profile"}
                     </Button>
                     </div>
                   )}
@@ -432,8 +435,11 @@ const EventPage = () => {
                   onClick={handleCheckIn}
                   size="lg"
                   className="w-full rounded-full h-12 text-base font-medium"
+                  disabled={joinEvent.isPending}
                 >
-                  Check In to This Event
+                  {joinEvent.isPending
+                    ? "Checking In..."
+                    : "Check In to This Event"}
                 </Button>
               )}
 
@@ -464,7 +470,11 @@ const EventPage = () => {
                 </div>
               </CardHeader>
               <CardContent>
-                {attendees.length === 0 ? (
+                {isAttendeesLoading ? (
+                  <p className="text-center text-muted-foreground py-8">
+                    Loading attendees...
+                  </p>
+                ) : attendees.length === 0 ? (
                   <p className="text-center text-muted-foreground py-8">
                     {isOrganizer
                       ? "No attendees yet. Share your QR code to get people to check in!"
@@ -478,7 +488,7 @@ const EventPage = () => {
                         className="flex items-center gap-4 py-4 border-b last:border-0"
                       >
                         <Avatar className="h-14 w-14">
-                          <AvatarImage src={attendee.avatar_url} />
+                          <AvatarImage src={attendee.avatar_url ?? undefined} />
                           <AvatarFallback className="bg-primary text-primary-foreground text-lg">
                             {attendee.name
                               .split(" ")
@@ -511,7 +521,9 @@ const EventPage = () => {
                           }}
                         >
                           <Linkedin className="h-4 w-4" />
-                          {currentUserId === attendee.id ? 'View Your Profile' : 'View Profile'}
+                          {currentUserId === attendee.id
+                            ? "View Your Profile"
+                            : "View Profile"}
                         </Button>
                       </div>
                     ))}

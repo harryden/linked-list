@@ -14,6 +14,7 @@ import {
 import { QrCode, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
+import { useCreateEvent } from "@/hooks/useSupabaseData";
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
@@ -23,6 +24,7 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const routerLocation = useLocation();
+  const createEvent = useCreateEvent();
 
   // Check if coming from dashboard, default to home
   const fromDashboard = routerLocation.state?.fromDashboard;
@@ -57,20 +59,14 @@ const CreateEvent = () => {
 
       const slug = generateSlug(name);
 
-      const { data, error } = await supabase
-        .from("events")
-        .insert({
-          name,
-          slug,
-          location: eventLocation || null,
-          starts_at: startsAt || null,
-          linkedin_event_url: linkedinUrl || null,
-          organizer_id: session.user.id,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      await createEvent.mutateAsync({
+        name,
+        slug,
+        location: eventLocation || null,
+        starts_at: startsAt || null,
+        linkedin_event_url: linkedinUrl || null,
+        organizer_id: session.user.id,
+      });
 
       toast.success("Event created successfully!");
       navigate(`/event-success/${slug}`);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -21,79 +21,85 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { QRScanner } from "@/components/QRScanner";
-
-interface Profile {
-  id: string;
-  name: string;
-  role: string;
-  headline?: string;
-  avatar_url?: string;
-}
-
-interface Event {
-  id: string;
-  name: string;
-  slug: string;
-  starts_at?: string;
-  created_at: string;
-}
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  fetchEventWithClient,
+  useAttendances,
+  useEvents,
+  useJoinEvent,
+  useMyProfile,
+  type EventRow,
+} from "@/hooks/useSupabaseData";
 
 const Dashboard = () => {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [events, setEvents] = useState<Event[]>([]);
-  const [attendedEvents, setAttendedEvents] = useState<Event[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [showScanner, setShowScanner] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const joinEvent = useJoinEvent();
 
   useEffect(() => {
-    checkAuth();
-  }, []);
+    let isMounted = true;
 
-  const checkAuth = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+    const loadSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
 
-    if (!session) {
-      navigate("/auth");
-      return;
-    }
-
-    // Fetch profile
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("id", session.user.id)
-      .single();
-
-    if (profileData) {
-      setProfile(profileData);
-
-      // Fetch user's created events
-      const { data: eventsData } = await supabase
-        .from("events")
-        .select("*")
-        .eq("organizer_id", session.user.id)
-        .order("created_at", { ascending: false });
-
-      if (eventsData) setEvents(eventsData);
-
-      // Fetch attended events
-      const { data: attendancesData } = await supabase
-        .from("attendances")
-        .select("event_id, events(*)")
-        .eq("user_id", session.user.id);
-
-      if (attendancesData) {
-        setAttendedEvents(
-          attendancesData.map((a: any) => a.events).filter(Boolean),
-        );
+      if (!isMounted) {
+        return;
       }
-    }
 
-    setIsLoading(false);
-  };
+      if (!session) {
+        setIsSessionLoading(false);
+        navigate("/auth");
+        return;
+      }
+
+      setUserId(session.user.id);
+      setIsSessionLoading(false);
+    };
+
+    loadSession();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [navigate]);
+
+  const { data: profile, isLoading: isProfileLoading } = useMyProfile(
+    userId ?? undefined,
+  );
+
+  const {
+    data: organizerEvents,
+    isLoading: isOrganizerEventsLoading,
+  } = useEvents({
+    organizerId: userId ?? undefined,
+    enabled: Boolean(userId),
+  });
+
+  const {
+    data: attendanceRecords,
+    isLoading: isAttendanceLoading,
+  } = useAttendances({
+    userId: userId ?? undefined,
+    includeEvents: true,
+    enabled: Boolean(userId),
+  });
+
+  const events = organizerEvents ?? [];
+
+  const attendedEvents = useMemo(() => {
+    return (attendanceRecords ?? [])
+      .map((attendance) => attendance.events)
+      .filter(Boolean) as EventRow[];
+  }, [attendanceRecords]);
+
+  const isLoading =
+    isSessionLoading ||
+    (Boolean(userId) && (isProfileLoading || isOrganizerEventsLoading || isAttendanceLoading));
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -103,14 +109,11 @@ const Dashboard = () => {
 
   const handleQRScan = async (eventSlug: string) => {
     try {
-      // Fetch the event by slug
-      const { data: eventData, error: eventError } = await supabase
-        .from("events")
-        .select("id, organizer_id")
-        .eq("slug", eventSlug)
-        .single();
+      const eventData = await fetchEventWithClient(queryClient, {
+        slug: eventSlug,
+      });
 
-      if (eventError || !eventData) {
+      if (!eventData) {
         toast.error("Event not found");
         return;
       }
@@ -118,43 +121,44 @@ const Dashboard = () => {
       const {
         data: { session },
       } = await supabase.auth.getSession();
+
       if (!session) {
         toast.error("Please sign in to check in");
         navigate("/auth");
         return;
       }
 
-      // Check if the user is the organizer
       if (session.user.id === eventData.organizer_id) {
-        toast.info("Hey, this is your own event! Share the QR code at the event to let others check in.");
+        toast.info(
+          "Hey, this is your own event! Share the QR code at the event to let others check in.",
+        );
+        setShowScanner(false);
         navigate(`/event/${eventSlug}`);
         return;
       }
 
-      // Check in to the event
-      const { error: attendanceError } = await supabase
-        .from("attendances")
-        .insert({
-          event_id: eventData.id,
-          user_id: session.user.id,
-          source: "qr",
-        });
+      await joinEvent.mutateAsync({
+        eventId: eventData.id,
+        userId: session.user.id,
+        source: "qr",
+      });
 
-      if (attendanceError) {
-        if (attendanceError.code === "23505") {
-          toast.info("You're already checked in to this event!");
-        } else {
-          throw attendanceError;
-        }
-      } else {
-        toast.success("Checked in successfully!");
-        // Refresh the attended events list
-        checkAuth();
-      }
-
-      // Navigate to the event page
+      toast.success("Checked in successfully!");
+      setShowScanner(false);
       navigate(`/event/${eventSlug}`);
     } catch (error) {
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        (error as { code?: string }).code === "23505"
+      ) {
+        toast.info("You're already checked in to this event!");
+        setShowScanner(false);
+        navigate(`/event/${eventSlug}`);
+        return;
+      }
+
       console.error("Error checking in:", error);
       toast.error("Failed to check in");
     }

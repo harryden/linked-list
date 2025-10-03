@@ -14,6 +14,8 @@ import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useQueryClient } from "@tanstack/react-query";
+import { fetchEventsWithClient } from "@/hooks/useSupabaseData";
 
 const JoinEvent = () => {
   const [eventCode, setEventCode] = useState("");
@@ -21,6 +23,7 @@ const JoinEvent = () => {
   const [isOwnEvent, setIsOwnEvent] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const queryClient = useQueryClient();
 
   // Check if coming from dashboard, default to home
   const fromDashboard = location.state?.fromDashboard;
@@ -53,11 +56,7 @@ const JoinEvent = () => {
       const userId = session?.user?.id;
 
       // Fetch all events to find matching code
-      const { data: events, error } = await supabase
-        .from("events")
-        .select("id, slug, organizer_id");
-
-      if (error) throw error;
+      const events = await fetchEventsWithClient(queryClient);
 
       // Find event with matching code
       const matchingEvent = events?.find(
