@@ -433,7 +433,7 @@ const EventPage = () => {
                 <div className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-muted-foreground" />
                   <span className="text-lg font-medium">
-                    {attendees.length} Attendees
+                    {attendees.length} {attendees.length === 1 ? 'Attendee' : 'Attendees'}
                   </span>
                 </div>
               </CardHeader>
