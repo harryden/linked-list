@@ -86,16 +86,26 @@ const EventHeader = ({
   return (
     <div className="space-y-4">
       <div>
-        <CardTitle className="text-4xl mb-2">{event.name}</CardTitle>
-            <div className="flex flex-col gap-2 text-muted-foreground">
-              {eventCode && (
-                <div className="flex items-center gap-2">
-                  <QrCode className="h-4 w-4" />
-                  <span className="font-mono font-semibold text-foreground">
-                    {TEXT.common.labels.eventCode}: {eventCode}
-                  </span>
-                </div>
-              )}
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <CardTitle className="text-4xl mb-2 flex-1 min-w-[200px]">
+            {event.name}
+          </CardTitle>
+          {isAttending && (
+            <div className="inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full">
+              <CheckCircle2 className="h-5 w-5" />
+              <span className="font-medium">{TEXT.event.header.checkedIn}</span>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col gap-2 text-muted-foreground">
+          {eventCode && (
+            <div className="flex items-center gap-2">
+              <QrCode className="h-4 w-4" />
+              <span className="font-mono font-semibold text-foreground">
+                {TEXT.common.labels.eventCode}: {eventCode}
+              </span>
+            </div>
+          )}
           {event.starts_at && (
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
@@ -114,23 +124,23 @@ const EventHeader = ({
               <span>{event.location}</span>
             </div>
           )}
-              {organizer && (
-                <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
-                  <Avatar className="h-12 w-12">
-                    <AvatarImage src={organizer.avatar_url ?? undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground">
+          {organizer && (
+            <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
+              <Avatar className="h-12 w-12">
+                <AvatarImage src={organizer.avatar_url ?? undefined} />
+                <AvatarFallback className="bg-primary text-primary-foreground">
                   {hostInitials}
                 </AvatarFallback>
               </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm text-muted-foreground mb-0.5">
-                      {TEXT.event.header.hostedBy}
-                    </p>
-                    <p className="font-semibold text-foreground">{organizer.name}</p>
-                    {organizer.headline && (
-                      <p className="text-sm text-muted-foreground truncate">
-                        {organizer.headline}
-                      </p>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm text-muted-foreground mb-0.5">
+                  {TEXT.event.header.hostedBy}
+                </p>
+                <p className="font-semibold text-foreground">{organizer.name}</p>
+                {organizer.headline && (
+                  <p className="text-sm text-muted-foreground truncate">
+                    {organizer.headline}
+                  </p>
                 )}
               </div>
               <Button
@@ -168,12 +178,6 @@ const EventHeader = ({
         </Button>
       )}
 
-      {isAttending && (
-        <div className="flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full w-fit">
-          <CheckCircle2 className="h-5 w-5" />
-          <span className="font-medium">{TEXT.event.header.checkedIn}</span>
-        </div>
-      )}
     </div>
   );
 };
