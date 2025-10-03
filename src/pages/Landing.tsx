@@ -1,10 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { QrCode, LogOut } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { TEXT } from "@/constants/text";
+import linkbackLogo from "@/assets/linkback-logo.png";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
 import HowItWorks from "./landing/components/HowItWorks";
@@ -41,8 +42,7 @@ const Landing = () => {
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
+            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
           </div>
           <div className="flex items-center gap-3">
             {user ? (
