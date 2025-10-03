@@ -8,7 +8,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card";
-import { QrCode, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
 import EventHeader from "@/pages/event/components/EventHeader";
@@ -22,6 +22,7 @@ import {
   type ProfileRow,
 } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
+import linkbackLogo from "@/assets/linkback-logo.png";
 
 const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -238,8 +239,7 @@ const EventPage = () => {
             to={currentUserId ? "/dashboard" : "/"}
             className="flex items-center gap-2"
           >
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
+            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
           </Link>
           {!currentUserId && (
             <Link to="/auth">
