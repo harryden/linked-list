@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, QrCode, Users } from "lucide-react";
+import { TEXT } from "@/constants/text";
 import EmptyState from "./EmptyState";
 
 interface MinimalEvent {
@@ -19,7 +20,7 @@ interface UpcomingSectionProps {
 
 const UpcomingSection = ({ events, isLoading, onScan }: UpcomingSectionProps) => (
   <section>
-    <h2 className="text-2xl font-semibold mb-4">Events You've Attended</h2>
+    <h2 className="text-2xl font-semibold mb-4">{TEXT.dashboard.upcoming.title}</h2>
 
     {isLoading ? (
       <Card>
@@ -27,23 +28,23 @@ const UpcomingSection = ({ events, isLoading, onScan }: UpcomingSectionProps) =>
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
           </div>
-          <p className="text-muted-foreground">Loading your upcoming events...</p>
+          <p className="text-muted-foreground">{TEXT.dashboard.upcoming.loading}</p>
         </CardContent>
       </Card>
     ) : events.length === 0 ? (
       <EmptyState
         icon={<QrCode className="h-12 w-12 text-muted-foreground" />}
-        title="No check-ins yet."
-        description="Scan a QR or enter a 6-digit code to get started."
+        title={TEXT.dashboard.upcoming.emptyTitle}
+        description={TEXT.dashboard.upcoming.emptyDescription}
         actions={
           <>
             <Button onClick={onScan} className="rounded-full">
               <Camera className="h-4 w-4 mr-2" />
-              Scan QR Code
+              {TEXT.common.buttons.scanQrCode}
             </Button>
             <Link to="/join-event" state={{ fromDashboard: true }}>
               <Button variant="outline" className="rounded-full">
-                Join by Code
+                {TEXT.common.buttons.joinByCode}
               </Button>
             </Link>
           </>
@@ -59,13 +60,13 @@ const UpcomingSection = ({ events, isLoading, onScan }: UpcomingSectionProps) =>
                 <CardDescription>
                   {event.starts_at
                     ? new Date(event.starts_at).toLocaleDateString()
-                    : "Date not set"}
+                    : TEXT.common.labels.dateNotSet}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2 text-sm text-primary">
                   <Users className="h-4 w-4" />
-                  <span>View attendee list →</span>
+                  <span>{TEXT.dashboard.upcoming.viewAttendeeList}</span>
                 </div>
               </CardContent>
             </Card>

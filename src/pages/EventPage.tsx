@@ -14,7 +14,14 @@ import { QRCodeDialog } from "@/components/QRCodeDialog";
 import EventHeader from "@/pages/event/components/EventHeader";
 import AttendButton from "@/pages/event/components/AttendButton";
 import AttendeeList from "@/pages/event/components/AttendeeList";
-import { useAttendances, useEvent, useJoinEvent, useMyProfile } from "@/hooks/useSupabaseData";
+import {
+  useAttendances,
+  useEvent,
+  useJoinEvent,
+  useMyProfile,
+  type ProfileRow,
+} from "@/hooks/useSupabaseData";
+import { TEXT } from "@/constants/text";
 
 const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -63,7 +70,7 @@ const EventPage = () => {
   useEffect(() => {
     if (eventError) {
       console.error("Error loading event:", eventError);
-      toast.error("Failed to load event");
+      toast.error(TEXT.event.toast.loadFailure);
     }
   }, [eventError]);
 
@@ -121,7 +128,7 @@ const EventPage = () => {
     }
 
     if (!event?.id) {
-      toast.error("Event not found");
+      toast.error(TEXT.event.toast.eventNotFound);
       return;
     }
 
@@ -132,7 +139,7 @@ const EventPage = () => {
         source: "manual",
       });
 
-      toast.success("Checked in successfully!");
+      toast.success(TEXT.event.toast.checkInSuccess);
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -140,12 +147,12 @@ const EventPage = () => {
         "code" in error &&
         (error as { code?: string }).code === "23505"
       ) {
-        toast.info("You're already checked in!");
+        toast.info(TEXT.event.toast.alreadyCheckedIn);
         return;
       }
 
       console.error("Failed to check in:", error);
-      toast.error("Failed to check in");
+      toast.error(TEXT.event.toast.checkInFailure);
     }
   };
 
@@ -154,7 +161,7 @@ const EventPage = () => {
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading event...</p>
+          <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
         </div>
       </div>
     );
@@ -165,14 +172,12 @@ const EventPage = () => {
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
         <Card className="max-w-md">
           <CardHeader>
-            <CardTitle>Event Not Found</CardTitle>
-            <CardDescription>
-              The event you're looking for doesn't exist.
-            </CardDescription>
+            <CardTitle>{TEXT.event.page.notFoundTitle}</CardTitle>
+            <CardDescription>{TEXT.event.page.notFoundDescription}</CardDescription>
           </CardHeader>
           <CardContent>
             <Link to="/">
-              <Button className="w-full">Go Home</Button>
+              <Button className="w-full">{TEXT.event.page.homeButton}</Button>
             </Link>
           </CardContent>
         </Card>
@@ -205,8 +210,7 @@ const EventPage = () => {
                 mode="linkedin"
               />
               <p className="text-xs text-center text-muted-foreground px-4">
-                By checking in, you agree to share your LinkedIn profile
-                information with event attendees for networking purposes.
+                {TEXT.event.page.guestNotice}
               </p>
             </div>
 
@@ -216,7 +220,7 @@ const EventPage = () => {
                   to="/dashboard"
                   className="text-sm text-primary hover:underline"
                 >
-                  View your past events
+                  {TEXT.common.links.viewPastEvents}
                 </Link>
               </div>
             )}
@@ -235,12 +239,12 @@ const EventPage = () => {
             className="flex items-center gap-2"
           >
             <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+            <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
           </Link>
           {!currentUserId && (
             <Link to="/auth">
               <Button variant="outline" className="rounded-full">
-                Sign In
+                {TEXT.common.buttons.signIn}
               </Button>
             </Link>
           )}
@@ -253,7 +257,7 @@ const EventPage = () => {
             <Link to="/dashboard">
               <Button variant="ghost">
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Dashboard
+                {TEXT.common.links.backToDashboard}
               </Button>
             </Link>
           )}

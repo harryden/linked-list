@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { QrCode } from "lucide-react";
+import { TEXT } from "@/constants/text";
 
 const DemoHeader = () => (
   <>
@@ -8,11 +9,11 @@ const DemoHeader = () => (
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <QrCode className="h-8 w-8 text-primary" />
-          <span className="text-2xl font-semibold">LinkBack</span>
+          <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
         </Link>
         <Link to="/auth">
           <Button variant="outline" className="rounded-full">
-            Get Started
+            {TEXT.common.buttons.getStarted}
           </Button>
         </Link>
       </div>
@@ -20,9 +21,9 @@ const DemoHeader = () => (
 
     <div className="container mx-auto px-4 pt-12">
       <div className="max-w-4xl mx-auto text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold">See LinkBack in Action</h1>
+        <h1 className="text-4xl md:text-5xl font-bold">{TEXT.demo.header.title}</h1>
         <p className="text-xl text-muted-foreground">
-          Experience how easy event check-ins can be
+          {TEXT.demo.header.subtitle}
         </p>
       </div>
     </div>

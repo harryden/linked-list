@@ -10,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
+import { TEXT } from "@/constants/text";
 
 interface CreateEventFormProps {
   name: string;
@@ -38,19 +39,17 @@ const CreateEventForm = ({
 }: CreateEventFormProps) => (
   <Card className="shadow-xl">
     <CardHeader>
-      <CardTitle className="text-3xl">Create New Event</CardTitle>
-      <CardDescription>
-        Fill in the details below to generate your event QR code
-      </CardDescription>
+      <CardTitle className="text-3xl">{TEXT.createEvent.form.title}</CardTitle>
+      <CardDescription>{TEXT.createEvent.form.description}</CardDescription>
     </CardHeader>
     <CardContent>
       <form onSubmit={onSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name">Event Name *</Label>
+          <Label htmlFor="name">{TEXT.createEvent.form.fields.nameLabel}</Label>
           <Input
             id="name"
             type="text"
-            placeholder="Summer Tech Meetup 2025"
+            placeholder={TEXT.createEvent.form.fields.namePlaceholder}
             value={name}
             onChange={(event) => onNameChange(event.target.value)}
             required
@@ -58,17 +57,17 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="location">{TEXT.createEvent.form.fields.locationLabel}</Label>
           <LocationAutocomplete
             id="location"
             value={location}
             onChange={onLocationChange}
-            placeholder="TechHub Conference Center, San Francisco"
+            placeholder={TEXT.createEvent.form.fields.locationPlaceholder}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="starts_at">Start Date & Time</Label>
+          <Label htmlFor="starts_at">{TEXT.createEvent.form.fields.startsAtLabel}</Label>
           <Input
             id="starts_at"
             type="datetime-local"
@@ -78,11 +77,13 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="linkedin_url">LinkedIn Event URL (optional)</Label>
+          <Label htmlFor="linkedin_url">
+            {TEXT.createEvent.form.fields.linkedinUrlLabel}
+          </Label>
           <Input
             id="linkedin_url"
             type="url"
-            placeholder="https://www.linkedin.com/events/..."
+            placeholder={TEXT.createEvent.form.fields.linkedinUrlPlaceholder}
             value={linkedinUrl}
             onChange={(event) => onLinkedinUrlChange(event.target.value)}
           />
@@ -93,7 +94,9 @@ const CreateEventForm = ({
           className="w-full rounded-full h-12 text-base font-medium"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Creating Event..." : "Create Event & Generate QR Code"}
+          {isSubmitting
+            ? TEXT.createEvent.form.submitLoading
+            : TEXT.createEvent.form.submitIdle}
         </Button>
       </form>
     </CardContent>

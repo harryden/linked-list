@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { QrCode, LogOut } from "lucide-react";
+import { TEXT } from "@/constants/text";
 
 interface DashboardHeaderProps {
   name?: string | null;
@@ -17,13 +18,17 @@ const DashboardHeader = ({ name, headline, avatarUrl, onSignOut }: DashboardHead
     .join("")
     .toUpperCase();
 
+  const welcomeMessage = name
+    ? `${TEXT.dashboard.header.welcomePrefix} ${name}!`
+    : TEXT.dashboard.header.welcomePrefix;
+
   return (
     <>
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
             <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+            <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
           </Link>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
@@ -51,9 +56,9 @@ const DashboardHeader = ({ name, headline, avatarUrl, onSignOut }: DashboardHead
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold mb-2">Welcome back, {name}!</h1>
+          <h1 className="text-4xl font-bold mb-2">{welcomeMessage}</h1>
           <p className="text-muted-foreground">
-            Host events, check in to events, and connect with attendees.
+            {TEXT.dashboard.header.tagline}
           </p>
         </div>
       </div>

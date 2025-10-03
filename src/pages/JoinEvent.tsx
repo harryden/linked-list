@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchEventsWithClient } from "@/hooks/useSupabaseData";
+import { TEXT } from "@/constants/text";
 
 const JoinEvent = () => {
   const [eventCode, setEventCode] = useState("");
@@ -28,7 +29,9 @@ const JoinEvent = () => {
   // Check if coming from dashboard, default to home
   const fromDashboard = location.state?.fromDashboard;
   const backPath = fromDashboard ? "/dashboard" : "/";
-  const backText = fromDashboard ? "Back to Dashboard" : "Back to Home";
+  const backText = fromDashboard
+    ? TEXT.common.links.backToDashboard
+    : TEXT.common.links.backToHome;
 
   const generateEventCode = (eventId: string): string => {
     return Math.abs(
@@ -41,7 +44,7 @@ const JoinEvent = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventCode.trim()) {
-      toast.error("Please enter an event code");
+      toast.error(TEXT.joinEvent.toast.missingCode);
       return;
     }
 
@@ -64,7 +67,7 @@ const JoinEvent = () => {
       );
 
       if (!matchingEvent) {
-        toast.error("Event not found. Please check the code and try again.");
+        toast.error(TEXT.joinEvent.toast.notFound);
         return;
       }
 
@@ -78,7 +81,7 @@ const JoinEvent = () => {
       navigate(`/event/${matchingEvent.slug}`);
     } catch (error) {
       console.error("Error finding event:", error);
-      toast.error("Failed to find event. Please try again.");
+      toast.error(TEXT.joinEvent.toast.failure);
     } finally {
       setIsLoading(false);
     }
@@ -101,9 +104,9 @@ const JoinEvent = () => {
           <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
             <QrCode className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl">Join an Event</CardTitle>
+          <CardTitle className="text-2xl">{TEXT.joinEvent.header.title}</CardTitle>
           <CardDescription className="text-base">
-            Enter your numeric event code to check in
+            {TEXT.joinEvent.header.description}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -112,18 +115,17 @@ const JoinEvent = () => {
               <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  You are the host of this event. Visit your dashboard to see
-                  the event details.
+                  {TEXT.joinEvent.alert.organizer}
                 </AlertDescription>
               </Alert>
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="eventCode">Event Code</Label>
+              <Label htmlFor="eventCode">{TEXT.joinEvent.form.label}</Label>
               <Input
                 id="eventCode"
                 type="text"
-                placeholder="Enter 6-digit code"
+                placeholder={TEXT.joinEvent.form.placeholder}
                 value={eventCode}
                 onChange={(e) => setEventCode(e.target.value)}
                 className="text-center text-lg tracking-wider"
@@ -139,7 +141,7 @@ const JoinEvent = () => {
                     type="button"
                     className="w-full h-12 text-base font-medium rounded-full"
                   >
-                    Go to Dashboard
+                    {TEXT.joinEvent.form.goToDashboard}
                   </Button>
                 </Link>
               ) : (
@@ -148,13 +150,15 @@ const JoinEvent = () => {
                   className="w-full h-12 text-base font-medium rounded-full"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Finding Event..." : "Continue to Check-In"}
+                  {isLoading
+                    ? TEXT.joinEvent.form.submitLoading
+                    : TEXT.joinEvent.form.submitIdle}
                 </Button>
               )}
             </div>
 
             <p className="text-sm text-muted-foreground text-center">
-              You can also scan a QR code at the event entrance
+              {TEXT.joinEvent.form.helperText}
             </p>
           </form>
         </CardContent>

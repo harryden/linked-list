@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CalendarCheck, Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useSupabaseData";
+import { TEXT } from "@/constants/text";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -61,7 +62,7 @@ const EventSuccess = () => {
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">{TEXT.eventSuccess.loading}</p>
         </div>
       </div>
     );
@@ -84,16 +85,15 @@ const EventSuccess = () => {
 
           {/* Title and Description */}
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold">Event Created!</h1>
-            <p className="text-muted-foreground">
-              Your event is ready. Share the QR code or event code with
-              attendees.
-            </p>
+            <h1 className="text-3xl font-bold">{TEXT.eventSuccess.title}</h1>
+            <p className="text-muted-foreground">{TEXT.eventSuccess.description}</p>
           </div>
 
           {/* Event Code */}
           <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
-            <p className="text-sm text-muted-foreground">Event Code</p>
+            <p className="text-sm text-muted-foreground">
+              {TEXT.eventSuccess.codeLabel}
+            </p>
             <p className="text-4xl font-bold tracking-wider">{eventCode}</p>
           </div>
 
@@ -115,12 +115,12 @@ const EventSuccess = () => {
               disabled={!qrCodeUrl}
             >
               <Download className="h-4 w-4 mr-2" />
-              Download QR Code
+              {TEXT.common.buttons.downloadQrCode}
             </Button>
 
             <Link to={`/event/${slug}`} className="block">
               <Button className="w-full rounded-full h-12 text-base font-medium">
-                View Event Dashboard
+                {TEXT.common.buttons.viewEventDashboard}
               </Button>
             </Link>
           </div>
