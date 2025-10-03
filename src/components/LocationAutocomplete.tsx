@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Input } from "@/components/ui/input";
 import { MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TEXT } from "@/constants/text";
 
 interface LocationSuggestion {
   place_id: number;
@@ -20,7 +21,7 @@ interface LocationAutocompleteProps {
 export const LocationAutocomplete = ({
   value,
   onChange,
-  placeholder = "Search for a location...",
+  placeholder = TEXT.locationAutocomplete.placeholder,
   id,
 }: LocationAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);

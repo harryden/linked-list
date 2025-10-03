@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { TEXT } from "@/constants/text";
 
 const NotFound = () => {
   const location = useLocation();
@@ -14,10 +15,10 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-gray-600">Oops! Page not found</p>
+        <h1 className="mb-4 text-4xl font-bold">{TEXT.notFound.title}</h1>
+        <p className="mb-4 text-xl text-gray-600">{TEXT.notFound.subtitle}</p>
         <a href="/" className="text-blue-500 underline hover:text-blue-700">
-          Return to Home
+          {TEXT.notFound.link}
         </a>
       </div>
     </div>

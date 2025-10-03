@@ -4,6 +4,7 @@ import { QrCode, LogOut } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
+import { TEXT } from "@/constants/text";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
 import HowItWorks from "./landing/components/HowItWorks";
@@ -41,14 +42,14 @@ const Landing = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
+            <span className="text-2xl font-semibold">{TEXT.common.brand}</span>
           </div>
           <div className="flex items-center gap-3">
             {user ? (
               <>
                 <Link to="/dashboard">
                   <Button variant="ghost" className="rounded-full">
-                    My Events
+                    {TEXT.common.buttons.myEvents}
                   </Button>
                 </Link>
                 <Button
@@ -66,7 +67,7 @@ const Landing = () => {
                   variant="ghost"
                   className="rounded-full shadow-[0_0_20px_rgba(10,102,194,0.5)] hover:shadow-[0_0_30px_rgba(10,102,194,0.7)] text-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2]"
                 >
-                  Sign in with LinkedIn
+                  {TEXT.common.buttons.signInWithLinkedIn}
                 </Button>
               </Link>
             )}
@@ -84,7 +85,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>© 2025 LinkBack. Powered by LinkedIn.</p>
+          <p>{TEXT.common.copy.footer}</p>
         </div>
       </footer>
     </div>

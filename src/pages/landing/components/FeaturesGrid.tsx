@@ -1,4 +1,5 @@
 import { QrCode, Shield, Users } from "lucide-react";
+import { TEXT } from "@/constants/text";
 
 const FeaturesGrid = () => (
   <section className="py-20">
@@ -7,10 +8,11 @@ const FeaturesGrid = () => (
         <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
           <QrCode className="h-6 w-6 text-accent-foreground" />
         </div>
-        <h3 className="text-xl font-semibold mb-2">One QR Code</h3>
+        <h3 className="text-xl font-semibold mb-2">
+          {TEXT.landing.features.oneQrCode.title}
+        </h3>
         <p className="text-muted-foreground">
-          Generate a unique QR code for each event. Display it at your venue or
-          share the link.
+          {TEXT.landing.features.oneQrCode.description}
         </p>
       </div>
 
@@ -18,10 +20,11 @@ const FeaturesGrid = () => (
         <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
           <Shield className="h-6 w-6 text-accent-foreground" />
         </div>
-        <h3 className="text-xl font-semibold mb-2">LinkedIn Verified</h3>
+        <h3 className="text-xl font-semibold mb-2">
+          {TEXT.landing.features.linkedinVerified.title}
+        </h3>
         <p className="text-muted-foreground">
-          Authentic attendee data from LinkedIn. No fake accounts, just real
-          professionals.
+          {TEXT.landing.features.linkedinVerified.description}
         </p>
       </div>
 
@@ -29,10 +32,11 @@ const FeaturesGrid = () => (
         <div className="w-12 h-12 rounded-xl bg-accent flex items-center justify-center mb-4">
           <Users className="h-6 w-6 text-accent-foreground" />
         </div>
-        <h3 className="text-xl font-semibold mb-2">Instant Lists</h3>
+        <h3 className="text-xl font-semibold mb-2">
+          {TEXT.landing.features.instantLists.title}
+        </h3>
         <p className="text-muted-foreground">
-          View who attended in real-time. Names, headlines, and profile links at
-          your fingertips.
+          {TEXT.landing.features.instantLists.description}
         </p>
       </div>
     </div>

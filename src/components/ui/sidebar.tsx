@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
+import { TEXT } from "@/constants/text";
 import {
   Tooltip,
   TooltipContent,
@@ -285,7 +286,7 @@ const SidebarTrigger = React.forwardRef<
       {...props}
     >
       <PanelLeft />
-      <span className="sr-only">Toggle Sidebar</span>
+        <span className="sr-only">{TEXT.common.ui.toggleSidebar}</span>
     </Button>
   );
 });

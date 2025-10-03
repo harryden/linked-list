@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
+import { TEXT } from "@/constants/text";
 
 interface QRCodeDialogProps {
   open: boolean;
@@ -49,13 +50,12 @@ export const QRCodeDialog = ({
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-center text-2xl">
-            Event QR Code
+            {TEXT.qrCodeDialog.title}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-6 py-4">
           <p className="text-center text-muted-foreground">
-            Use this QR code to allow attendees to seamlessly register
-            attendance
+            {TEXT.qrCodeDialog.description}
           </p>
 
           {open && (
@@ -75,7 +75,7 @@ export const QRCodeDialog = ({
             disabled={!qrCodeUrl}
           >
             <Download className="h-4 w-4 mr-2" />
-            Download QR Code
+            {TEXT.common.buttons.downloadQrCode}
           </Button>
         </div>
       </DialogContent>

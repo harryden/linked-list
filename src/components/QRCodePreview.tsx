@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { TEXT } from "@/constants/text";
 
 interface QRCodePreviewProps {
   value: string;
@@ -70,7 +71,7 @@ const QRCodePreview = ({
       {dataUrl ? (
         <img
           src={dataUrl}
-          alt="QR Code"
+          alt={TEXT.qrCodePreview.alt}
           className={cn("h-64 w-64", imageClassName)}
         />
       ) : (
@@ -81,7 +82,7 @@ const QRCodePreview = ({
               imageClassName,
             )}
           >
-            Generating QR code...
+            {TEXT.qrCodePreview.generating}
           </div>
         )
       )}

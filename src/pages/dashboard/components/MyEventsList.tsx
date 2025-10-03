@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Calendar, Users } from "lucide-react";
+import { TEXT } from "@/constants/text";
 import EmptyState from "./EmptyState";
 
 interface MinimalEvent {
@@ -19,7 +20,7 @@ interface MyEventsListProps {
 const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
   return (
     <section>
-      <h2 className="text-2xl font-semibold mb-4">Your Events</h2>
+      <h2 className="text-2xl font-semibold mb-4">{TEXT.dashboard.myEvents.title}</h2>
 
       {isLoading ? (
         <Card>
@@ -27,21 +28,23 @@ const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
             </div>
-            <p className="text-muted-foreground">Loading your events...</p>
-          </CardContent>
-        </Card>
-      ) : events.length === 0 ? (
-        <EmptyState
-          icon={<Calendar className="h-12 w-12 text-muted-foreground" />}
-          title="Ready to host your first event?"
-          description="Create your QR in under 10 seconds."
-          actions={
-            <Link to="/create-event" state={{ fromDashboard: true }}>
-              <Button className="rounded-full">Create Your First Event</Button>
-            </Link>
-          }
-        />
-      ) : (
+            <p className="text-muted-foreground">{TEXT.dashboard.myEvents.loading}</p>
+      </CardContent>
+    </Card>
+  ) : events.length === 0 ? (
+    <EmptyState
+      icon={<Calendar className="h-12 w-12 text-muted-foreground" />}
+      title={TEXT.dashboard.myEvents.emptyTitle}
+      description={TEXT.dashboard.myEvents.emptyDescription}
+      actions={
+        <Link to="/create-event" state={{ fromDashboard: true }}>
+          <Button className="rounded-full">
+            {TEXT.common.buttons.createFirstEvent}
+          </Button>
+        </Link>
+      }
+    />
+  ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {events.map((event) => (
             <Link key={event.id} to={`/event/${event.slug}`}>
@@ -51,13 +54,13 @@ const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
                   <CardDescription>
                     {event.starts_at
                       ? new Date(event.starts_at).toLocaleDateString()
-                      : "Date not set"}
+                      : TEXT.common.labels.dateNotSet}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2 text-sm text-primary">
                     <Users className="h-4 w-4" />
-                    <span>View attendees →</span>
+                    <span>{TEXT.dashboard.myEvents.viewAttendees}</span>
                   </div>
                 </CardContent>
               </Card>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { TEXT } from "@/constants/text";
 import { useCreateEvent } from "@/hooks/useSupabaseData";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
@@ -19,7 +20,9 @@ const CreateEvent = () => {
   // Check if coming from dashboard, default to home
   const fromDashboard = routerLocation.state?.fromDashboard;
   const backPath = fromDashboard ? "/dashboard" : "/";
-  const backText = fromDashboard ? "Back to Dashboard" : "Back to Home";
+  const backText = fromDashboard
+    ? TEXT.createEvent.header.backToDashboard
+    : TEXT.createEvent.header.backToHome;
 
   const generateSlug = (name: string) => {
     return (
@@ -42,7 +45,7 @@ const CreateEvent = () => {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        toast.error("Please sign in to create events");
+        toast.error(TEXT.createEvent.toast.authRequired);
         navigate("/auth");
         return;
       }
@@ -58,10 +61,10 @@ const CreateEvent = () => {
         organizer_id: session.user.id,
       });
 
-      toast.success("Event created successfully!");
+      toast.success(TEXT.createEvent.toast.success);
       navigate(`/event-success/${slug}`);
     } catch (error: any) {
-      toast.error(error.message || "Failed to create event");
+      toast.error(error.message || TEXT.createEvent.toast.failure);
     } finally {
       setIsLoading(false);
     }

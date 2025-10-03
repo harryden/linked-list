@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Linkedin, Users } from "lucide-react";
 import type { ProfileRow } from "@/hooks/useSupabaseData";
+import { TEXT } from "@/constants/text";
+import { toast } from "sonner";
 
 interface AttendeeListProps {
   attendees: ProfileRow[];
@@ -25,20 +27,23 @@ const AttendeeList = ({
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-muted-foreground" />
           <span className="text-lg font-medium">
-            {attendeeCount} {attendeeCount === 1 ? "Attendee" : "Attendees"}
+            {attendeeCount}{" "}
+            {attendeeCount === 1
+              ? TEXT.event.attendeeList.singular
+              : TEXT.event.attendeeList.plural}
           </span>
         </div>
       </CardHeader>
       <CardContent>
         {isLoading ? (
           <p className="text-center text-muted-foreground py-8">
-            Loading attendees...
+            {TEXT.event.attendeeList.loading}
           </p>
         ) : attendeeCount === 0 ? (
           <p className="text-center text-muted-foreground py-8">
             {isOrganizer
-              ? "No attendees yet. Share your QR code to get people to check in!"
-              : "No attendees yet. Be the first to check in!"}
+              ? TEXT.event.attendeeList.organizerEmpty
+              : TEXT.event.attendeeList.attendeeEmpty}
           </p>
         ) : (
           <div className="space-y-3">
@@ -76,13 +81,15 @@ const AttendeeList = ({
                           `https://www.linkedin.com/in/${attendee.linkedin_id}`,
                           "_blank",
                         );
+                      } else {
+                        toast.info(TEXT.event.header.linkedInMissing);
                       }
                     }}
                   >
                     <Linkedin className="h-4 w-4" />
                     {currentUserId === attendee.id
-                      ? "View Your Profile"
-                      : "View Profile"}
+                      ? TEXT.event.header.viewSelfProfile
+                      : TEXT.event.header.viewProfile}
                   </Button>
                 </div>
               );

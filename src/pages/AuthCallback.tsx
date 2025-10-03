@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useSupabaseData";
 import { toast } from "sonner";
 import { QrCode } from "lucide-react";
+import { TEXT } from "@/constants/text";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ const AuthCallback = () => {
 
         if (error) {
           console.error("OAuth error:", error, errorDescription);
-          toast.error(errorDescription || "Authentication failed");
+          toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
           setStatus("error");
           setTimeout(() => navigate("/auth"), 2000);
           return;
@@ -39,14 +40,14 @@ const AuthCallback = () => {
 
         if (sessionError) {
           console.error("Session error:", sessionError);
-          toast.error("Failed to establish session");
+          toast.error(TEXT.authCallback.toast.sessionFailure);
           setStatus("error");
           setTimeout(() => navigate("/auth"), 2000);
           return;
         }
 
         if (!session) {
-          toast.error("No active session found");
+          toast.error(TEXT.authCallback.toast.noSession);
           setStatus("error");
           setTimeout(() => navigate("/auth"), 2000);
           return;
@@ -55,7 +56,11 @@ const AuthCallback = () => {
         setUserId(session.user.id);
       } catch (error: unknown) {
         console.error("Auth callback error:", error);
-        toast.error(error instanceof Error ? error.message : "Authentication failed");
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : TEXT.authCallback.toast.genericFailure,
+        );
         setStatus("error");
         setTimeout(() => navigate("/auth"), 2000);
       }
@@ -71,14 +76,14 @@ const AuthCallback = () => {
 
     if (profileError) {
       console.error("Profile fetch error:", profileError);
-      toast.error("Failed to load profile");
+      toast.error(TEXT.authCallback.toast.loadProfileFailure);
       setStatus("error");
       setHasHandledProfile(true);
       setTimeout(() => navigate("/auth"), 2000);
       return;
     }
 
-    toast.success("Successfully authenticated!");
+    toast.success(TEXT.authCallback.toast.success);
     setHasHandledProfile(true);
     navigate("/dashboard");
   }, [hasHandledProfile, isProfileLoading, navigate, profileError, userId]);
@@ -92,9 +97,11 @@ const AuthCallback = () => {
 
         {status === "loading" ? (
           <>
-            <h1 className="text-2xl font-bold">Authenticating...</h1>
+            <h1 className="text-2xl font-bold">
+              {TEXT.authCallback.loadingTitle}
+            </h1>
             <p className="text-muted-foreground">
-              Please wait while we complete your sign in
+              {TEXT.authCallback.loadingDescription}
             </p>
             <div className="flex justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
@@ -103,10 +110,10 @@ const AuthCallback = () => {
         ) : (
           <>
             <h1 className="text-2xl font-bold text-destructive">
-              Authentication Error
+              {TEXT.authCallback.errorTitle}
             </h1>
             <p className="text-muted-foreground">
-              Redirecting you back to sign in...
+              {TEXT.authCallback.errorDescription}
             </p>
           </>
         )}

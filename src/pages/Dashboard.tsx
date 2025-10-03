@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { QRScanner } from "@/components/QRScanner";
 import { useQueryClient } from "@tanstack/react-query";
+import { TEXT } from "@/constants/text";
 import {
   fetchEventWithClient,
   useMyEvents,
@@ -84,7 +85,7 @@ const Dashboard = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    toast.success("Signed out successfully");
+    toast.success(TEXT.dashboard.header.signOutSuccess);
     navigate("/");
   };
 
@@ -95,7 +96,7 @@ const Dashboard = () => {
       });
 
       if (!eventData) {
-        toast.error("Event not found");
+        toast.error(TEXT.event.toast.eventNotFound);
         return;
       }
 
@@ -104,7 +105,7 @@ const Dashboard = () => {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        toast.error("Please sign in to check in");
+        toast.error(TEXT.dashboard.toast.authRequired);
         navigate("/auth");
         return;
       }
@@ -124,7 +125,7 @@ const Dashboard = () => {
         source: "qr",
       });
 
-      toast.success("Checked in successfully!");
+      toast.success(TEXT.event.toast.checkInSuccess);
       setShowScanner(false);
       navigate(`/event/${eventSlug}`);
     } catch (error) {
@@ -134,14 +135,14 @@ const Dashboard = () => {
         "code" in error &&
         (error as { code?: string }).code === "23505"
       ) {
-        toast.info("You're already checked in to this event!");
+        toast.info(TEXT.dashboard.toast.alreadyCheckedIn);
         setShowScanner(false);
         navigate(`/event/${eventSlug}`);
         return;
       }
 
       console.error("Error checking in:", error);
-      toast.error("Failed to check in");
+      toast.error(TEXT.event.toast.checkInFailure);
     }
   };
 
@@ -150,7 +151,7 @@ const Dashboard = () => {
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading your dashboard...</p>
+          <p className="text-muted-foreground">{TEXT.dashboard.loading}</p>
         </div>
       </div>
     );

@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 import { toast } from "sonner";
+import { TEXT } from "@/constants/text";
 
 type Html5QrcodeType = import("html5-qrcode").Html5Qrcode;
 
@@ -113,11 +114,11 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
         onScan(slug);
         onClose();
       } else {
-        toast.error("Invalid event QR code");
+        toast.error(TEXT.qrScannerErrors.invalidQr);
       }
     } catch (err) {
       console.error("Error parsing QR code:", err);
-      toast.error("Invalid QR code format");
+      toast.error(TEXT.qrScannerErrors.invalidFormat);
     }
   };
 
@@ -132,12 +133,12 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Camera className="h-5 w-5" />
-            Scan Event QR Code
+            {TEXT.qrScanner.title}
           </DialogTitle>
           <DialogDescription className="sr-only">
             {hasPermission === false
-              ? "Camera access denied. Please enable camera permissions in your browser settings."
-              : "Position the QR code within the frame to scan"}
+              ? TEXT.qrScanner.permissionDenied
+              : TEXT.qrScanner.instructions}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -145,8 +146,7 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
             <div className="rounded-lg border border-border bg-muted/30 p-6 text-center">
               <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">
-                Camera access denied. Please enable camera permissions in your
-                browser settings.
+                {TEXT.qrScanner.permissionDenied}
               </p>
             </div>
           ) : (
@@ -159,11 +159,11 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
           )}
           {hasPermission !== false && (
             <p className="text-sm text-muted-foreground text-center">
-              Position the QR code within the frame to scan
+              {TEXT.qrScanner.instructions}
             </p>
           )}
           <Button variant="outline" onClick={onClose} className="w-full">
-            Cancel
+            {TEXT.common.buttons.cancel}
           </Button>
         </div>
       </DialogContent>

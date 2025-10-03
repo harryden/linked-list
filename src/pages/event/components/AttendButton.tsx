@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TEXT } from "@/constants/text";
 
 interface AttendButtonProps {
   currentUserId: string | null;
@@ -34,13 +35,14 @@ const AttendButton = ({
     className,
   );
 
-  const buttonLabel = mode === "linkedin"
-    ? isLoading
-      ? "Checking In..."
-      : "Check In with LinkedIn"
-    : isLoading
-    ? "Checking In..."
-    : "Check In to This Event";
+  const buttonLabel =
+    mode === "linkedin"
+      ? isLoading
+        ? TEXT.event.attendButton.checkingIn
+        : TEXT.event.attendButton.checkInLinkedIn
+      : isLoading
+      ? TEXT.event.attendButton.checkingIn
+      : TEXT.event.attendButton.checkIn;
 
   const button = (
     <Button
