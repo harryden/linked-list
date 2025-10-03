@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { QrCode, ArrowRight, Check } from "lucide-react";
 
 const Demo = () => {
@@ -42,9 +48,12 @@ const Demo = () => {
                     1
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">Organizer Creates Event</CardTitle>
+                    <CardTitle className="text-2xl mb-2">
+                      Organizer Creates Event
+                    </CardTitle>
                     <CardDescription className="text-base">
-                      Sign up as an organizer, create your event with a name and optional details
+                      Sign up as an organizer, create your event with a name and
+                      optional details
                     </CardDescription>
                   </div>
                 </div>
@@ -79,9 +88,12 @@ const Demo = () => {
                     2
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">Display QR Code</CardTitle>
+                    <CardTitle className="text-2xl mb-2">
+                      Display QR Code
+                    </CardTitle>
                     <CardDescription className="text-base">
-                      Print the QR code or display it digitally at your event entrance
+                      Print the QR code or display it digitally at your event
+                      entrance
                     </CardDescription>
                   </div>
                 </div>
@@ -108,9 +120,12 @@ const Demo = () => {
                     3
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">Attendees Check In</CardTitle>
+                    <CardTitle className="text-2xl mb-2">
+                      Attendees Check In
+                    </CardTitle>
                     <CardDescription className="text-base">
-                      Guests scan the QR code with their phone and authenticate with LinkedIn
+                      Guests scan the QR code with their phone and authenticate
+                      with LinkedIn
                     </CardDescription>
                   </div>
                 </div>
@@ -121,13 +136,16 @@ const Demo = () => {
                     <p className="font-medium">⚠️ Privacy Notice Shown:</p>
                     <div className="bg-background/80 p-4 rounded-lg border border-border">
                       <p className="text-sm">
-                        "Your LinkedIn name and headline will be shown to other attendees of this event."
+                        "Your LinkedIn name and headline will be shown to other
+                        attendees of this event."
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 text-success">
                     <Check className="h-5 w-5" />
-                    <span className="font-medium">Attendance recorded automatically</span>
+                    <span className="font-medium">
+                      Attendance recorded automatically
+                    </span>
                   </div>
                 </div>
               </CardContent>
@@ -141,9 +159,12 @@ const Demo = () => {
                     4
                   </div>
                   <div className="flex-1">
-                    <CardTitle className="text-2xl mb-2">View Attendee List</CardTitle>
+                    <CardTitle className="text-2xl mb-2">
+                      View Attendee List
+                    </CardTitle>
                     <CardDescription className="text-base">
-                      Organizers and attendees can see the verified list of who's at the event
+                      Organizers and attendees can see the verified list of
+                      who's at the event
                     </CardDescription>
                   </div>
                 </div>
@@ -152,11 +173,20 @@ const Demo = () => {
                 <div className="bg-muted p-6 rounded-xl">
                   <div className="space-y-3">
                     {[
-                      { name: "Sarah Johnson", title: "Senior Product Manager at Tech Corp" },
-                      { name: "Michael Chen", title: "Software Engineer at StartupXYZ" },
-                      { name: "Emma Davis", title: "UX Designer at Creative Studio" },
+                      {
+                        name: "Sarah Johnson",
+                        title: "Senior Product Manager at Tech Corp",
+                      },
+                      {
+                        name: "Michael Chen",
+                        title: "Software Engineer at StartupXYZ",
+                      },
+                      {
+                        name: "Emma Davis",
+                        title: "UX Designer at Creative Studio",
+                      },
                     ].map((person, idx) => (
-                      <div 
+                      <div
                         key={idx}
                         className="flex items-center gap-3 bg-background p-4 rounded-lg border border-border"
                       >
@@ -165,7 +195,9 @@ const Demo = () => {
                         </div>
                         <div className="flex-1">
                           <p className="font-semibold">{person.name}</p>
-                          <p className="text-sm text-muted-foreground">{person.title}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {person.title}
+                          </p>
                         </div>
                       </div>
                     ))}
@@ -178,7 +210,10 @@ const Demo = () => {
           {/* CTA */}
           <div className="text-center pt-8">
             <Link to="/auth">
-              <Button size="lg" className="rounded-full px-8 h-12 text-base font-medium">
+              <Button
+                size="lg"
+                className="rounded-full px-8 h-12 text-base font-medium"
+              >
                 Try LinkBack Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>

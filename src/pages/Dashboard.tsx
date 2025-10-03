@@ -2,9 +2,23 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { QrCode, Plus, Calendar, Users, LogOut, Camera, Linkedin } from "lucide-react";
+import {
+  QrCode,
+  Plus,
+  Calendar,
+  Users,
+  LogOut,
+  Camera,
+  Linkedin,
+} from "lucide-react";
 import { toast } from "sonner";
 import { QRScanner } from "@/components/QRScanner";
 
@@ -37,8 +51,10 @@ const Dashboard = () => {
   }, []);
 
   const checkAuth = async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
     if (!session) {
       navigate("/auth");
       return;
@@ -53,24 +69,26 @@ const Dashboard = () => {
 
     if (profileData) {
       setProfile(profileData);
-      
+
       // Fetch user's created events
       const { data: eventsData } = await supabase
         .from("events")
         .select("*")
         .eq("organizer_id", session.user.id)
         .order("created_at", { ascending: false });
-      
+
       if (eventsData) setEvents(eventsData);
-      
+
       // Fetch attended events
       const { data: attendancesData } = await supabase
         .from("attendances")
         .select("event_id, events(*)")
         .eq("user_id", session.user.id);
-      
+
       if (attendancesData) {
-        setAttendedEvents(attendancesData.map((a: any) => a.events).filter(Boolean));
+        setAttendedEvents(
+          attendancesData.map((a: any) => a.events).filter(Boolean),
+        );
       }
     }
 
@@ -97,7 +115,9 @@ const Dashboard = () => {
         return;
       }
 
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       if (!session) {
         toast.error("Please sign in to check in");
         navigate("/auth");
@@ -158,7 +178,11 @@ const Dashboard = () => {
               <Avatar className="h-10 w-10">
                 <AvatarImage src={profile?.avatar_url} />
                 <AvatarFallback className="bg-primary text-primary-foreground">
-                  {profile?.name?.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  {profile?.name
+                    ?.split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="text-right hidden sm:block">
@@ -181,7 +205,9 @@ const Dashboard = () => {
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Welcome Section */}
           <div>
-            <h1 className="text-4xl font-bold mb-2">Welcome back, {profile?.name}!</h1>
+            <h1 className="text-4xl font-bold mb-2">
+              Welcome back, {profile?.name}!
+            </h1>
             <p className="text-muted-foreground">
               Host events, check in to events, and connect with attendees.
             </p>
@@ -190,15 +216,21 @@ const Dashboard = () => {
           {/* Your Events Section */}
           <div>
             <h2 className="text-2xl font-semibold mb-4">Your Events</h2>
-            
+
             {events.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
                   <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-1">Ready to host your first event?</h3>
-                  <p className="text-muted-foreground mb-4">Create your QR in under 10 seconds.</p>
+                  <h3 className="text-lg font-semibold mb-1">
+                    Ready to host your first event?
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    Create your QR in under 10 seconds.
+                  </p>
                   <Link to="/create-event" state={{ fromDashboard: true }}>
-                    <Button className="rounded-full">Create Your First Event</Button>
+                    <Button className="rounded-full">
+                      Create Your First Event
+                    </Button>
                   </Link>
                 </CardContent>
               </Card>
@@ -210,7 +242,7 @@ const Dashboard = () => {
                       <CardHeader>
                         <CardTitle>{event.name}</CardTitle>
                         <CardDescription>
-                          {event.starts_at 
+                          {event.starts_at
                             ? new Date(event.starts_at).toLocaleDateString()
                             : "Date not set"}
                         </CardDescription>
@@ -230,23 +262,32 @@ const Dashboard = () => {
 
           {/* Attended Events Section */}
           <div>
-            <h2 className="text-2xl font-semibold mb-4">Events You've Attended</h2>
-            
+            <h2 className="text-2xl font-semibold mb-4">
+              Events You've Attended
+            </h2>
+
             {attendedEvents.length === 0 ? (
               <Card>
                 <CardContent className="py-12 text-center">
                   <QrCode className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-1">No check-ins yet.</h3>
+                  <h3 className="text-lg font-semibold mb-1">
+                    No check-ins yet.
+                  </h3>
                   <p className="text-muted-foreground mb-4">
                     Scan a QR or enter a 6-digit code to get started.
                   </p>
                   <div className="flex gap-3 justify-center">
-                    <Button onClick={() => setShowScanner(true)} className="rounded-full">
+                    <Button
+                      onClick={() => setShowScanner(true)}
+                      className="rounded-full"
+                    >
                       <Camera className="h-4 w-4 mr-2" />
                       Scan QR Code
                     </Button>
                     <Link to="/join-event" state={{ fromDashboard: true }}>
-                      <Button variant="outline" className="rounded-full">Join by Code</Button>
+                      <Button variant="outline" className="rounded-full">
+                        Join by Code
+                      </Button>
                     </Link>
                   </div>
                 </CardContent>
@@ -259,7 +300,7 @@ const Dashboard = () => {
                       <CardHeader>
                         <CardTitle>{event.name}</CardTitle>
                         <CardDescription>
-                          {event.starts_at 
+                          {event.starts_at
                             ? new Date(event.starts_at).toLocaleDateString()
                             : "Date not set"}
                         </CardDescription>
@@ -279,9 +320,9 @@ const Dashboard = () => {
         </div>
       </main>
 
-      <QRScanner 
-        open={showScanner} 
-        onClose={() => setShowScanner(false)} 
+      <QRScanner
+        open={showScanner}
+        onClose={() => setShowScanner(false)}
         onScan={handleQRScan}
       />
     </div>

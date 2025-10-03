@@ -4,7 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { QrCode, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
@@ -17,17 +23,21 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const routerLocation = useLocation();
-  
+
   // Check if coming from dashboard, default to home
   const fromDashboard = routerLocation.state?.fromDashboard;
   const backPath = fromDashboard ? "/dashboard" : "/";
   const backText = fromDashboard ? "Back to Dashboard" : "Back to Home";
 
   const generateSlug = (name: string) => {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/(^-|-$)/g, "") + "-" + Math.random().toString(36).substring(2, 8);
+    return (
+      name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "") +
+      "-" +
+      Math.random().toString(36).substring(2, 8)
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,14 +45,15 @@ const CreateEvent = () => {
     setIsLoading(true);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
       if (!session) {
         toast.error("Please sign in to create events");
         navigate("/auth");
         return;
       }
-
 
       const slug = generateSlug(name);
 
@@ -132,7 +143,9 @@ const CreateEvent = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="linkedin_url">LinkedIn Event URL (optional)</Label>
+                  <Label htmlFor="linkedin_url">
+                    LinkedIn Event URL (optional)
+                  </Label>
                   <Input
                     id="linkedin_url"
                     type="url"
@@ -147,7 +160,9 @@ const CreateEvent = () => {
                   className="w-full rounded-full h-12 text-base font-medium"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Creating Event..." : "Create Event & Generate QR Code"}
+                  {isLoading
+                    ? "Creating Event..."
+                    : "Create Event & Generate QR Code"}
                 </Button>
               </form>
             </CardContent>

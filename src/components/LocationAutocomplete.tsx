@@ -17,11 +17,11 @@ interface LocationAutocompleteProps {
   id?: string;
 }
 
-export const LocationAutocomplete = ({ 
-  value, 
-  onChange, 
+export const LocationAutocomplete = ({
+  value,
+  onChange,
   placeholder = "Search for a location...",
-  id 
+  id,
 }: LocationAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -31,7 +31,10 @@ export const LocationAutocomplete = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setShowSuggestions(false);
       }
     };
@@ -52,11 +55,11 @@ export const LocationAutocomplete = ({
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`,
         {
           headers: {
-            'Accept': 'application/json',
+            Accept: "application/json",
           },
-        }
+        },
       );
-      
+
       if (response.ok) {
         const data = await response.json();
         setSuggestions(data);
@@ -71,7 +74,7 @@ export const LocationAutocomplete = ({
 
   const handleInputChange = (newValue: string) => {
     onChange(newValue);
-    
+
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current);
     }
@@ -104,7 +107,7 @@ export const LocationAutocomplete = ({
           <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
         )}
       </div>
-      
+
       {showSuggestions && suggestions.length > 0 && (
         <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-auto">
           {suggestions.map((suggestion) => (
@@ -114,7 +117,7 @@ export const LocationAutocomplete = ({
               onClick={() => handleSelectSuggestion(suggestion)}
               className={cn(
                 "w-full text-left px-4 py-3 hover:bg-accent transition-colors",
-                "flex items-start gap-3 border-b last:border-0"
+                "flex items-start gap-3 border-b last:border-0",
               )}
             >
               <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
