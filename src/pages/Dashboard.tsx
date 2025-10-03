@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -83,6 +83,26 @@ const Dashboard = () => {
 
   const isInitialLoading = isSessionLoading || isProfileLoading;
 
+  const greeting = useMemo(() => {
+    if (!profile?.name && myEvents.length === 0 && upcomingEvents.length === 0) {
+      return "Hey, glad to have you here! Ready to start connecting?";
+    }
+
+    if (myEvents.length === 0 && upcomingEvents.length === 0) {
+      return "Hey, glad to have you here! Ready to start connecting?";
+    }
+
+    if (myEvents.length === 0 && upcomingEvents.length === 1) {
+      return "Nice, you got your first check in!";
+    }
+
+    if (myEvents.length === 1 && upcomingEvents.length === 0) {
+      return "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!";
+    }
+
+    return `Welcome back, ${profile?.name ?? "friend"}!`;
+  }, [myEvents.length, upcomingEvents.length, profile?.name]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     toast.success(TEXT.dashboard.header.signOutSuccess);
@@ -164,6 +184,7 @@ const Dashboard = () => {
         headline={profile?.headline}
         avatarUrl={profile?.avatar_url}
         onSignOut={handleSignOut}
+        greeting={greeting}
       />
 
       <main className="container mx-auto px-4 pb-8">
