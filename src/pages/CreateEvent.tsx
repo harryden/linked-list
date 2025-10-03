@@ -1,19 +1,10 @@
 import { useState } from "react";
-import { useNavigate, Link, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { QrCode, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
-import { LocationAutocomplete } from "@/components/LocationAutocomplete";
+import { useCreateEvent } from "@/hooks/useSupabaseData";
+import CreateEventHeader from "./create-event/components/CreateEventHeader";
+import CreateEventForm from "./create-event/components/CreateEventForm";
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
@@ -23,6 +14,7 @@ const CreateEvent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const routerLocation = useLocation();
+  const createEvent = useCreateEvent();
 
   // Check if coming from dashboard, default to home
   const fromDashboard = routerLocation.state?.fromDashboard;
@@ -57,20 +49,14 @@ const CreateEvent = () => {
 
       const slug = generateSlug(name);
 
-      const { data, error } = await supabase
-        .from("events")
-        .insert({
-          name,
-          slug,
-          location: eventLocation || null,
-          starts_at: startsAt || null,
-          linkedin_event_url: linkedinUrl || null,
-          organizer_id: session.user.id,
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
+      await createEvent.mutateAsync({
+        name,
+        slug,
+        location: eventLocation || null,
+        starts_at: startsAt || null,
+        linkedin_event_url: linkedinUrl || null,
+        organizer_id: session.user.id,
+      });
 
       toast.success("Event created successfully!");
       navigate(`/event-success/${slug}`);
@@ -83,90 +69,22 @@ const CreateEvent = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-center gap-2">
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
-          </Link>
-        </div>
-      </header>
+      <CreateEventHeader backPath={backPath} backText={backText} />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 pb-8">
         <div className="max-w-2xl mx-auto">
-          <Link to={backPath}>
-            <Button variant="ghost" className="mb-6">
-              <ArrowLeft className="h-4 w-4 mr-2" />
-              {backText}
-            </Button>
-          </Link>
-
-          <Card className="shadow-xl">
-            <CardHeader>
-              <CardTitle className="text-3xl">Create New Event</CardTitle>
-              <CardDescription>
-                Fill in the details below to generate your event QR code
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="name">Event Name *</Label>
-                  <Input
-                    id="name"
-                    type="text"
-                    placeholder="Summer Tech Meetup 2025"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="location">Location</Label>
-                  <LocationAutocomplete
-                    id="location"
-                    value={eventLocation}
-                    onChange={setEventLocation}
-                    placeholder="TechHub Conference Center, San Francisco"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="starts_at">Start Date & Time</Label>
-                  <Input
-                    id="starts_at"
-                    type="datetime-local"
-                    value={startsAt}
-                    onChange={(e) => setStartsAt(e.target.value)}
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="linkedin_url">
-                    LinkedIn Event URL (optional)
-                  </Label>
-                  <Input
-                    id="linkedin_url"
-                    type="url"
-                    placeholder="https://www.linkedin.com/events/..."
-                    value={linkedinUrl}
-                    onChange={(e) => setLinkedinUrl(e.target.value)}
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full rounded-full h-12 text-base font-medium"
-                  disabled={isLoading}
-                >
-                  {isLoading
-                    ? "Creating Event..."
-                    : "Create Event & Generate QR Code"}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+          <CreateEventForm
+            name={name}
+            location={eventLocation}
+            startsAt={startsAt}
+            linkedinUrl={linkedinUrl}
+            isSubmitting={isLoading}
+            onNameChange={setName}
+            onLocationChange={setEventLocation}
+            onStartsAtChange={setStartsAt}
+            onLinkedinUrlChange={setLinkedinUrl}
+            onSubmit={handleSubmit}
+          />
         </div>
       </main>
     </div>

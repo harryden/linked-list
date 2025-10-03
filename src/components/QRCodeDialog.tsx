@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
-import QRCodeSVG from "qrcode";
+import QRCodePreview from "@/components/QRCodePreview";
 
 interface QRCodeDialogProps {
   open: boolean;
@@ -25,18 +25,10 @@ export const QRCodeDialog = ({
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
   useEffect(() => {
-    if (open && eventSlug) {
-      const eventUrl = `${window.location.origin}/event/${eventSlug}?ref=qr`;
-      QRCodeSVG.toDataURL(eventUrl, {
-        width: 400,
-        margin: 2,
-        color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
-      }).then(setQrCodeUrl);
+    if (!open) {
+      setQrCodeUrl("");
     }
-  }, [open, eventSlug]);
+  }, [open]);
 
   const handleDownload = () => {
     const link = document.createElement("a");
@@ -66,15 +58,13 @@ export const QRCodeDialog = ({
             attendance
           </p>
 
-          {qrCodeUrl && (
+          {open && (
             <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-inner">
-                <img
-                  src={qrCodeUrl}
-                  alt="Event QR Code"
-                  className="w-64 h-64"
-                />
-              </div>
+              <QRCodePreview
+                value={`${window.location.origin}/event/${eventSlug}?ref=qr`}
+                size={400}
+                onDataUrlChange={setQrCodeUrl}
+              />
             </div>
           )}
 

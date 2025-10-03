@@ -1,66 +1,56 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarCheck, Download } from "lucide-react";
-import QRCodeSVG from "qrcode";
+import QRCodePreview from "@/components/QRCodePreview";
+import { useEvent } from "@/hooks/useSupabaseData";
 
 const EventSuccess = () => {
-  const { slug } = useParams();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [eventCode, setEventCode] = useState<string>("");
   const [eventName, setEventName] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(true);
+
+  const {
+    data: event,
+    isLoading: isEventLoading,
+    error: eventError,
+  } = useEvent(slug ? { slug } : undefined);
 
   useEffect(() => {
-    loadEventAndGenerateQR();
-  }, [slug]);
-
-  const loadEventAndGenerateQR = async () => {
-    try {
-      const { data: eventData, error } = await supabase
-        .from("events")
-        .select("name, slug, id")
-        .eq("slug", slug)
-        .single();
-
-      if (error) throw error;
-
-      setEventName(eventData.name);
-
-      // Generate 6-digit event code from event ID
-      const code = Math.abs(
-        parseInt(eventData.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
-      )
-        .toString()
-        .padStart(6, "0");
-      setEventCode(code);
-
-      // Generate QR code
-      const eventUrl = `${window.location.origin}/event/${eventData.slug}?ref=qr`;
-      const qrUrl = await QRCodeSVG.toDataURL(eventUrl, {
-        width: 400,
-        margin: 2,
-        color: {
-          dark: "#000000",
-          light: "#FFFFFF",
-        },
-      });
-      setQrCodeUrl(qrUrl);
-    } catch (error) {
-      console.error("Error loading event:", error);
+    if (eventError) {
+      console.error("Error loading event:", eventError);
       navigate("/dashboard");
-    } finally {
-      setIsLoading(false);
     }
-  };
+  }, [eventError, navigate]);
+
+  useEffect(() => {
+    if (!event) {
+      return;
+    }
+
+    setEventName(event.name);
+
+    const code = Math.abs(
+      parseInt(event.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
+    )
+      .toString()
+      .padStart(6, "0");
+    setEventCode(code);
+  }, [event]);
+
+  const isLoading = isEventLoading;
 
   const handleDownload = () => {
+    if (!event || !qrCodeUrl) {
+      return;
+    }
+
     const link = document.createElement("a");
     link.href = qrCodeUrl;
-    link.download = `${slug}-qr-code.png`;
+    link.download = `${event.slug}-qr-code.png`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -75,6 +65,10 @@ const EventSuccess = () => {
         </div>
       </div>
     );
+  }
+
+  if (!event) {
+    return null;
   }
 
   return (
@@ -104,17 +98,13 @@ const EventSuccess = () => {
           </div>
 
           {/* QR Code */}
-          {qrCodeUrl && (
-            <div className="flex justify-center">
-              <div className="bg-white p-4 rounded-lg shadow-inner">
-                <img
-                  src={qrCodeUrl}
-                  alt="Event QR Code"
-                  className="w-64 h-64"
-                />
-              </div>
-            </div>
-          )}
+          <div className="flex justify-center">
+            <QRCodePreview
+              value={`${window.location.origin}/event/${event.slug}?ref=qr`}
+              size={400}
+              onDataUrlChange={setQrCodeUrl}
+            />
+          </div>
 
           {/* Action Buttons */}
           <div className="space-y-3">
