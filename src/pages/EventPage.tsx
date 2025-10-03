@@ -44,6 +44,8 @@ interface Organizer {
   id: string;
   name: string;
   headline?: string;
+  linkedin_id?: string;
+  avatar_url?: string;
 }
 
 const EventPage = () => {
@@ -86,7 +88,7 @@ const EventPage = () => {
       // Fetch organizer profile
       const { data: organizerData } = await supabase
         .from("profiles")
-        .select("id, name, headline")
+        .select("id, name, headline, linkedin_id, avatar_url")
         .eq("id", eventData.organizer_id)
         .single();
 
@@ -370,9 +372,33 @@ const EventPage = () => {
                     </div>
                   )}
                   {organizer && (
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
-                      <span>Hosted by {organizer.name}</span>
+                    <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={organizer.avatar_url} />
+                      <AvatarFallback className="bg-primary text-primary-foreground">
+                        {organizer.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-muted-foreground mb-0.5">Hosted by</p>
+                      <p className="font-semibold text-foreground">{organizer.name}</p>
+                      {organizer.headline && (
+                        <p className="text-sm text-muted-foreground truncate">{organizer.headline}</p>
+                      )}
+                    </div>
+                    <Button 
+                      className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white"
+                      onClick={() => {
+                        if (organizer.linkedin_id) {
+                          window.open(`https://www.linkedin.com/in/${organizer.linkedin_id}`, '_blank');
+                        } else {
+                          toast.info("LinkedIn profile not available");
+                        }
+                      }}
+                    >
+                      <Linkedin className="h-4 w-4" />
+                      {currentUserId === organizer.id ? 'View Your Profile' : 'View Profile'}
+                    </Button>
                     </div>
                   )}
                 </div>
