@@ -333,8 +333,14 @@ export const useCreateEvent = () => {
 
       return data as EventRow;
     },
-    onSuccess: () => {
+    onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+      if (variables.organizer_id) {
+        queryClient.invalidateQueries({
+          queryKey: ["my-events", variables.organizer_id],
+        });
+      }
     },
   });
 };
