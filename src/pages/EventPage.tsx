@@ -511,7 +511,7 @@ const EventPage = () => {
                           }}
                         >
                           <Linkedin className="h-4 w-4" />
-                          View Profile
+                          {currentUserId === attendee.id ? 'View Your Profile' : 'View Profile'}
                         </Button>
                       </div>
                     ))}
