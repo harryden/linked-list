@@ -5,6 +5,7 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import type { UseQueryResult } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -115,6 +116,25 @@ export const useEvents = (options?: UseEventsOptions) => {
   });
 };
 
+export const useMyEvents = (
+  userId?: string,
+  options?: { enabled?: boolean },
+) => {
+  const enabled = options?.enabled ?? Boolean(userId);
+
+  return useQuery({
+    queryKey: ["my-events", userId],
+    enabled,
+    queryFn: () => {
+      if (!userId) {
+        throw new Error("User id required to fetch organizer events");
+      }
+
+      return fetchEvents({ organizerId: userId });
+    },
+  });
+};
+
 type UseAttendancesOptions = {
   eventId?: string;
   userId?: string;
@@ -188,6 +208,32 @@ export const useAttendances = (options: UseAttendancesOptions) => {
     queryKey: attendancesQueryKey(options),
     enabled,
     queryFn: () => fetchAttendances(options),
+  });
+};
+
+export const useUpcoming = (
+  userId?: string,
+  options?: { enabled?: boolean },
+): UseQueryResult<EventRow[], Error> => {
+  const enabled = options?.enabled ?? Boolean(userId);
+
+  return useQuery({
+    queryKey: ["upcoming-events", userId],
+    enabled,
+    queryFn: async () => {
+      if (!userId) {
+        throw new Error("User id required to fetch upcoming events");
+      }
+
+      const records = await fetchAttendances({
+        userId,
+        includeEvents: true,
+      });
+
+      return (records ?? [])
+        .map((attendance) => attendance.events)
+        .filter(Boolean) as EventRow[];
+    },
   });
 };
 

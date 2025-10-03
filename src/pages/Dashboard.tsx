@@ -1,35 +1,19 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  QrCode,
-  Plus,
-  Calendar,
-  Users,
-  LogOut,
-  Camera,
-  Linkedin,
-} from "lucide-react";
 import { toast } from "sonner";
 import { QRScanner } from "@/components/QRScanner";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   fetchEventWithClient,
-  useAttendances,
-  useEvents,
+  useMyEvents,
+  useUpcoming,
   useJoinEvent,
   useMyProfile,
-  type EventRow,
 } from "@/hooks/useSupabaseData";
+import DashboardHeader from "./dashboard/components/DashboardHeader";
+import MyEventsList from "./dashboard/components/MyEventsList";
+import UpcomingSection from "./dashboard/components/UpcomingSection";
 
 const Dashboard = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -73,33 +57,30 @@ const Dashboard = () => {
   );
 
   const {
-    data: organizerEvents,
-    isLoading: isOrganizerEventsLoading,
-  } = useEvents({
-    organizerId: userId ?? undefined,
-    enabled: Boolean(userId),
-  });
+    data: myEventsData,
+    isLoading: isMyEventsLoading,
+  } = useMyEvents(userId ?? undefined, { enabled: Boolean(userId) });
 
   const {
-    data: attendanceRecords,
-    isLoading: isAttendanceLoading,
-  } = useAttendances({
-    userId: userId ?? undefined,
-    includeEvents: true,
-    enabled: Boolean(userId),
-  });
+    data: upcomingEventsData,
+    isLoading: isUpcomingLoading,
+  } = useUpcoming(userId ?? undefined, { enabled: Boolean(userId) });
 
-  const events = organizerEvents ?? [];
+  const myEvents = (myEventsData ?? []).map((event) => ({
+    id: event.id,
+    name: event.name,
+    slug: event.slug,
+    starts_at: event.starts_at ?? null,
+  }));
 
-  const attendedEvents = useMemo(() => {
-    return (attendanceRecords ?? [])
-      .map((attendance) => attendance.events)
-      .filter(Boolean) as EventRow[];
-  }, [attendanceRecords]);
+  const upcomingEvents = (upcomingEventsData ?? []).map((event) => ({
+    id: event.id,
+    name: event.name,
+    slug: event.slug,
+    starts_at: event.starts_at ?? null,
+  }));
 
-  const isLoading =
-    isSessionLoading ||
-    (Boolean(userId) && (isProfileLoading || isOrganizerEventsLoading || isAttendanceLoading));
+  const isInitialLoading = isSessionLoading || isProfileLoading;
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -164,7 +145,7 @@ const Dashboard = () => {
     }
   };
 
-  if (isLoading) {
+  if (isInitialLoading) {
     return (
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
         <div className="text-center">
@@ -177,157 +158,21 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-subtle">
-      {/* Header */}
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <QrCode className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-semibold">LinkBack</span>
-          </Link>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={profile?.avatar_url} />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {profile?.name
-                    ?.split(" ")
-                    .map((n) => n[0])
-                    .join("")
-                    .toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="text-right hidden sm:block">
-                <p className="font-medium">{profile?.name}</p>
-                {profile?.headline && (
-                  <p className="text-xs text-muted-foreground truncate max-w-[200px]">
-                    {profile.headline}
-                  </p>
-                )}
-              </div>
-            </div>
-            <Button variant="outline" size="icon" onClick={handleSignOut}>
-              <LogOut className="h-4 w-4" />
-            </Button>
-          </div>
-        </div>
-      </header>
+      <DashboardHeader
+        name={profile?.name}
+        headline={profile?.headline}
+        avatarUrl={profile?.avatar_url}
+        onSignOut={handleSignOut}
+      />
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container mx-auto px-4 pb-8">
         <div className="max-w-6xl mx-auto space-y-8">
-          {/* Welcome Section */}
-          <div>
-            <h1 className="text-4xl font-bold mb-2">
-              Welcome back, {profile?.name}!
-            </h1>
-            <p className="text-muted-foreground">
-              Host events, check in to events, and connect with attendees.
-            </p>
-          </div>
-
-          {/* Your Events Section */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">Your Events</h2>
-
-            {events.length === 0 ? (
-              <Card>
-                <CardContent className="py-12 text-center">
-                  <Calendar className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-1">
-                    Ready to host your first event?
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Create your QR in under 10 seconds.
-                  </p>
-                  <Link to="/create-event" state={{ fromDashboard: true }}>
-                    <Button className="rounded-full">
-                      Create Your First Event
-                    </Button>
-                  </Link>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid md:grid-cols-2 gap-4">
-                {events.map((event) => (
-                  <Link key={event.id} to={`/event/${event.slug}`}>
-                    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                      <CardHeader>
-                        <CardTitle>{event.name}</CardTitle>
-                        <CardDescription>
-                          {event.starts_at
-                            ? new Date(event.starts_at).toLocaleDateString()
-                            : "Date not set"}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center gap-2 text-sm text-primary">
-                          <Users className="h-4 w-4" />
-                          <span>View attendees →</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Attended Events Section */}
-          <div>
-            <h2 className="text-2xl font-semibold mb-4">
-              Events You've Attended
-            </h2>
-
-            {attendedEvents.length === 0 ? (
-              <Card>
-                <CardContent className="py-12 text-center">
-                  <QrCode className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-1">
-                    No check-ins yet.
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    Scan a QR or enter a 6-digit code to get started.
-                  </p>
-                  <div className="flex gap-3 justify-center">
-                    <Button
-                      onClick={() => setShowScanner(true)}
-                      className="rounded-full"
-                    >
-                      <Camera className="h-4 w-4 mr-2" />
-                      Scan QR Code
-                    </Button>
-                    <Link to="/join-event" state={{ fromDashboard: true }}>
-                      <Button variant="outline" className="rounded-full">
-                        Join by Code
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ) : (
-              <div className="grid md:grid-cols-2 gap-4">
-                {attendedEvents.map((event) => (
-                  <Link key={event.id} to={`/event/${event.slug}`}>
-                    <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                      <CardHeader>
-                        <CardTitle>{event.name}</CardTitle>
-                        <CardDescription>
-                          {event.starts_at
-                            ? new Date(event.starts_at).toLocaleDateString()
-                            : "Date not set"}
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="flex items-center gap-2 text-sm text-primary">
-                          <Users className="h-4 w-4" />
-                          <span>View attendee list →</span>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+          <MyEventsList events={myEvents} isLoading={isMyEventsLoading} />
+          <UpcomingSection
+            events={upcomingEvents}
+            isLoading={isUpcomingLoading}
+            onScan={() => setShowScanner(true)}
+          />
         </div>
       </main>
 
