@@ -212,8 +212,14 @@ const Dashboard = () => {
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Welcome Section */}
           <div>
-            <h1 className="text-4xl font-bold mb-2">
-              Welcome back, {profile?.name}!
+          <h1 className="text-4xl font-bold mb-2">
+              {events.length === 0 && attendedEvents.length === 0
+                ? "Hey, glad to have you here! Ready to start connecting?"
+                : events.length === 0 && attendedEvents.length === 1
+                ? "Nice, you got your first check in!"
+                : events.length === 1 && attendedEvents.length === 0
+                ? "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!"
+                : `Welcome back, ${profile?.name}!`}
             </h1>
             <p className="text-muted-foreground">
               Host events, check in to events, and connect with attendees.
