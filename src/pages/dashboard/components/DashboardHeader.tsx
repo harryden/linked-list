@@ -10,16 +10,25 @@ interface DashboardHeaderProps {
   headline?: string | null;
   avatarUrl?: string | null;
   onSignOut: () => void;
+  greeting?: string;
 }
 
-const DashboardHeader = ({ name, headline, avatarUrl, onSignOut }: DashboardHeaderProps) => {
+const DashboardHeader = ({
+  name,
+  headline,
+  avatarUrl,
+  onSignOut,
+  greeting,
+}: DashboardHeaderProps) => {
   const initials = name
     ?.split(" ")
     .map((part) => part[0])
     .join("")
     .toUpperCase();
 
-  const welcomeMessage = name
+  const welcomeMessage = greeting
+    ? greeting
+    : name
     ? `${TEXT.dashboard.header.welcomePrefix} ${name}!`
     : TEXT.dashboard.header.welcomePrefix;
 
