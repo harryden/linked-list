@@ -25,8 +25,11 @@ const AuthCallback = () => {
         }
 
         // Wait for session to be established
-        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-        
+        const {
+          data: { session },
+          error: sessionError,
+        } = await supabase.auth.getSession();
+
         if (sessionError) {
           console.error("Session error:", sessionError);
           toast.error("Failed to establish session");
@@ -77,7 +80,7 @@ const AuthCallback = () => {
         <div className="flex justify-center">
           <QrCode className="h-16 w-16 text-primary animate-pulse" />
         </div>
-        
+
         {status === "loading" ? (
           <>
             <h1 className="text-2xl font-bold">Authenticating...</h1>
@@ -90,7 +93,9 @@ const AuthCallback = () => {
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold text-destructive">Authentication Error</h1>
+            <h1 className="text-2xl font-bold text-destructive">
+              Authentication Error
+            </h1>
             <p className="text-muted-foreground">
               Redirecting you back to sign in...
             </p>

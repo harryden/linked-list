@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
@@ -15,14 +21,16 @@ const JoinEvent = () => {
   const [isOwnEvent, setIsOwnEvent] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   // Check if coming from dashboard, default to home
   const fromDashboard = location.state?.fromDashboard;
   const backPath = fromDashboard ? "/dashboard" : "/";
   const backText = fromDashboard ? "Back to Dashboard" : "Back to Home";
 
   const generateEventCode = (eventId: string): string => {
-    return Math.abs(parseInt(eventId.replace(/-/g, "").substring(0, 8), 16) % 1000000)
+    return Math.abs(
+      parseInt(eventId.replace(/-/g, "").substring(0, 8), 16) % 1000000,
+    )
       .toString()
       .padStart(6, "0");
   };
@@ -36,10 +44,12 @@ const JoinEvent = () => {
 
     setIsLoading(true);
     setIsOwnEvent(false);
-    
+
     try {
       // Get current user
-      const { data: { session } } = await supabase.auth.getSession();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
       const userId = session?.user?.id;
 
       // Fetch all events to find matching code
@@ -50,8 +60,8 @@ const JoinEvent = () => {
       if (error) throw error;
 
       // Find event with matching code
-      const matchingEvent = events?.find(event => 
-        generateEventCode(event.id) === eventCode.trim()
+      const matchingEvent = events?.find(
+        (event) => generateEventCode(event.id) === eventCode.trim(),
       );
 
       if (!matchingEvent) {
@@ -78,7 +88,10 @@ const JoinEvent = () => {
   return (
     <div className="min-h-screen bg-gradient-subtle flex flex-col items-center justify-center p-4">
       <div className="w-full max-w-md mb-8">
-        <Link to={backPath} className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+        <Link
+          to={backPath}
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
+        >
           <ArrowLeft className="h-4 w-4" />
           {backText}
         </Link>
@@ -100,7 +113,8 @@ const JoinEvent = () => {
               <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  You are the host of this event. Visit your dashboard to see the event details.
+                  You are the host of this event. Visit your dashboard to see
+                  the event details.
                 </AlertDescription>
               </Alert>
             )}

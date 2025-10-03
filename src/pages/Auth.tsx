@@ -1,7 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { QrCode, Linkedin, Shield, Users, Lock } from "lucide-react";
@@ -23,13 +29,13 @@ const Auth = () => {
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin_oidc',
+        provider: "linkedin_oidc",
         options: {
           redirectTo: `${window.location.origin}/auth/callback`,
-          scopes: 'openid profile email'
-        }
+          scopes: "openid profile email",
+        },
       });
-      
+
       if (error) throw error;
     } catch (error: any) {
       toast.error(error.message || "Authentication failed");
@@ -59,7 +65,7 @@ const Auth = () => {
           </CardHeader>
 
           <CardContent className="space-y-6 px-6 pb-6">
-            <Button 
+            <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
               size="lg"
@@ -82,29 +88,39 @@ const Auth = () => {
               <p className="text-sm font-medium text-center text-foreground">
                 What we access:
               </p>
-              
+
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <Users className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium">Your name and profile picture</p>
-                    <p className="text-xs text-muted-foreground">To identify you at events</p>
+                    <p className="text-sm font-medium">
+                      Your name and profile picture
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      To identify you at events
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Shield className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="text-sm font-medium">Your headline and email</p>
-                    <p className="text-xs text-muted-foreground">For professional networking</p>
+                    <p className="text-sm font-medium">
+                      Your headline and email
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      For professional networking
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-3">
                   <Lock className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="text-sm font-medium">Read-only access</p>
-                    <p className="text-xs text-muted-foreground">We cannot post or message on your behalf</p>
+                    <p className="text-xs text-muted-foreground">
+                      We cannot post or message on your behalf
+                    </p>
                   </div>
                 </div>
               </div>
@@ -112,23 +128,29 @@ const Auth = () => {
 
             <div className="pt-2">
               <p className="text-xs text-center text-muted-foreground leading-relaxed">
-                By signing in, you agree to share your LinkedIn profile information with event organizers and attendees for networking purposes. You can revoke access anytime from your{" "}
-                <a 
-                  href="https://www.linkedin.com/mypreferences/d/apps" 
-                  target="_blank" 
+                By signing in, you agree to share your LinkedIn profile
+                information with event organizers and attendees for networking
+                purposes. You can revoke access anytime from your{" "}
+                <a
+                  href="https://www.linkedin.com/mypreferences/d/apps"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="hover:underline"
-                  style={{ color: '#0A66C2' }}
+                  style={{ color: "#0A66C2" }}
                 >
                   LinkedIn settings
-                </a>.
+                </a>
+                .
               </p>
             </div>
           </CardContent>
         </Card>
 
         <div className="mt-6 text-center">
-          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+          <Link
+            to="/"
+            className="text-sm text-muted-foreground hover:text-foreground"
+          >
             ← Back to home
           </Link>
         </div>

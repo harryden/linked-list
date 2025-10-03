@@ -2,7 +2,12 @@ import type { Config } from "tailwindcss";
 
 export default {
   darkMode: ["class"],
-  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
+  content: [
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   prefix: "",
   theme: {
     container: {
@@ -50,15 +55,15 @@ export default {
         },
       },
       boxShadow: {
-        'sm': 'var(--shadow-sm)',
-        'md': 'var(--shadow-md)',
-        'lg': 'var(--shadow-lg)',
-        'xl': 'var(--shadow-xl)',
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
+        xl: "var(--shadow-xl)",
       },
       backgroundImage: {
-        'gradient-subtle': 'var(--gradient-subtle)',
-        'gradient-primary': 'var(--gradient-primary)',
-        'gradient-accent': 'var(--gradient-accent)',
+        "gradient-subtle": "var(--gradient-subtle)",
+        "gradient-primary": "var(--gradient-primary)",
+        "gradient-accent": "var(--gradient-accent)",
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -82,7 +87,7 @@ export default {
             height: "0",
           },
         },
-        "shimmer": {
+        shimmer: {
           "0%, 100%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
         },
@@ -98,17 +103,19 @@ export default {
         },
         "border-glow": {
           "0%, 100%": {
-            boxShadow: "0 0 20px rgba(255, 150, 200, 0.4), 0 0 40px rgba(255, 150, 200, 0.2)",
+            boxShadow:
+              "0 0 20px rgba(255, 150, 200, 0.4), 0 0 40px rgba(255, 150, 200, 0.2)",
           },
           "50%": {
-            boxShadow: "0 0 30px rgba(255, 150, 200, 0.6), 0 0 60px rgba(255, 150, 200, 0.3), 0 0 80px rgba(255, 150, 200, 0.1)",
+            boxShadow:
+              "0 0 30px rgba(255, 150, 200, 0.6), 0 0 60px rgba(255, 150, 200, 0.3), 0 0 80px rgba(255, 150, 200, 0.1)",
           },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "shimmer": "shimmer 3s ease-in-out infinite",
+        shimmer: "shimmer 3s ease-in-out infinite",
         "fade-in": "fade-in 0.5s ease-out",
         "border-glow": "border-glow 3s ease-in-out infinite",
       },

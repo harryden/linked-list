@@ -29,9 +29,11 @@ const EventSuccess = () => {
       if (error) throw error;
 
       setEventName(eventData.name);
-      
+
       // Generate 6-digit event code from event ID
-      const code = Math.abs(parseInt(eventData.id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
+      const code = Math.abs(
+        parseInt(eventData.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
+      )
         .toString()
         .padStart(6, "0");
       setEventCode(code);
@@ -90,7 +92,8 @@ const EventSuccess = () => {
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold">Event Created!</h1>
             <p className="text-muted-foreground">
-              Your event is ready. Share the QR code or event code with attendees.
+              Your event is ready. Share the QR code or event code with
+              attendees.
             </p>
           </div>
 
@@ -104,7 +107,11 @@ const EventSuccess = () => {
           {qrCodeUrl && (
             <div className="flex justify-center">
               <div className="bg-white p-4 rounded-lg shadow-inner">
-                <img src={qrCodeUrl} alt="Event QR Code" className="w-64 h-64" />
+                <img
+                  src={qrCodeUrl}
+                  alt="Event QR Code"
+                  className="w-64 h-64"
+                />
               </div>
             </div>
           )}

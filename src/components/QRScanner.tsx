@@ -1,6 +1,12 @@
 import { useEffect, useRef, useState, useId } from "react";
 import { Html5Qrcode } from "html5-qrcode";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 import { toast } from "sonner";
@@ -57,7 +63,7 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
         (decodedText) => {
           handleScan(decodedText);
         },
-        () => {}
+        () => {},
       );
 
       setIsScanning(true);
@@ -66,7 +72,11 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
       console.error("Failed to start scanner:", err);
       const msg = String(err?.message || err);
       const name = err?.name;
-      if (name === "NotAllowedError" || msg.toLowerCase().includes("permission") || msg.toLowerCase().includes("notallowederror")) {
+      if (
+        name === "NotAllowedError" ||
+        msg.toLowerCase().includes("permission") ||
+        msg.toLowerCase().includes("notallowederror")
+      ) {
         setHasPermission(false);
       } else {
         setHasPermission(null);
@@ -92,9 +102,9 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
       // Extract event slug from URL
       // Expected format: https://domain.com/event/slug or https://domain.com/event/slug?ref=qr
       const url = new URL(decodedText);
-      const pathParts = url.pathname.split('/');
-      const eventIndex = pathParts.indexOf('event');
-      
+      const pathParts = url.pathname.split("/");
+      const eventIndex = pathParts.indexOf("event");
+
       if (eventIndex !== -1 && pathParts[eventIndex + 1]) {
         const slug = pathParts[eventIndex + 1];
         await stopScanner();
@@ -110,7 +120,12 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
   };
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => { if (!isOpen) onClose(); }}>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        if (!isOpen) onClose();
+      }}
+    >
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -128,12 +143,16 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
             <div className="rounded-lg border border-border bg-muted/30 p-6 text-center">
               <Camera className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
               <p className="text-sm text-muted-foreground">
-                Camera access denied. Please enable camera permissions in your browser settings.
+                Camera access denied. Please enable camera permissions in your
+                browser settings.
               </p>
             </div>
           ) : (
             <div className="relative">
-              <div id={readerId} className="w-full h-64 rounded-lg overflow-hidden bg-black" />
+              <div
+                id={readerId}
+                className="w-full h-64 rounded-lg overflow-hidden bg-black"
+              />
             </div>
           )}
           {hasPermission !== false && (
