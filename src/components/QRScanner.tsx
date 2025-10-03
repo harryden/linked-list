@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState, useId } from "react";
-import { Html5Qrcode } from "html5-qrcode";
 import {
   Dialog,
   DialogContent,
@@ -11,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Camera } from "lucide-react";
 import { toast } from "sonner";
 
+type Html5QrcodeType = import("html5-qrcode").Html5Qrcode;
+
 interface QRScannerProps {
   open: boolean;
   onClose: () => void;
@@ -19,7 +20,7 @@ interface QRScannerProps {
 
 export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
   const [isScanning, setIsScanning] = useState(false);
-  const scannerRef = useRef<Html5Qrcode | null>(null);
+  const scannerRef = useRef<Html5QrcodeType | null>(null);
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const readerId = useId();
 
@@ -51,6 +52,7 @@ export const QRScanner = ({ open, onClose, onScan }: QRScannerProps) => {
       return;
     }
     try {
+      const { Html5Qrcode } = await import("html5-qrcode");
       const scanner = new Html5Qrcode(readerId);
       scannerRef.current = scanner;
 

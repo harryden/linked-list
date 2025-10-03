@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarCheck, Download } from "lucide-react";
-import QRCodeSVG from "qrcode";
 import { useEvent } from "@/hooks/useSupabaseData";
 
 const EventSuccess = () => {
@@ -28,8 +27,10 @@ const EventSuccess = () => {
   }, [eventError, navigate]);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (!event) {
-      return;
+      return undefined;
     }
 
     setQrCodeUrl("");
@@ -43,10 +44,13 @@ const EventSuccess = () => {
         )
           .toString()
           .padStart(6, "0");
-        setEventCode(code);
+        if (isMounted) {
+          setEventCode(code);
+        }
 
+        const { default: QRCode } = await import("qrcode");
         const eventUrl = `${window.location.origin}/event/${event.slug}?ref=qr`;
-        const qrUrl = await QRCodeSVG.toDataURL(eventUrl, {
+        const qrUrl = await QRCode.toDataURL(eventUrl, {
           width: 400,
           margin: 2,
           color: {
@@ -54,15 +58,24 @@ const EventSuccess = () => {
             light: "#FFFFFF",
           },
         });
-        setQrCodeUrl(qrUrl);
+
+        if (isMounted) {
+          setQrCodeUrl(qrUrl);
+        }
       } catch (error) {
         console.error("Error generating QR code:", error);
       } finally {
-        setIsGenerating(false);
+        if (isMounted) {
+          setIsGenerating(false);
+        }
       }
     };
 
     generate();
+
+    return () => {
+      isMounted = false;
+    };
   }, [event]);
 
   const isLoading = isEventLoading || isGenerating;
