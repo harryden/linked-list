@@ -16,6 +16,7 @@ export const TEXT = {
       joinByCode: "Join by Code",
       joinFirstEvent: "Join your first event",
       goToDashboard: "Go to Dashboard",
+      goToEvent: "Go to Event",
       continueCheckIn: "Continue to Check-In",
       findingEvent: "Finding Event...",
       createEventAndQr: "Create Event & Generate QR Code",
@@ -225,12 +226,12 @@ export const TEXT = {
       description: "Enter your numeric event code to check in",
     },
     alert: {
-      organizer: "You are the host of this event. Visit your dashboard to see the event details.",
+      organizer: "You are the host of this event. Open your event to manage check-ins.",
     },
     form: {
       label: "Event Code",
       placeholder: "Enter 6-digit code",
-      goToDashboard: "Go to Dashboard",
+      goToEvent: "Go to Event",
       submitIdle: "Continue to Check-In",
       submitLoading: "Finding Event...",
       helperText: "You can also scan a QR code at the event entrance",
