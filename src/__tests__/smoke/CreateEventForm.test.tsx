@@ -26,7 +26,9 @@ describe('CreateEvent smoke', () => {
     await user.type(screen.getByLabelText(/end time/i), '12:00');
 
     await user.click(
-      screen.getByRole('button', { name: /create event & generate qr code/i }),
+      screen.getByRole('button', {
+        name: new RegExp(TEXT.createEvent.form.submitIdle, 'i'),
+      }),
     );
 
     expect(
@@ -44,7 +46,9 @@ describe('CreateEvent smoke', () => {
     await user.type(screen.getByLabelText(/end time/i), '12:00');
 
     await user.click(
-      screen.getByRole('button', { name: /create event & generate qr code/i }),
+      screen.getByRole('button', {
+        name: new RegExp(TEXT.createEvent.form.submitIdle, 'i'),
+      }),
     );
 
     expect(
