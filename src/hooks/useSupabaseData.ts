@@ -107,19 +107,6 @@ export const fetchEvents = async (
   return data ?? [];
 };
 
-export const useEvents = (options?: UseEventsOptions) => {
-  const normalized = normalizeEventsOptions(options);
-  const enabled =
-    (options?.enabled ?? Boolean(normalized.organizerId)) ||
-    options === undefined;
-
-  return useQuery({
-    queryKey: eventsQueryKey(options),
-    enabled,
-    queryFn: () => fetchEvents(options),
-  });
-};
-
 export const useMyEvents = (
   userId?: string,
   options?: { enabled?: boolean },
