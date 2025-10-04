@@ -161,21 +161,23 @@ const EventHeader = ({
     }
 
     if (eventNameLength > 56) {
-      return "text-[1.65rem] sm:text-[2.5rem]";
+      return "text-[1.2rem] sm:text-[2.05rem]";
     }
 
     if (eventNameLength > 40) {
-      return "text-[1.85rem] sm:text-[2.75rem]";
+      return "text-[1.3rem] sm:text-[2.2rem]";
     }
 
     if (eventNameLength > 26) {
-      return "text-[2.1rem] sm:text-[2.85rem]";
+      return "text-[1.45rem] sm:text-[2.35rem]";
     }
 
-    return "text-4xl sm:text-[2.9rem]";
+    return "text-[1.55rem] sm:text-[2.4rem]";
   }, [eventNameLength]);
 
   const isAbnormallyLongTitle = eventNameLength > 88;
+
+  const eventTitleMarginClass = isAttending ? "mb-6" : "mb-4";
 
   if (variant === "compact") {
     return (
@@ -223,10 +225,11 @@ const EventHeader = ({
   return (
     <div className="space-y-4">
       <div>
-        <div className="grid grid-cols-[1fr_auto_auto] items-center gap-4">
+        <div className="grid grid-cols-[1fr_auto_auto] items-start sm:items-center gap-4">
           <CardTitle
             className={cn(
-              "mb-5 min-w-0 break-words leading-tight",
+              "min-w-0 break-words leading-tight",
+              eventTitleMarginClass,
               eventTitleSizingClass,
               isAbnormallyLongTitle
                 ? "truncate sm:truncate-none"
@@ -236,9 +239,9 @@ const EventHeader = ({
             {event.name}
           </CardTitle>
           {isAttending && (
-            <div className="col-start-2 inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0">
+            <div className="col-start-2 self-start sm:self-center inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0 translate-x-[0.625rem] sm:translate-x-3">
               <CheckCircle2 className="h-5 w-5" />
-              <span className="font-medium">{TEXT.event.header.checkedIn}</span>
+              <span className="font-medium">{TEXT.event.header.checkedInShort}</span>
             </div>
           )}
           {isOrganizer && (onEdit || onDelete) && (
@@ -247,7 +250,7 @@ const EventHeader = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="col-start-3 rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
+                  className="col-start-3 self-start sm:self-center rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
                   aria-label={TEXT.event.header.options}
                 >
                   <MoreVertical className="h-5 w-5" />
@@ -275,7 +278,7 @@ const EventHeader = ({
         </div>
         <div className="flex flex-col gap-2 text-muted-foreground">
           {eventCode && (
-            <div className="flex items-center gap-2 mb-2.5 sm:mb-3">
+            <div className="flex items-center gap-2 mb-1 sm:mb-1.5">
               <QrCode className="h-4 w-4" />
               <span className="font-mono font-semibold text-foreground">
                 {TEXT.common.labels.eventCode}: {eventCode}

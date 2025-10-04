@@ -40,22 +40,26 @@ const Landing = () => {
     <div className="min-h-screen bg-gradient-subtle">
       {/* Header */}
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
+            <img
+              src={linkbackLogo}
+              alt="LinkBack"
+              className="h-16 sm:h-20 w-auto"
+            />
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button variant="ghost" className="rounded-full">
+                  <Button variant="ghost" className="rounded-full text-sm sm:text-base">
                     {TEXT.common.buttons.myEvents}
                   </Button>
                 </Link>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full"
+                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
                   onClick={handleSignOut}
                 >
                   <LogOut className="h-4 w-4" />
@@ -65,7 +69,7 @@ const Landing = () => {
               <Link to="/auth">
                 <Button
                   variant="ghost"
-                  className="rounded-full shadow-[0_0_20px_rgba(10,102,194,0.5)] hover:shadow-[0_0_30px_rgba(10,102,194,0.7)] text-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2]"
+                  className="rounded-full shadow-[0_0_18px_rgba(10,102,194,0.45)] hover:shadow-[0_0_24px_rgba(10,102,194,0.6)] text-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2] text-sm sm:text-base"
                 >
                   {TEXT.common.buttons.signInWithLinkedIn}
                 </Button>
