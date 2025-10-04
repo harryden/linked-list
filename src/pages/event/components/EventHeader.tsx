@@ -241,7 +241,9 @@ const EventHeader = ({
           {isAttending && (
             <div className="col-start-2 self-start sm:self-center inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0 translate-x-[0.625rem] sm:translate-x-3">
               <CheckCircle2 className="h-5 w-5" />
-              <span className="font-medium">{TEXT.event.header.checkedInShort}</span>
+              <span className="font-medium">
+                {TEXT.event.header.checkedInShort}
+              </span>
             </div>
           )}
           {isOrganizer && (onEdit || onDelete) && (
