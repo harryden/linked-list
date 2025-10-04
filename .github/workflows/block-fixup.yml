@@ -1,0 +1,23 @@
+name: Block fixup/squash commits
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  check-fixup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check for fixup/squash commits
+        run: |
+          git fetch origin ${{ github.base_ref }}
+          if git log --oneline origin/${{ github.base_ref }}..HEAD | grep -E '(fixup!|squash!)'; then
+            echo "❌ Found fixup or squash commits - please squash them before merging"
+            exit 1
+          fi
+          echo "✅ No fixup/squash commits found"

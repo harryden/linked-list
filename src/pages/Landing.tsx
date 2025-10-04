@@ -52,7 +52,10 @@ const Landing = () => {
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button variant="ghost" className="rounded-full text-sm sm:text-base">
+                  <Button
+                    variant="ghost"
+                    className="rounded-full text-sm sm:text-base"
+                  >
                     {TEXT.common.buttons.myEvents}
                   </Button>
                 </Link>
