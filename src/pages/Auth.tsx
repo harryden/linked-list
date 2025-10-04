@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useState, useEffect, useMemo } from "react";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,25 +17,53 @@ import linkbackLogo from "@/assets/linkback-logo.png";
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const infoItems = TEXT.auth.info.items;
   const infoIcons = [Users, Shield, Lock];
+
+  const redirectPath = useMemo(() => {
+    const params = new URLSearchParams(location.search);
+    const fromQuery = params.get("redirect");
+
+    if (fromQuery && fromQuery.startsWith("/")) {
+      return fromQuery;
+    }
+
+    if (typeof window !== "undefined") {
+      const stored = sessionStorage.getItem("postAuthRedirect");
+
+      if (stored && stored.startsWith("/")) {
+        return stored;
+      }
+    }
+
+    return "/";
+  }, [location.search]);
 
   useEffect(() => {
     // Check if user is already authenticated
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/");
+        navigate(redirectPath, { replace: true });
       }
     });
-  }, [navigate]);
+  }, [navigate, redirectPath]);
 
   const handleLinkedInSignIn = async () => {
     setIsLoading(true);
     try {
+      const safeRedirect = redirectPath.startsWith("/") ? redirectPath : "/";
+
+      if (typeof window !== "undefined") {
+        sessionStorage.setItem("postAuthRedirect", safeRedirect);
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "linkedin_oidc",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?redirect=${encodeURIComponent(
+            safeRedirect,
+          )}`,
           scopes: "openid profile email",
         },
       });
@@ -44,6 +72,9 @@ const Auth = () => {
     } catch (error: any) {
       toast.error(error.message || TEXT.auth.toast.failure);
       setIsLoading(false);
+      if (typeof window !== "undefined") {
+        sessionStorage.removeItem("postAuthRedirect");
+      }
     }
   };
 
