@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -39,6 +39,7 @@ import {
 const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [showQRDialog, setShowQRDialog] = useState(false);
@@ -259,6 +260,7 @@ const EventPage = () => {
                 onCheckIn={handleCheckIn}
                 isLoading={joinEvent.isPending}
                 mode="linkedin"
+                redirectPath={`${location.pathname}${location.search}`}
               />
               <p className="text-xs text-center text-muted-foreground px-4">
                 {TEXT.event.page.guestNotice}
@@ -334,6 +336,7 @@ const EventPage = () => {
                 onCheckIn={handleCheckIn}
                 isLoading={joinEvent.isPending}
                 mode="primary"
+                redirectPath={`${location.pathname}${location.search}`}
               />
             </CardContent>
           </Card>

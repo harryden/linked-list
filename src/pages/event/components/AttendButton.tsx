@@ -12,6 +12,7 @@ interface AttendButtonProps {
   isLoading: boolean;
   mode?: "primary" | "linkedin";
   className?: string;
+  redirectPath?: string;
 }
 
 const AttendButton = ({
@@ -22,6 +23,7 @@ const AttendButton = ({
   isLoading,
   mode = "primary",
   className,
+  redirectPath,
 }: AttendButtonProps) => {
   if (isOrganizer || isAttending) {
     return null;
@@ -56,7 +58,12 @@ const AttendButton = ({
   );
 
   if (!currentUserId) {
-    return <Link to="/auth">{button}</Link>;
+    const safeRedirectPath = redirectPath?.startsWith("/")
+      ? redirectPath
+      : "/";
+    const authLink = `/auth?redirect=${encodeURIComponent(safeRedirectPath)}`;
+
+    return <Link to={authLink}>{button}</Link>;
   }
 
   return button;

@@ -11,6 +11,7 @@ const AuthCallback = () => {
   const [status, setStatus] = useState<"loading" | "error">("loading");
   const [userId, setUserId] = useState<string | null>(null);
   const [hasHandledProfile, setHasHandledProfile] = useState(false);
+  const [redirectPath, setRedirectPath] = useState<string>("/");
 
   const {
     data: _profile,
@@ -24,11 +25,29 @@ const AuthCallback = () => {
         const params = new URLSearchParams(window.location.search);
         const error = params.get("error");
         const errorDescription = params.get("error_description");
+        const redirectParam = params.get("redirect");
+
+        let resolvedRedirect = "/";
+
+        if (redirectParam && redirectParam.startsWith("/")) {
+          resolvedRedirect = redirectParam;
+        } else if (typeof window !== "undefined") {
+          const stored = sessionStorage.getItem("postAuthRedirect");
+
+          if (stored && stored.startsWith("/")) {
+            resolvedRedirect = stored;
+          }
+        }
+
+        setRedirectPath(resolvedRedirect);
 
         if (error) {
           console.error("OAuth error:", error, errorDescription);
           toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
           setStatus("error");
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("postAuthRedirect");
+          }
           setTimeout(() => navigate("/auth"), 2000);
           return;
         }
@@ -42,6 +61,9 @@ const AuthCallback = () => {
           console.error("Session error:", sessionError);
           toast.error(TEXT.authCallback.toast.sessionFailure);
           setStatus("error");
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("postAuthRedirect");
+          }
           setTimeout(() => navigate("/auth"), 2000);
           return;
         }
@@ -49,6 +71,9 @@ const AuthCallback = () => {
         if (!session) {
           toast.error(TEXT.authCallback.toast.noSession);
           setStatus("error");
+          if (typeof window !== "undefined") {
+            sessionStorage.removeItem("postAuthRedirect");
+          }
           setTimeout(() => navigate("/auth"), 2000);
           return;
         }
@@ -62,6 +87,9 @@ const AuthCallback = () => {
             : TEXT.authCallback.toast.genericFailure,
         );
         setStatus("error");
+        if (typeof window !== "undefined") {
+          sessionStorage.removeItem("postAuthRedirect");
+        }
         setTimeout(() => navigate("/auth"), 2000);
       }
     };
@@ -85,8 +113,11 @@ const AuthCallback = () => {
 
     toast.success(TEXT.authCallback.toast.success);
     setHasHandledProfile(true);
-    navigate("/");
-  }, [hasHandledProfile, isProfileLoading, navigate, profileError, userId]);
+    if (typeof window !== "undefined") {
+      sessionStorage.removeItem("postAuthRedirect");
+    }
+    navigate(redirectPath, { replace: true });
+  }, [hasHandledProfile, isProfileLoading, navigate, profileError, redirectPath, userId]);
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">

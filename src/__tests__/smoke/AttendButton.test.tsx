@@ -37,4 +37,24 @@ describe('AttendButton smoke', () => {
 
     expect(screen.queryByRole('button', { name: /check in/i })).not.toBeInTheDocument();
   });
+
+  it('routes to auth with the provided redirect path when not signed in', () => {
+    renderWithProviders(
+      <AttendButton
+        currentUserId={null}
+        isOrganizer={false}
+        isAttending={false}
+        onCheckIn={vi.fn()}
+        isLoading={false}
+        mode="linkedin"
+        redirectPath="/event/test-event"
+      />,
+    );
+
+    const link = screen.getByRole('link', {
+      name: /check in with linkedin/i,
+    });
+
+    expect(link).toHaveAttribute('href', '/auth?redirect=%2Fevent%2Ftest-event');
+  });
 });
