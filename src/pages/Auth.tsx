@@ -24,7 +24,7 @@ const Auth = () => {
     // Check if user is already authenticated
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
-        navigate("/dashboard");
+        navigate("/");
       }
     });
   }, [navigate]);
