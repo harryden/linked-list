@@ -1,11 +1,11 @@
-import { renderWithProviders } from '@/test-utils/render';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { vi } from 'vitest';
-import AttendButton from '@/pages/event/components/AttendButton';
+import { renderWithProviders } from "@/test-utils/render";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
+import AttendButton from "@/pages/event/components/AttendButton";
 
-describe('AttendButton smoke', () => {
-  it('invokes the provided callback when a signed-in attendee checks in', async () => {
+describe("AttendButton smoke", () => {
+  it("invokes the provided callback when a signed-in attendee checks in", async () => {
     const user = userEvent.setup();
     const onCheckIn = vi.fn();
 
@@ -20,11 +20,11 @@ describe('AttendButton smoke', () => {
       />,
     );
 
-    await user.click(screen.getByRole('button', { name: /check in/i }));
+    await user.click(screen.getByRole("button", { name: /check in/i }));
     expect(onCheckIn).toHaveBeenCalledTimes(1);
   });
 
-  it('hides the button when the attendee is already checked in', () => {
+  it("hides the button when the attendee is already checked in", () => {
     renderWithProviders(
       <AttendButton
         currentUserId="user_test"
@@ -35,10 +35,12 @@ describe('AttendButton smoke', () => {
       />,
     );
 
-    expect(screen.queryByRole('button', { name: /check in/i })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: /check in/i }),
+    ).not.toBeInTheDocument();
   });
 
-  it('routes to auth with the provided redirect path when not signed in', () => {
+  it("routes to auth with the provided redirect path when not signed in", () => {
     renderWithProviders(
       <AttendButton
         currentUserId={null}
@@ -51,10 +53,13 @@ describe('AttendButton smoke', () => {
       />,
     );
 
-    const link = screen.getByRole('link', {
+    const link = screen.getByRole("link", {
       name: /check in with linkedin/i,
     });
 
-    expect(link).toHaveAttribute('href', '/auth?redirect=%2Fevent%2Ftest-event');
+    expect(link).toHaveAttribute(
+      "href",
+      "/auth?redirect=%2Fevent%2Ftest-event",
+    );
   });
 });

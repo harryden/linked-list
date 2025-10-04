@@ -141,8 +141,7 @@ export const TEXT = {
       steps: [
         {
           title: "Create an Event",
-          description:
-            "Sign in, create your event, and get your QR code",
+          description: "Sign in, create your event, and get your QR code",
           checklist: [
             'Name your event: "Tech Meetup 2025"',
             "Set date and time (optional)",
@@ -152,14 +151,12 @@ export const TEXT = {
         },
         {
           title: "Display the QR Code",
-          description:
-            "Print or display your code at the event entrance",
+          description: "Print or display your code at the event entrance",
           note: "Every event gets a unique code",
         },
         {
           title: "Attendees Check In",
-          description:
-            "Attendees scan and sign in with LinkedIn",
+          description: "Attendees scan and sign in with LinkedIn",
           privacyNotice: "⚠️ Privacy Notice:",
           privacyCopy:
             '"Your LinkedIn name and headline will be visible to other attendees."',
@@ -167,8 +164,7 @@ export const TEXT = {
         },
         {
           title: "View Attendee List",
-          description:
-            "Everyone can see who's at the event",
+          description: "Everyone can see who's at the event",
           attendees: [
             {
               name: "Sarah Johnson",
@@ -356,7 +352,8 @@ export const TEXT = {
   },
   qrScanner: {
     title: "Scan QR Code",
-    permissionDenied: "Camera access denied. Enable permissions in your browser settings.",
+    permissionDenied:
+      "Camera access denied. Enable permissions in your browser settings.",
     instructions: "Position the QR code within the frame",
   },
   qrCodeDialog: {

@@ -75,7 +75,7 @@ const QRCodePreview = ({
           className={cn("h-64 w-64", imageClassName)}
         />
       ) : (
-        emptyState ?? (
+        (emptyState ?? (
           <div
             className={cn(
               "flex h-64 w-64 items-center justify-center text-sm text-muted-foreground",
@@ -84,7 +84,7 @@ const QRCodePreview = ({
           >
             {TEXT.qrCodePreview.generating}
           </div>
-        )
+        ))
       )}
     </div>
   );

@@ -1,10 +1,10 @@
-import { Route, Routes } from 'react-router-dom';
-import { renderWithProviders } from '@/test-utils/render';
-import { screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import EventPage from '@/pages/EventPage';
-import { TEXT } from '@/constants/text';
-import { createQueryStub, supabaseStub } from '@/test-utils/supabase';
+import { Route, Routes } from "react-router-dom";
+import { renderWithProviders } from "@/test-utils/render";
+import { screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import EventPage from "@/pages/EventPage";
+import { TEXT } from "@/constants/text";
+import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 
 const createDeferred = <T,>() => {
   let resolve!: (value: T) => void;
@@ -29,7 +29,7 @@ type LocationMocksOptions = {
   attendeeProfiles?: OrganizerProfile[];
   organizerProfile?: OrganizerProfile | null;
   deleteResult?: { data: unknown; error: unknown };
-  resolveEventWith?: 'immediate' | 'deferred';
+  resolveEventWith?: "immediate" | "deferred";
 };
 
 const setupEventPageMocks = ({
@@ -38,12 +38,12 @@ const setupEventPageMocks = ({
   userAttendance = [],
   attendeeProfiles = [],
   organizerProfile = {
-    id: event.organizer_id ?? 'organizer-1',
-    name: 'Organizer One',
-    headline: 'Event Host',
+    id: event.organizer_id ?? "organizer-1",
+    name: "Organizer One",
+    headline: "Event Host",
   },
   deleteResult = { data: null, error: null },
-  resolveEventWith = 'immediate',
+  resolveEventWith = "immediate",
 }: LocationMocksOptions) => {
   supabaseStub.auth.getSession.mockResolvedValue({
     data: currentUserId
@@ -59,7 +59,7 @@ const setupEventPageMocks = ({
   eventQuery.eq.mockReturnValue(eventQuery);
 
   const deferred = createDeferred<{ data: typeof event; error: null }>();
-  if (resolveEventWith === 'deferred') {
+  if (resolveEventWith === "deferred") {
     eventQuery.single.mockReturnValue(deferred.promise);
   }
 
@@ -96,7 +96,7 @@ const setupEventPageMocks = ({
   let attendanceCallCount = 0;
 
   supabaseStub.from.mockImplementation((table) => {
-    if (table === 'events') {
+    if (table === "events") {
       if (eventCallCount === 0) {
         eventCallCount += 1;
         return eventQuery;
@@ -104,7 +104,7 @@ const setupEventPageMocks = ({
       return deleteQuery;
     }
 
-    if (table === 'attendances') {
+    if (table === "attendances") {
       attendanceCallCount += 1;
       if (attendanceCallCount === 1) {
         return userAttendanceQuery;
@@ -112,7 +112,7 @@ const setupEventPageMocks = ({
       return attendeesQuery;
     }
 
-    if (table === 'profiles') {
+    if (table === "profiles") {
       return profileQuery;
     }
 
@@ -122,35 +122,38 @@ const setupEventPageMocks = ({
   return { deferred };
 };
 
-describe('EventPage behavior', () => {
+describe("EventPage behavior", () => {
   const renderEventPage = () =>
     renderWithProviders(
       <Routes>
         <Route path="/event/:slug" element={<EventPage />} />
-        <Route path="/dashboard" element={<div data-testid="dashboard-destination" />} />
+        <Route
+          path="/dashboard"
+          element={<div data-testid="dashboard-destination" />}
+        />
       </Routes>,
-      { route: '/event/launch-day' },
+      { route: "/event/launch-day" },
     );
 
   const baseEvent = {
-    id: 'event-1',
-    slug: 'launch-day',
-    name: 'Launch Day',
-    organizer_id: 'organizer-1',
-    starts_at: '2025-05-01T09:00:00.000Z',
-    ends_at: '2025-05-01T11:00:00.000Z',
-    location: 'Gothenburg, Sweden',
+    id: "event-1",
+    slug: "launch-day",
+    name: "Launch Day",
+    organizer_id: "organizer-1",
+    starts_at: "2025-05-01T09:00:00.000Z",
+    ends_at: "2025-05-01T11:00:00.000Z",
+    location: "Gothenburg, Sweden",
   };
 
-  it('renders the skeleton before the event data resolves and then shows the event view', async () => {
+  it("renders the skeleton before the event data resolves and then shows the event view", async () => {
     const { deferred } = setupEventPageMocks({
       event: baseEvent,
-      currentUserId: 'attendee-1',
-      userAttendance: [{ id: 'attendance-1' }],
+      currentUserId: "attendee-1",
+      userAttendance: [{ id: "attendance-1" }],
       attendeeProfiles: [
-        { id: 'attendee-1', name: 'Guest One', headline: 'Attendee' },
+        { id: "attendee-1", name: "Guest One", headline: "Attendee" },
       ],
-      resolveEventWith: 'deferred',
+      resolveEventWith: "deferred",
     });
 
     renderEventPage();
@@ -162,10 +165,10 @@ describe('EventPage behavior', () => {
     expect(await screen.findByText(baseEvent.name)).toBeInTheDocument();
   });
 
-  it('exposes owner controls and hides the attend button when viewing own event', async () => {
+  it("exposes owner controls and hides the attend button when viewing own event", async () => {
     setupEventPageMocks({
       event: baseEvent,
-      currentUserId: 'organizer-1',
+      currentUserId: "organizer-1",
       userAttendance: [],
       attendeeProfiles: [],
     });
@@ -174,64 +177,68 @@ describe('EventPage behavior', () => {
 
     expect(await screen.findByText(baseEvent.name)).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: TEXT.common.buttons.viewQrCode }),
+      screen.getByRole("button", { name: TEXT.common.buttons.viewQrCode }),
     ).toBeInTheDocument();
 
     const user = userEvent.setup();
     const optionsTrigger = screen.getByLabelText(TEXT.event.header.options);
     await user.click(optionsTrigger);
 
-    expect(
-      await screen.findByText(TEXT.event.header.edit),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(TEXT.event.header.edit)).toBeInTheDocument();
     expect(screen.getByText(TEXT.event.header.delete)).toBeInTheDocument();
     expect(
-      screen.queryByRole('button', { name: TEXT.event.attendButton.checkIn }),
+      screen.queryByRole("button", { name: TEXT.event.attendButton.checkIn }),
     ).not.toBeInTheDocument();
     expect(
-      screen.queryByRole('link', { name: TEXT.event.attendButton.checkInLinkedIn }),
+      screen.queryByRole("link", {
+        name: TEXT.event.attendButton.checkInLinkedIn,
+      }),
     ).not.toBeInTheDocument();
   });
 
-  it('keeps the guest view minimal until the attendee joins', async () => {
+  it("keeps the guest view minimal until the attendee joins", async () => {
     setupEventPageMocks({
       event: baseEvent,
-      currentUserId: 'guest-1',
+      currentUserId: "guest-1",
       userAttendance: [],
       attendeeProfiles: [],
     });
 
     renderEventPage();
 
-    expect(await screen.findByText(TEXT.event.page.guestNotice)).toBeInTheDocument();
+    expect(
+      await screen.findByText(TEXT.event.page.guestNotice),
+    ).toBeInTheDocument();
     expect(
       screen.queryByText(TEXT.common.buttons.viewQrCode),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole('button', {
+      screen.getByRole("button", {
         name: TEXT.event.attendButton.checkInLinkedIn,
       }),
     ).toBeInTheDocument();
   });
 
-  it('completes the delete flow, shows feedback, and redirects to the dashboard', async () => {
+  it("completes the delete flow, shows feedback, and redirects to the dashboard", async () => {
     setupEventPageMocks({
       event: baseEvent,
-      currentUserId: 'organizer-1',
+      currentUserId: "organizer-1",
       userAttendance: [],
       attendeeProfiles: [],
     });
 
     renderEventPage();
 
-    const optionsTrigger = await screen.findByLabelText(TEXT.event.header.options);
+    const optionsTrigger = await screen.findByLabelText(
+      TEXT.event.header.options,
+    );
     const user = userEvent.setup();
 
     await user.click(optionsTrigger);
     await user.click(screen.getByText(TEXT.event.header.delete));
 
     await user.click(
-      await screen.findByRole('button', {
+      await screen.findByRole("button", {
         name: TEXT.event.header.deleteConfirmSubmit,
       }),
     );
@@ -239,23 +246,25 @@ describe('EventPage behavior', () => {
     expect(
       await screen.findByText(TEXT.event.toast.deleteSuccess),
     ).toBeInTheDocument();
-    expect(await screen.findByTestId('dashboard-destination')).toBeInTheDocument();
+    expect(
+      await screen.findByTestId("dashboard-destination"),
+    ).toBeInTheDocument();
   });
 
-  it('renders the not-found view when the event cannot be loaded', async () => {
+  it("renders the not-found view when the event cannot be loaded", async () => {
     supabaseStub.auth.getSession.mockResolvedValue({
-      data: { session: { user: { id: 'guest-1' } } },
+      data: { session: { user: { id: "guest-1" } } },
       error: null,
     });
 
     const failingQuery = createQueryStub({
-      singleResult: { data: null, error: { message: 'Gone' } },
+      singleResult: { data: null, error: { message: "Gone" } },
     });
     failingQuery.select.mockReturnValue(failingQuery);
     failingQuery.eq.mockReturnValue(failingQuery);
 
     supabaseStub.from.mockImplementation((table) => {
-      if (table === 'events') {
+      if (table === "events") {
         return failingQuery;
       }
       return createQueryStub();

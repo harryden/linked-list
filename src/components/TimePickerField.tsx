@@ -27,8 +27,15 @@ const normalizeTime = (value: string) => {
   return value;
 };
 
-const TimePickerField = ({ value, onChange, className, id }: TimePickerFieldProps) => {
-  const [internalValue, setInternalValue] = useState(() => normalizeTime(value));
+const TimePickerField = ({
+  value,
+  onChange,
+  className,
+  id,
+}: TimePickerFieldProps) => {
+  const [internalValue, setInternalValue] = useState(() =>
+    normalizeTime(value),
+  );
 
   useEffect(() => {
     setInternalValue(normalizeTime(value));

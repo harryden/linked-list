@@ -1,14 +1,18 @@
-import { useEffect, useRef, useState } from 'react';
-import { vi } from 'vitest';
-import { render, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import { QRCodeDialog } from '@/components/QRCodeDialog';
-import { TEXT } from '@/constants/text';
+import { useEffect, useRef, useState } from "react";
+import { vi } from "vitest";
+import { render, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { QRCodeDialog } from "@/components/QRCodeDialog";
+import { TEXT } from "@/constants/text";
 
-vi.mock('@/components/QRCodePreview', () => ({
-  default: ({ onDataUrlChange }: { onDataUrlChange?: (url: string) => void }) => {
+vi.mock("@/components/QRCodePreview", () => ({
+  default: ({
+    onDataUrlChange,
+  }: {
+    onDataUrlChange?: (url: string) => void;
+  }) => {
     useEffect(() => {
-      onDataUrlChange?.('data:image/png;base64,qr');
+      onDataUrlChange?.("data:image/png;base64,qr");
     }, [onDataUrlChange]);
 
     return (
@@ -43,34 +47,34 @@ const DialogHarness = () => {
   );
 };
 
-describe('QRCodeDialog', () => {
-  it('opens as an accessible dialog with the QR preview rendered', async () => {
+describe("QRCodeDialog", () => {
+  it("opens as an accessible dialog with the QR preview rendered", async () => {
     const { getByRole, getByAltText } = render(<DialogHarness />);
     const user = userEvent.setup();
 
-    const trigger = getByRole('button', { name: /show qr/i });
+    const trigger = getByRole("button", { name: /show qr/i });
     await user.click(trigger);
 
-    const dialog = getByRole('dialog', { name: TEXT.qrCodeDialog.title });
+    const dialog = getByRole("dialog", { name: TEXT.qrCodeDialog.title });
     expect(dialog).toBeInTheDocument();
     expect(getByAltText(TEXT.qrCodePreview.alt)).toBeInTheDocument();
     expect(
-      getByRole('button', {
+      getByRole("button", {
         name: TEXT.common.buttons.downloadQrCode,
       }),
     ).toBeEnabled();
   });
 
-  it('closes on escape and restores focus to the trigger for accessibility', async () => {
+  it("closes on escape and restores focus to the trigger for accessibility", async () => {
     const { getByRole, queryByRole } = render(<DialogHarness />);
     const user = userEvent.setup();
 
-    const trigger = getByRole('button', { name: /show qr/i });
+    const trigger = getByRole("button", { name: /show qr/i });
     await user.click(trigger);
-    await user.keyboard('{Escape}');
+    await user.keyboard("{Escape}");
 
     await waitFor(() => {
-      expect(queryByRole('dialog')).not.toBeInTheDocument();
+      expect(queryByRole("dialog")).not.toBeInTheDocument();
     });
     expect(trigger).toHaveFocus();
   });

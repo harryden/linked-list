@@ -50,15 +50,13 @@ const Dashboard = () => {
     userId ?? undefined,
   );
 
-  const {
-    data: myEventsData,
-    isLoading: isMyEventsLoading,
-  } = useMyEvents(userId ?? undefined, { enabled: Boolean(userId) });
+  const { data: myEventsData, isLoading: isMyEventsLoading } = useMyEvents(
+    userId ?? undefined,
+    { enabled: Boolean(userId) },
+  );
 
-  const {
-    data: upcomingEventsData,
-    isLoading: isUpcomingLoading,
-  } = useUpcoming(userId ?? undefined, { enabled: Boolean(userId) });
+  const { data: upcomingEventsData, isLoading: isUpcomingLoading } =
+    useUpcoming(userId ?? undefined, { enabled: Boolean(userId) });
 
   const myEvents = (myEventsData ?? []).map((event) => ({
     id: event.id,
@@ -77,7 +75,11 @@ const Dashboard = () => {
   const isInitialLoading = isSessionLoading || isProfileLoading;
 
   const greeting = useMemo(() => {
-    if (!profile?.name && myEvents.length === 0 && upcomingEvents.length === 0) {
+    if (
+      !profile?.name &&
+      myEvents.length === 0 &&
+      upcomingEvents.length === 0
+    ) {
       return "Hey, glad to have you here! Ready to start connecting?";
     }
 

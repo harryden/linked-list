@@ -43,8 +43,8 @@ const AttendButton = ({
         ? TEXT.event.attendButton.checkingIn
         : TEXT.event.attendButton.checkInLinkedIn
       : isLoading
-      ? TEXT.event.attendButton.checkingIn
-      : TEXT.event.attendButton.checkIn;
+        ? TEXT.event.attendButton.checkingIn
+        : TEXT.event.attendButton.checkIn;
 
   const button = (
     <Button
@@ -58,9 +58,7 @@ const AttendButton = ({
   );
 
   if (!currentUserId) {
-    const safeRedirectPath = redirectPath?.startsWith("/")
-      ? redirectPath
-      : "/";
+    const safeRedirectPath = redirectPath?.startsWith("/") ? redirectPath : "/";
     const authLink = `/auth?redirect=${encodeURIComponent(safeRedirectPath)}`;
 
     return <Link to={authLink}>{button}</Link>;

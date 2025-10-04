@@ -16,8 +16,8 @@ const CreateEventHeader = ({ backPath, backText }: CreateEventHeaderProps) => (
         <Link to="/dashboard" className="flex items-center gap-2">
           <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
         </Link>
-        </div>
-      </header>
+      </div>
+    </header>
 
     <div className="container mx-auto px-4 pt-8">
       <div className="max-w-2xl mx-auto">

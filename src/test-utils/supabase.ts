@@ -1,4 +1,4 @@
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 type SupabaseQueryResult = {
   data: unknown;
@@ -47,7 +47,9 @@ export const supabaseStub = {
     getSession: vi.fn(),
     signInWithOAuth: vi.fn(),
     signOut: vi.fn(),
-    onAuthStateChange: vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } }}),
+    onAuthStateChange: vi
+      .fn()
+      .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
   },
   from: vi.fn(),
 };
@@ -61,14 +63,17 @@ export const resetSupabaseStub = () => {
   supabaseStub.from.mockReset();
 
   supabaseStub.auth.getUser.mockResolvedValue({
-    data: { user: { id: 'user_test' } },
+    data: { user: { id: "user_test" } },
     error: null,
   });
   supabaseStub.auth.getSession.mockResolvedValue({
-    data: { session: { user: { id: 'user_test' } } },
+    data: { session: { user: { id: "user_test" } } },
     error: null,
   });
-  supabaseStub.auth.signInWithOAuth.mockResolvedValue({ data: null, error: null });
+  supabaseStub.auth.signInWithOAuth.mockResolvedValue({
+    data: null,
+    error: null,
+  });
   supabaseStub.auth.signOut.mockResolvedValue({ error: null });
   supabaseStub.auth.onAuthStateChange.mockReturnValue({
     data: { subscription: { unsubscribe: vi.fn() } },
@@ -79,6 +84,6 @@ export const resetSupabaseStub = () => {
 
 resetSupabaseStub();
 
-vi.mock('@/integrations/supabase/client', () => ({
+vi.mock("@/integrations/supabase/client", () => ({
   supabase: supabaseStub,
 }));
