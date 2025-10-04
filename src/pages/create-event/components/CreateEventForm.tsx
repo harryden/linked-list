@@ -15,13 +15,17 @@ import { TEXT } from "@/constants/text";
 interface CreateEventFormProps {
   name: string;
   location: string;
-  startsAt: string;
+  eventDate: string;
+  startTime: string;
+  endTime: string;
   linkedinUrl: string;
   isSubmitting: boolean;
   mode?: "create" | "edit";
   onNameChange: (value: string) => void;
   onLocationChange: (value: string) => void;
-  onStartsAtChange: (value: string) => void;
+  onEventDateChange: (value: string) => void;
+  onStartTimeChange: (value: string) => void;
+  onEndTimeChange: (value: string) => void;
   onLinkedinUrlChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }
@@ -29,13 +33,17 @@ interface CreateEventFormProps {
 const CreateEventForm = ({
   name,
   location,
-  startsAt,
+  eventDate,
+  startTime,
+  endTime,
   linkedinUrl,
   isSubmitting,
   mode = "create",
   onNameChange,
   onLocationChange,
-  onStartsAtChange,
+  onEventDateChange,
+  onStartTimeChange,
+  onEndTimeChange,
   onLinkedinUrlChange,
   onSubmit,
 }: CreateEventFormProps) => (
@@ -77,12 +85,37 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="starts_at">{TEXT.createEvent.form.fields.startsAtLabel}</Label>
+          <Label htmlFor="event_date">{TEXT.createEvent.form.fields.dateLabel}</Label>
           <Input
-            id="starts_at"
-            type="datetime-local"
-            value={startsAt}
-            onChange={(event) => onStartsAtChange(event.target.value)}
+            id="event_date"
+            type="date"
+            placeholder={TEXT.createEvent.form.fields.datePlaceholder}
+            value={eventDate}
+            onChange={(event) => onEventDateChange(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="start_time">{TEXT.createEvent.form.fields.startTimeLabel}</Label>
+          <Input
+            id="start_time"
+            type="time"
+            value={startTime}
+            onChange={(event) => onStartTimeChange(event.target.value)}
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="end_time">{TEXT.createEvent.form.fields.endTimeLabel}</Label>
+          <Input
+            id="end_time"
+            type="time"
+            value={endTime}
+            onChange={(event) => onEndTimeChange(event.target.value)}
+            min={startTime || undefined}
+            required
           />
         </div>
 

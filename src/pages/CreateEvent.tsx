@@ -7,25 +7,45 @@ import { useCreateEvent, useEvent, useUpdateEvent } from "@/hooks/useSupabaseDat
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
 
-const toDateTimeLocalValue = (input?: string | null) => {
+const parseDateParts = (input?: string | null) => {
   if (!input) {
-    return "";
+    return { date: "", time: "" };
   }
 
   const date = new Date(input);
 
   if (Number.isNaN(date.getTime())) {
-    return "";
+    return { date: "", time: "" };
   }
 
   const tzAdjusted = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
-  return tzAdjusted.toISOString().slice(0, 16);
+
+  return {
+    date: tzAdjusted.toISOString().slice(0, 10),
+    time: tzAdjusted.toISOString().slice(11, 16),
+  };
+};
+
+const combineDateAndTime = (date: string, time: string) => {
+  if (!date || !time) {
+    return null;
+  }
+
+  const combined = new Date(`${date}T${time}`);
+
+  if (Number.isNaN(combined.getTime())) {
+    return null;
+  }
+
+  return combined.toISOString();
 };
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
   const [eventLocation, setEventLocation] = useState("");
-  const [startsAt, setStartsAt] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
   const [linkedinUrl, setLinkedinUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPrefilled, setIsPrefilled] = useState(false);
@@ -68,7 +88,13 @@ const CreateEvent = () => {
     if (isEditing && existingEvent && !isPrefilled) {
       setName(existingEvent.name ?? "");
       setEventLocation(existingEvent.location ?? "");
-      setStartsAt(toDateTimeLocalValue(existingEvent.starts_at));
+      const { date: parsedDate, time: parsedStartTime } = parseDateParts(
+        existingEvent.starts_at,
+      );
+      const { time: parsedEndTime } = parseDateParts(existingEvent.ends_at);
+      setEventDate(parsedDate);
+      setStartTime(parsedStartTime);
+      setEndTime(parsedEndTime);
       setLinkedinUrl(existingEvent.linkedin_event_url ?? "");
       setIsPrefilled(true);
     }
@@ -100,9 +126,37 @@ const CreateEvent = () => {
         return;
       }
 
-      const normalizedStartsAt = startsAt
-        ? new Date(startsAt).toISOString()
-        : null;
+      const normalizedStartsAt = combineDateAndTime(eventDate, startTime);
+      const normalizedEndsAt = combineDateAndTime(eventDate, endTime);
+
+      if (!eventDate) {
+        toast.error(TEXT.createEvent.toast.missingDateTime);
+        setIsLoading(false);
+        return;
+      }
+
+      if (!normalizedStartsAt) {
+        toast.error(TEXT.createEvent.toast.missingDateTime);
+        setIsLoading(false);
+        return;
+      }
+
+      if (!normalizedEndsAt) {
+        toast.error(TEXT.createEvent.toast.missingEndTime);
+        setIsLoading(false);
+        return;
+      }
+
+      if (
+        normalizedStartsAt &&
+        normalizedEndsAt &&
+        new Date(normalizedEndsAt).getTime() <=
+          new Date(normalizedStartsAt).getTime()
+      ) {
+        toast.error(TEXT.createEvent.toast.invalidTimeRange);
+        setIsLoading(false);
+        return;
+      }
 
       if (isEditing && editingEventId) {
         try {
@@ -112,6 +166,7 @@ const CreateEvent = () => {
               name,
               location: eventLocation || null,
               starts_at: normalizedStartsAt,
+              ends_at: normalizedEndsAt,
               linkedin_event_url: linkedinUrl || null,
             },
           });
@@ -129,6 +184,7 @@ const CreateEvent = () => {
           slug,
           location: eventLocation || null,
           starts_at: normalizedStartsAt,
+          ends_at: normalizedEndsAt,
           linkedin_event_url: linkedinUrl || null,
           organizer_id: session.user.id,
         });
@@ -163,13 +219,17 @@ const CreateEvent = () => {
           <CreateEventForm
             name={name}
             location={eventLocation}
-            startsAt={startsAt}
+            eventDate={eventDate}
+            startTime={startTime}
+            endTime={endTime}
             linkedinUrl={linkedinUrl}
             isSubmitting={isLoading || (isEditing && isEventLoading)}
             mode={isEditing ? "edit" : "create"}
             onNameChange={setName}
             onLocationChange={setEventLocation}
-            onStartsAtChange={setStartsAt}
+            onEventDateChange={setEventDate}
+            onStartTimeChange={setStartTime}
+            onEndTimeChange={setEndTime}
             onLinkedinUrlChange={setLinkedinUrl}
             onSubmit={handleSubmit}
           />

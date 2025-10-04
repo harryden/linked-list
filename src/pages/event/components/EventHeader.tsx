@@ -4,6 +4,7 @@ import { CardTitle } from "@/components/ui/card";
 import {
   Calendar,
   CheckCircle2,
+  Clock,
   Linkedin,
   MapPin,
   MoreVertical,
@@ -48,6 +49,95 @@ const EventHeader = ({
   onEdit,
   onDelete,
 }: EventHeaderProps) => {
+  const eventStartDate = useMemo(() => {
+    if (!event.starts_at) {
+      return null;
+    }
+
+    const date = new Date(event.starts_at);
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  }, [event.starts_at]);
+
+  const eventEndDate = useMemo(() => {
+    if (!event.ends_at) {
+      return null;
+    }
+
+    const date = new Date(event.ends_at);
+
+    return Number.isNaN(date.getTime()) ? null : date;
+  }, [event.ends_at]);
+
+  const dateReference = eventStartDate ?? eventEndDate;
+
+  const formattedEventDate = useMemo(() => {
+    if (!dateReference) {
+      return TEXT.common.labels.dateNotSet;
+    }
+
+    return dateReference.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    });
+  }, [dateReference]);
+
+  const timeZoneAbbreviation = useMemo(() => {
+    const baseDate = eventStartDate ?? eventEndDate;
+
+    if (!baseDate) {
+      return null;
+    }
+
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Stockholm",
+      timeZoneName: "short",
+    })
+      .formatToParts(baseDate)
+      .find((part) => part.type === "timeZoneName")?.value;
+
+    if (!parts) {
+      return null;
+    }
+
+    if (parts.includes("GMT+2") || parts.includes("GMT+02")) {
+      return "CEST";
+    }
+
+    if (parts.includes("GMT+1") || parts.includes("GMT+01")) {
+      return "CET";
+    }
+
+    return parts;
+  }, [eventStartDate, eventEndDate]);
+
+  const formattedTimeRange = useMemo(() => {
+    if (!eventStartDate && !eventEndDate) {
+      return TEXT.common.labels.timeNotSet;
+    }
+
+    const formatter = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Europe/Stockholm",
+    });
+
+    const startTime = eventStartDate ? formatter.format(eventStartDate) : null;
+    const endTime = eventEndDate ? formatter.format(eventEndDate) : null;
+
+    const zoneSuffix = timeZoneAbbreviation ? ` ${timeZoneAbbreviation}` : "";
+
+    if (startTime && endTime) {
+      return `${startTime} - ${endTime}${zoneSuffix}`;
+    }
+
+    const singleTime = startTime ?? endTime;
+
+    return singleTime ? `${singleTime}${zoneSuffix}` : TEXT.common.labels.timeNotSet;
+  }, [eventStartDate, eventEndDate, timeZoneAbbreviation]);
+
   const hostInitials = useMemo(() => {
     if (!organizer?.name) {
       return "";
@@ -71,16 +161,16 @@ const EventHeader = ({
                     {TEXT.common.labels.eventCode}: {eventCode}
                   </div>
                 )}
-            {event.starts_at && (
+            {dateReference && (
               <div className="flex items-center justify-center gap-2">
                 <Calendar className="h-4 w-4" />
-                <span>
-                  {new Date(event.starts_at).toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric",
-                  })}
-                </span>
+                <span>{formattedEventDate}</span>
+              </div>
+            )}
+            {(eventStartDate || eventEndDate) && (
+              <div className="flex items-center justify-center gap-2">
+                <Clock className="h-4 w-4" />
+                <span>{formattedTimeRange}</span>
               </div>
             )}
             {event.location && (
@@ -161,16 +251,16 @@ const EventHeader = ({
               </span>
             </div>
           )}
-          {event.starts_at && (
+          {dateReference && (
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4" />
-              <span>
-                {new Date(event.starts_at).toLocaleDateString("en-US", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
+              <span>{formattedEventDate}</span>
+            </div>
+          )}
+          {(eventStartDate || eventEndDate) && (
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>{formattedTimeRange}</span>
             </div>
           )}
           {event.location && (
