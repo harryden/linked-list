@@ -18,6 +18,7 @@ interface CreateEventFormProps {
   startsAt: string;
   linkedinUrl: string;
   isSubmitting: boolean;
+  mode?: "create" | "edit";
   onNameChange: (value: string) => void;
   onLocationChange: (value: string) => void;
   onStartsAtChange: (value: string) => void;
@@ -31,6 +32,7 @@ const CreateEventForm = ({
   startsAt,
   linkedinUrl,
   isSubmitting,
+  mode = "create",
   onNameChange,
   onLocationChange,
   onStartsAtChange,
@@ -39,8 +41,16 @@ const CreateEventForm = ({
 }: CreateEventFormProps) => (
   <Card className="shadow-xl">
     <CardHeader>
-      <CardTitle className="text-3xl">{TEXT.createEvent.form.title}</CardTitle>
-      <CardDescription>{TEXT.createEvent.form.description}</CardDescription>
+      <CardTitle className="text-3xl">
+        {mode === "edit"
+          ? TEXT.createEvent.form.editTitle
+          : TEXT.createEvent.form.title}
+      </CardTitle>
+      <CardDescription>
+        {mode === "edit"
+          ? TEXT.createEvent.form.editDescription
+          : TEXT.createEvent.form.description}
+      </CardDescription>
     </CardHeader>
     <CardContent>
       <form onSubmit={onSubmit} className="space-y-6">
@@ -95,7 +105,11 @@ const CreateEventForm = ({
           disabled={isSubmitting}
         >
           {isSubmitting
-            ? TEXT.createEvent.form.submitLoading
+            ? mode === "edit"
+              ? TEXT.createEvent.form.editSubmitLoading
+              : TEXT.createEvent.form.submitLoading
+            : mode === "edit"
+            ? TEXT.createEvent.form.editSubmitIdle
             : TEXT.createEvent.form.submitIdle}
         </Button>
       </form>
