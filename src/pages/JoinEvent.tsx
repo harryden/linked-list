@@ -22,6 +22,7 @@ const JoinEvent = () => {
   const [eventCode, setEventCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOwnEvent, setIsOwnEvent] = useState(false);
+  const [ownEventSlug, setOwnEventSlug] = useState<string | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const queryClient = useQueryClient();
@@ -50,6 +51,7 @@ const JoinEvent = () => {
 
     setIsLoading(true);
     setIsOwnEvent(false);
+    setOwnEventSlug(null);
 
     try {
       // Get current user
@@ -74,6 +76,7 @@ const JoinEvent = () => {
       // Check if user is the organizer
       if (userId && matchingEvent.organizer_id === userId) {
         setIsOwnEvent(true);
+        setOwnEventSlug(matchingEvent.slug);
         return;
       }
 
@@ -135,13 +138,13 @@ const JoinEvent = () => {
             </div>
 
             <div className="pt-2">
-              {isOwnEvent ? (
-                <Link to="/dashboard">
+              {isOwnEvent && ownEventSlug ? (
+                <Link to={`/event/${ownEventSlug}`}>
                   <Button
                     type="button"
                     className="w-full h-12 text-base font-medium rounded-full"
                   >
-                    {TEXT.joinEvent.form.goToDashboard}
+                    {TEXT.joinEvent.form.goToEvent}
                   </Button>
                 </Link>
               ) : (
