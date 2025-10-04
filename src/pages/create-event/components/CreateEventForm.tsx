@@ -87,8 +87,9 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label>{TEXT.createEvent.form.fields.dateLabel}</Label>
+          <Label htmlFor="event_date">{TEXT.createEvent.form.fields.dateLabel}</Label>
           <DatePickerField
+            id="event_date"
             value={eventDate}
             onChange={onEventDateChange}
             placeholder={TEXT.createEvent.form.fields.datePlaceholder}
@@ -96,13 +97,17 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label>{TEXT.createEvent.form.fields.startTimeLabel}</Label>
-          <TimePickerField value={startTime} onChange={onStartTimeChange} />
+          <Label htmlFor="start_time">{TEXT.createEvent.form.fields.startTimeLabel}</Label>
+          <TimePickerField
+            id="start_time"
+            value={startTime}
+            onChange={onStartTimeChange}
+          />
         </div>
 
         <div className="space-y-2">
-          <Label>{TEXT.createEvent.form.fields.endTimeLabel}</Label>
-          <TimePickerField value={endTime} onChange={onEndTimeChange} />
+          <Label htmlFor="end_time">{TEXT.createEvent.form.fields.endTimeLabel}</Label>
+          <TimePickerField id="end_time" value={endTime} onChange={onEndTimeChange} />
         </div>
 
         <div className="space-y-2">

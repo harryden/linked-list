@@ -1,3 +1,47 @@
+import { vi } from 'vitest';
+
+vi.mock('@/components/DatePickerField', () => ({
+  default: ({
+    value,
+    onChange,
+    placeholder,
+    id,
+  }: {
+    value: string;
+    onChange: (next: string) => void;
+    placeholder?: string;
+    id?: string;
+  }) => (
+    <input
+      id={id}
+      type="date"
+      value={value}
+      placeholder={placeholder}
+      onChange={(event) => onChange(event.target.value)}
+    />
+  ),
+}));
+
+vi.mock('@/components/TimePickerField', () => ({
+  default: ({
+    value,
+    onChange,
+    id,
+  }: {
+    value: string;
+    onChange: (next: string) => void;
+    id?: string;
+  }) => (
+    <input
+      id={id}
+      type="time"
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      step={60}
+    />
+  ),
+}));
+
 import { renderWithProviders } from '@/test-utils/render';
 import { Route, Routes } from 'react-router-dom';
 import { screen } from '@testing-library/react';
