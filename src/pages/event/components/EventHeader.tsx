@@ -17,6 +17,7 @@ import { useMemo } from "react";
 import type { EventRow, ProfileRow } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -150,6 +151,30 @@ const EventHeader = ({
       .toUpperCase();
   }, [organizer?.name]);
 
+  const eventNameLength = event.name?.length ?? 0;
+
+  const eventTitleSizingClass = useMemo(() => {
+    if (eventNameLength > 72) {
+      return "text-xl sm:text-3xl";
+    }
+
+    if (eventNameLength > 56) {
+      return "text-[1.65rem] sm:text-[2.5rem]";
+    }
+
+    if (eventNameLength > 40) {
+      return "text-[1.85rem] sm:text-[2.75rem]";
+    }
+
+    if (eventNameLength > 26) {
+      return "text-[2.1rem] sm:text-[2.85rem]";
+    }
+
+    return "text-4xl sm:text-[2.9rem]";
+  }, [eventNameLength]);
+
+  const isAbnormallyLongTitle = eventNameLength > 88;
+
   if (variant === "compact") {
     return (
       <div className="text-center space-y-6">
@@ -197,7 +222,15 @@ const EventHeader = ({
     <div className="space-y-4">
       <div>
         <div className="grid grid-cols-[1fr_auto_auto] items-center gap-4">
-          <CardTitle className="text-4xl mb-2 min-w-0 truncate sm:whitespace-normal sm:truncate-none">
+          <CardTitle
+            className={cn(
+              "mb-5 min-w-0 break-words leading-tight",
+              eventTitleSizingClass,
+              isAbnormallyLongTitle
+                ? "truncate sm:truncate-none"
+                : "line-clamp-2 sm:line-clamp-none",
+            )}
+          >
             {event.name}
           </CardTitle>
           {isAttending && (
@@ -240,7 +273,7 @@ const EventHeader = ({
         </div>
         <div className="flex flex-col gap-2 text-muted-foreground">
           {eventCode && (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mb-2.5 sm:mb-3">
               <QrCode className="h-4 w-4" />
               <span className="font-mono font-semibold text-foreground">
                 {TEXT.common.labels.eventCode}: {eventCode}
