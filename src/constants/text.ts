@@ -37,6 +37,7 @@ export const TEXT = {
     labels: {
       eventCode: "Event Code",
       dateNotSet: "Date not set",
+      timeNotSet: "Time not set",
     },
     ui: {
       breadcrumbMore: "More",
@@ -205,7 +206,10 @@ export const TEXT = {
         namePlaceholder: "Summer Tech Meetup 2025",
         locationLabel: "Location",
         locationPlaceholder: "TechHub Conference Center, San Francisco",
-        startsAtLabel: "Start Date & Time",
+        dateLabel: "Event Date",
+        datePlaceholder: "Select the event date",
+        startTimeLabel: "Start Time",
+        endTimeLabel: "End Time",
         linkedinUrlLabel: "LinkedIn Event URL (optional)",
         linkedinUrlPlaceholder: "https://www.linkedin.com/events/...",
       },
@@ -218,6 +222,9 @@ export const TEXT = {
       success: "Event created successfully!",
       failure: "Failed to create event",
       authRequired: "Please sign in to create events",
+      missingDateTime: "Please select an event date and start time",
+      invalidTimeRange: "Event end time must be after the start time",
+      missingEndTime: "Please provide an end time",
     },
   },
   joinEvent: {
