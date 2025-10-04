@@ -1,11 +1,27 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CardTitle } from "@/components/ui/card";
-import { Calendar, CheckCircle2, Linkedin, MapPin, QrCode, Users } from "lucide-react";
+import {
+  Calendar,
+  CheckCircle2,
+  Linkedin,
+  MapPin,
+  MoreVertical,
+  Pencil,
+  QrCode,
+  Trash2,
+  Users,
+} from "lucide-react";
 import { useMemo } from "react";
 import type { EventRow, ProfileRow } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
 import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface EventHeaderProps {
   event: EventRow;
@@ -16,6 +32,8 @@ interface EventHeaderProps {
   isAttending: boolean;
   onShowQr?: () => void;
   variant?: "default" | "compact";
+  onEdit?: () => void;
+  onDelete?: () => void;
 }
 
 const EventHeader = ({
@@ -27,6 +45,8 @@ const EventHeader = ({
   isAttending,
   onShowQr,
   variant = "default",
+  onEdit,
+  onDelete,
 }: EventHeaderProps) => {
   const hostInitials = useMemo(() => {
     if (!organizer?.name) {
@@ -90,10 +110,45 @@ const EventHeader = ({
           <CardTitle className="text-4xl mb-2 flex-1 min-w-[200px]">
             {event.name}
           </CardTitle>
-          {isAttending && (
-            <div className="inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full">
-              <CheckCircle2 className="h-5 w-5" />
-              <span className="font-medium">{TEXT.event.header.checkedIn}</span>
+          {(isAttending || (isOrganizer && (onEdit || onDelete))) && (
+            <div className="flex items-center gap-2 ml-auto">
+              {isAttending && (
+                <div className="inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full">
+                  <CheckCircle2 className="h-5 w-5" />
+                  <span className="font-medium">{TEXT.event.header.checkedIn}</span>
+                </div>
+              )}
+              {isOrganizer && (onEdit || onDelete) && (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="rounded-full h-10 w-10"
+                      aria-label={TEXT.event.header.options}
+                    >
+                      <MoreVertical className="h-5 w-5" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    {onEdit && (
+                      <DropdownMenuItem onSelect={() => onEdit()}>
+                        <Pencil className="mr-2 h-4 w-4" />
+                        {TEXT.event.header.edit}
+                      </DropdownMenuItem>
+                    )}
+                    {onDelete && (
+                      <DropdownMenuItem
+                        onSelect={() => onDelete()}
+                        className="text-destructive focus:text-destructive"
+                      >
+                        <Trash2 className="mr-2 h-4 w-4" />
+                        {TEXT.event.header.delete}
+                      </DropdownMenuItem>
+                    )}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              )}
             </div>
           )}
         </div>

@@ -20,9 +20,20 @@ import {
   useJoinEvent,
   useMyProfile,
   type ProfileRow,
+  useDeleteEvent,
 } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -30,6 +41,7 @@ const EventPage = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [showQRDialog, setShowQRDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -121,6 +133,7 @@ const EventPage = () => {
   const isLoading = isSessionLoading || isEventLoading || isUserAttendanceLoading;
 
   const joinEvent = useJoinEvent();
+  const deleteEvent = useDeleteEvent();
 
   const handleCheckIn = async () => {
     if (!currentUserId) {
@@ -154,6 +167,40 @@ const EventPage = () => {
 
       console.error("Failed to check in:", error);
       toast.error(TEXT.event.toast.checkInFailure);
+    }
+  };
+
+  const handleEditEvent = () => {
+    if (!event) {
+      return;
+    }
+
+    navigate("/create-event", {
+      state: {
+        eventId: event.id,
+        eventSlug: event.slug,
+      },
+    });
+  };
+
+  const handleDeleteEvent = async () => {
+    if (!event) {
+      return;
+    }
+
+    try {
+      await deleteEvent.mutateAsync({
+        eventId: event.id,
+        organizerId: event.organizer_id ?? undefined,
+        eventSlug: event.slug,
+      });
+      toast.success(TEXT.event.toast.deleteSuccess);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Failed to delete event:", error);
+      toast.error(TEXT.event.toast.deleteFailure);
+    } finally {
+      setShowDeleteDialog(false);
     }
   };
 
@@ -199,6 +246,8 @@ const EventPage = () => {
               isOrganizer={isOrganizer}
               isAttending={isAttending}
               variant="compact"
+              onEdit={isOrganizer ? handleEditEvent : undefined}
+              onDelete={isOrganizer ? () => setShowDeleteDialog(true) : undefined}
             />
 
             <div className="space-y-4">
@@ -267,12 +316,14 @@ const EventPage = () => {
               <EventHeader
                 event={event}
                 eventCode={eventCode}
-                organizer={organizerProfile}
-                currentUserId={currentUserId}
-                isOrganizer={isOrganizer}
-                isAttending={isAttending}
-                onShowQr={() => setShowQRDialog(true)}
-              />
+              organizer={organizerProfile}
+              currentUserId={currentUserId}
+              isOrganizer={isOrganizer}
+              isAttending={isAttending}
+              onEdit={isOrganizer ? handleEditEvent : undefined}
+              onDelete={isOrganizer ? () => setShowDeleteDialog(true) : undefined}
+              onShowQr={() => setShowQRDialog(true)}
+            />
             </CardHeader>
             <CardContent className="space-y-6">
               <AttendButton
@@ -301,6 +352,30 @@ const EventPage = () => {
         eventSlug={event.slug}
         eventName={event.name}
       />
+
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {TEXT.event.header.deleteConfirmTitle}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {TEXT.event.header.deleteConfirmDescription}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleteEvent.isPending}>
+              {TEXT.event.header.deleteConfirmCancel}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteEvent}
+              disabled={deleteEvent.isPending}
+            >
+              {TEXT.event.header.deleteConfirmSubmit}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

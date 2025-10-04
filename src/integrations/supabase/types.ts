@@ -141,7 +141,16 @@ export type Database = {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      delete_event_cascade: {
+        Args: {
+          target_event_id: string;
+        };
+        Returns: {
+          id: string;
+          slug: string;
+          organizer_id: string;
+        }[];
+      };
     };
     Enums: {
       [_ in never]: never;

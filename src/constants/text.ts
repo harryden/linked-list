@@ -192,10 +192,13 @@ export const TEXT = {
     header: {
       backToDashboard: "Back to Dashboard",
       backToHome: "Back to Home",
+      backToEvent: "Back to Event",
     },
     form: {
       title: "Create New Event",
       description: "Fill in the details below to generate your event QR code",
+      editTitle: "Edit Event",
+      editDescription: "Update your event details and save the changes",
       fields: {
         nameLabel: "Event Name *",
         namePlaceholder: "Summer Tech Meetup 2025",
@@ -207,6 +210,8 @@ export const TEXT = {
       },
       submitIdle: "Create Event & Generate QR Code",
       submitLoading: "Creating Event...",
+      editSubmitIdle: "Save Changes",
+      editSubmitLoading: "Saving Changes...",
     },
     toast: {
       success: "Event created successfully!",
@@ -292,6 +297,14 @@ export const TEXT = {
       viewSelfProfile: "View Your Profile",
       linkedInMissing: "LinkedIn profile not available",
       checkedIn: "You're checked in!",
+      options: "Event options",
+      edit: "Edit event",
+      delete: "Delete event",
+      deleteConfirmTitle: "Delete event",
+      deleteConfirmDescription:
+        "Are you sure you want to delete this event? This action cannot be undone.",
+      deleteConfirmSubmit: "Yes, delete",
+      deleteConfirmCancel: "No, keep it",
     },
     attendButton: {
       checkingIn: "Checking In...",
@@ -321,6 +334,10 @@ export const TEXT = {
       checkInFailure: "Failed to check in",
       alreadyCheckedIn: "You're already checked in!",
       eventNotFound: "Event not found",
+      updateSuccess: "Event updated successfully!",
+      updateFailure: "Failed to update event",
+      deleteSuccess: "Event deleted successfully",
+      deleteFailure: "Failed to delete event",
     },
   },
   eventSuccess: {
