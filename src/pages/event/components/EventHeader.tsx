@@ -196,12 +196,12 @@ const EventHeader = ({
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <CardTitle className="text-4xl mb-2 flex-1 min-w-[200px]">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+          <CardTitle className="text-3xl sm:text-4xl mb-2 sm:mb-0 sm:flex-1 sm:min-w-[200px]">
             {event.name}
           </CardTitle>
           {(isAttending || (isOrganizer && (onEdit || onDelete))) && (
-            <div className="flex items-center gap-2 ml-auto">
+            <div className="flex flex-wrap items-center gap-2 sm:ml-auto sm:justify-end">
               {isAttending && (
                 <div className="inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full">
                   <CheckCircle2 className="h-5 w-5" />
