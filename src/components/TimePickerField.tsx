@@ -8,6 +8,7 @@ interface TimePickerFieldProps {
   value: string;
   onChange: (value: string) => void;
   className?: string;
+  id?: string;
 }
 
 const normalizeTime = (value: string) => {
@@ -26,7 +27,7 @@ const normalizeTime = (value: string) => {
   return value;
 };
 
-const TimePickerField = ({ value, onChange, className }: TimePickerFieldProps) => {
+const TimePickerField = ({ value, onChange, className, id }: TimePickerFieldProps) => {
   const [internalValue, setInternalValue] = useState(() => normalizeTime(value));
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const TimePickerField = ({ value, onChange, className }: TimePickerFieldProps) =
   return (
     <div className={cn("time-input-wrapper", className)}>
       <input
+        id={id}
         type="time"
         value={internalValue}
         onChange={(event) => handleChange(event.target.value)}

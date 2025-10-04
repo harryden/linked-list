@@ -14,9 +14,16 @@ interface DatePickerFieldProps {
   onChange: (value: string) => void;
   placeholder?: string;
   className?: string;
+  id?: string;
 }
 
-const DatePickerField = ({ value, onChange, placeholder, className }: DatePickerFieldProps) => {
+const DatePickerField = ({
+  value,
+  onChange,
+  placeholder,
+  className,
+  id,
+}: DatePickerFieldProps) => {
   const [open, setOpen] = useState(false);
 
   const selectedDate = useMemo(() => {
@@ -37,6 +44,7 @@ const DatePickerField = ({ value, onChange, placeholder, className }: DatePicker
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           className={cn(
             "w-full justify-between text-left font-normal",
