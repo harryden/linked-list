@@ -13,8 +13,8 @@ export const TEXT = {
       getStarted: "Get Started",
       signIn: "Sign In",
       createFirstEvent: "Create Your First Event",
-      scanQrCode: "Scan QR Code",
       joinByCode: "Join by Code",
+      joinFirstEvent: "Join your first event",
       goToDashboard: "Go to Dashboard",
       continueCheckIn: "Continue to Check-In",
       findingEvent: "Finding Event...",
@@ -126,12 +126,8 @@ export const TEXT = {
       title: "Events You've Attended",
       loading: "Loading your upcoming events...",
       emptyTitle: "No check-ins yet.",
-      emptyDescription: "Scan a QR or enter a 6-digit code to get started.",
+      emptyDescription: "Enter your 6-digit event code to get started.",
       viewAttendeeList: "View attendee list →",
-    },
-    toast: {
-      authRequired: "Please sign in to check in",
-      alreadyCheckedIn: "You're already checked in to this event!",
     },
   },
   demo: {
@@ -189,7 +185,7 @@ export const TEXT = {
       ],
     },
     notes: {
-      helper: "No payments. No friction. Simply login and start scanning.",
+      helper: "No payments. No friction. Simply login and start connecting.",
     },
   },
   createEvent: {

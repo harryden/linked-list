@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Camera, QrCode, Users } from "lucide-react";
+import { QrCode, Users } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import EmptyState from "./EmptyState";
 
@@ -15,10 +15,9 @@ interface MinimalEvent {
 interface UpcomingSectionProps {
   events: MinimalEvent[];
   isLoading: boolean;
-  onScan: () => void;
 }
 
-const UpcomingSection = ({ events, isLoading, onScan }: UpcomingSectionProps) => (
+const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
   <section>
     <h2 className="text-2xl font-semibold mb-4">{TEXT.dashboard.upcoming.title}</h2>
 
@@ -37,17 +36,11 @@ const UpcomingSection = ({ events, isLoading, onScan }: UpcomingSectionProps) =>
         title={TEXT.dashboard.upcoming.emptyTitle}
         description={TEXT.dashboard.upcoming.emptyDescription}
         actions={
-          <>
-            <Button onClick={onScan} className="rounded-full">
-              <Camera className="h-4 w-4 mr-2" />
-              {TEXT.common.buttons.scanQrCode}
+          <Link to="/join-event" state={{ fromDashboard: true }}>
+            <Button className="rounded-full">
+              {TEXT.common.buttons.joinFirstEvent}
             </Button>
-            <Link to="/join-event" state={{ fromDashboard: true }}>
-              <Button variant="outline" className="rounded-full">
-                {TEXT.common.buttons.joinByCode}
-              </Button>
-            </Link>
-          </>
+          </Link>
         }
       />
     ) : (

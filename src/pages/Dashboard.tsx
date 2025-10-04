@@ -2,14 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { QRScanner } from "@/components/QRScanner";
-import { useQueryClient } from "@tanstack/react-query";
 import { TEXT } from "@/constants/text";
 import {
-  fetchEventWithClient,
   useMyEvents,
   useUpcoming,
-  useJoinEvent,
   useMyProfile,
 } from "@/hooks/useSupabaseData";
 import DashboardHeader from "./dashboard/components/DashboardHeader";
@@ -19,10 +15,7 @@ import UpcomingSection from "./dashboard/components/UpcomingSection";
 const Dashboard = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
-  const [showScanner, setShowScanner] = useState(false);
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
-  const joinEvent = useJoinEvent();
 
   useEffect(() => {
     let isMounted = true;
@@ -109,63 +102,6 @@ const Dashboard = () => {
     navigate("/");
   };
 
-  const handleQRScan = async (eventSlug: string) => {
-    try {
-      const eventData = await fetchEventWithClient(queryClient, {
-        slug: eventSlug,
-      });
-
-      if (!eventData) {
-        toast.error(TEXT.event.toast.eventNotFound);
-        return;
-      }
-
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-
-      if (!session) {
-        toast.error(TEXT.dashboard.toast.authRequired);
-        navigate("/auth");
-        return;
-      }
-
-      if (session.user.id === eventData.organizer_id) {
-        toast.info(
-          "Hey, this is your own event! Share the QR code at the event to let others check in.",
-        );
-        setShowScanner(false);
-        navigate(`/event/${eventSlug}`);
-        return;
-      }
-
-      await joinEvent.mutateAsync({
-        eventId: eventData.id,
-        userId: session.user.id,
-        source: "qr",
-      });
-
-      toast.success(TEXT.event.toast.checkInSuccess);
-      setShowScanner(false);
-      navigate(`/event/${eventSlug}`);
-    } catch (error) {
-      if (
-        typeof error === "object" &&
-        error !== null &&
-        "code" in error &&
-        (error as { code?: string }).code === "23505"
-      ) {
-        toast.info(TEXT.dashboard.toast.alreadyCheckedIn);
-        setShowScanner(false);
-        navigate(`/event/${eventSlug}`);
-        return;
-      }
-
-      console.error("Error checking in:", error);
-      toast.error(TEXT.event.toast.checkInFailure);
-    }
-  };
-
   if (isInitialLoading) {
     return (
       <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
@@ -193,16 +129,9 @@ const Dashboard = () => {
           <UpcomingSection
             events={upcomingEvents}
             isLoading={isUpcomingLoading}
-            onScan={() => setShowScanner(true)}
           />
         </div>
       </main>
-
-      <QRScanner
-        open={showScanner}
-        onClose={() => setShowScanner(false)}
-        onScan={handleQRScan}
-      />
     </div>
   );
 };
