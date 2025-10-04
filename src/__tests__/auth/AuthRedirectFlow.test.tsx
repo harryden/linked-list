@@ -81,7 +81,7 @@ describe("Auth redirect flow", () => {
     expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "linkedin_oidc",
       options: {
-        redirectTo: expect.stringContaining("%2Fevent%2Ftest-event"),
+        redirectTo: `${window.location.origin}/auth/callback`,
         scopes: "openid profile email",
       },
     });
@@ -109,7 +109,7 @@ describe("Auth redirect flow", () => {
     expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "linkedin_oidc",
       options: {
-        redirectTo: expect.stringContaining("redirect=%2F"),
+        redirectTo: `${window.location.origin}/auth/callback`,
         scopes: "openid profile email",
       },
     });
