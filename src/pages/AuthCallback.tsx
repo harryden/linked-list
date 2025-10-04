@@ -85,7 +85,7 @@ const AuthCallback = () => {
 
     toast.success(TEXT.authCallback.toast.success);
     setHasHandledProfile(true);
-    navigate("/dashboard");
+    navigate("/");
   }, [hasHandledProfile, isProfileLoading, navigate, profileError, userId]);
 
   return (
