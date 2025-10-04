@@ -196,50 +196,46 @@ const EventHeader = ({
   return (
     <div className="space-y-4">
       <div>
-        <div className="flex flex-wrap items-start justify-between gap-4">
-          <CardTitle className="text-4xl mb-2 flex-1 min-w-[200px]">
+        <div className="grid grid-cols-[1fr_auto_auto] items-center gap-4">
+          <CardTitle className="text-4xl mb-2 min-w-0 truncate sm:whitespace-normal sm:truncate-none">
             {event.name}
           </CardTitle>
-          {(isAttending || (isOrganizer && (onEdit || onDelete))) && (
-            <div className="flex items-center gap-2 ml-auto">
-              {isAttending && (
-                <div className="inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full">
-                  <CheckCircle2 className="h-5 w-5" />
-                  <span className="font-medium">{TEXT.event.header.checkedIn}</span>
-                </div>
-              )}
-              {isOrganizer && (onEdit || onDelete) && (
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="rounded-full h-10 w-10"
-                      aria-label={TEXT.event.header.options}
-                    >
-                      <MoreVertical className="h-5 w-5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-44">
-                    {onEdit && (
-                      <DropdownMenuItem onSelect={() => onEdit()}>
-                        <Pencil className="mr-2 h-4 w-4" />
-                        {TEXT.event.header.edit}
-                      </DropdownMenuItem>
-                    )}
-                    {onDelete && (
-                      <DropdownMenuItem
-                        onSelect={() => onDelete()}
-                        className="text-destructive focus:text-destructive"
-                      >
-                        <Trash2 className="mr-2 h-4 w-4" />
-                        {TEXT.event.header.delete}
-                      </DropdownMenuItem>
-                    )}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              )}
+          {isAttending && (
+            <div className="col-start-2 inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0">
+              <CheckCircle2 className="h-5 w-5" />
+              <span className="font-medium">{TEXT.event.header.checkedIn}</span>
             </div>
+          )}
+          {isOrganizer && (onEdit || onDelete) && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="col-start-3 rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
+                  aria-label={TEXT.event.header.options}
+                >
+                  <MoreVertical className="h-5 w-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                {onEdit && (
+                  <DropdownMenuItem onSelect={() => onEdit()}>
+                    <Pencil className="mr-2 h-4 w-4" />
+                    {TEXT.event.header.edit}
+                  </DropdownMenuItem>
+                )}
+                {onDelete && (
+                  <DropdownMenuItem
+                    onSelect={() => onDelete()}
+                    className="text-destructive focus:text-destructive"
+                  >
+                    <Trash2 className="mr-2 h-4 w-4" />
+                    {TEXT.event.header.delete}
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
         <div className="flex flex-col gap-2 text-muted-foreground">
