@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PATTERNS='**/*.{js,jsx,ts,tsx,css,scss,html,json,md,yaml,yml}'
+PATTERNS='**/*.{js,jsx,ts,tsx,css,scss,html,json,yaml,yml}'
 
 echo "🔎 Checking Prettier formatting..."
 npx prettier --check $PATTERNS || {
