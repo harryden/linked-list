@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/card";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
 import { TEXT } from "@/constants/text";
+import DatePickerField from "@/components/DatePickerField";
+import TimePickerField from "@/components/TimePickerField";
 
 interface CreateEventFormProps {
   name: string;
@@ -61,7 +63,7 @@ const CreateEventForm = ({
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <form onSubmit={onSubmit} className="space-y-6">
+      <form onSubmit={onSubmit} className="space-y-8">
         <div className="space-y-2">
           <Label htmlFor="name">{TEXT.createEvent.form.fields.nameLabel}</Label>
           <Input
@@ -85,38 +87,22 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="event_date">{TEXT.createEvent.form.fields.dateLabel}</Label>
-          <Input
-            id="event_date"
-            type="date"
-            placeholder={TEXT.createEvent.form.fields.datePlaceholder}
+          <Label>{TEXT.createEvent.form.fields.dateLabel}</Label>
+          <DatePickerField
             value={eventDate}
-            onChange={(event) => onEventDateChange(event.target.value)}
-            required
+            onChange={onEventDateChange}
+            placeholder={TEXT.createEvent.form.fields.datePlaceholder}
           />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="start_time">{TEXT.createEvent.form.fields.startTimeLabel}</Label>
-          <Input
-            id="start_time"
-            type="time"
-            value={startTime}
-            onChange={(event) => onStartTimeChange(event.target.value)}
-            required
-          />
+          <Label>{TEXT.createEvent.form.fields.startTimeLabel}</Label>
+          <TimePickerField value={startTime} onChange={onStartTimeChange} />
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="end_time">{TEXT.createEvent.form.fields.endTimeLabel}</Label>
-          <Input
-            id="end_time"
-            type="time"
-            value={endTime}
-            onChange={(event) => onEndTimeChange(event.target.value)}
-            min={startTime || undefined}
-            required
-          />
+          <Label>{TEXT.createEvent.form.fields.endTimeLabel}</Label>
+          <TimePickerField value={endTime} onChange={onEndTimeChange} />
         </div>
 
         <div className="space-y-2">
