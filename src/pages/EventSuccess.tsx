@@ -86,7 +86,9 @@ const EventSuccess = () => {
           {/* Title and Description */}
           <div className="text-center space-y-2">
             <h1 className="text-3xl font-bold">{TEXT.eventSuccess.title}</h1>
-            <p className="text-muted-foreground">{TEXT.eventSuccess.description}</p>
+            <p className="text-muted-foreground">
+              {TEXT.eventSuccess.description}
+            </p>
           </div>
 
           {/* Event Code */}

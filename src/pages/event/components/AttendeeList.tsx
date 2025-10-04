@@ -66,7 +66,9 @@ const AttendeeList = ({
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground">{attendee.name}</p>
+                    <p className="font-semibold text-foreground">
+                      {attendee.name}
+                    </p>
                     {attendee.headline && (
                       <p className="text-sm text-muted-foreground truncate">
                         {attendee.headline}

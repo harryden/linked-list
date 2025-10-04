@@ -59,7 +59,10 @@ export const fetchEvent = async (
 };
 
 export const useEvent = (identifier?: EventIdentifier) => {
-  const normalized = useMemo(() => normalizeEventIdentifier(identifier), [identifier]);
+  const normalized = useMemo(
+    () => normalizeEventIdentifier(identifier),
+    [identifier],
+  );
   const enabled = Boolean(normalized.id || normalized.slug);
 
   return useQuery({
@@ -107,7 +110,8 @@ export const fetchEvents = async (
 export const useEvents = (options?: UseEventsOptions) => {
   const normalized = normalizeEventsOptions(options);
   const enabled =
-    (options?.enabled ?? Boolean(normalized.organizerId)) || options === undefined;
+    (options?.enabled ?? Boolean(normalized.organizerId)) ||
+    options === undefined;
 
   return useQuery({
     queryKey: eventsQueryKey(options),

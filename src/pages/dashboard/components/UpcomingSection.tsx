@@ -1,6 +1,12 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { QrCode, Users } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import EmptyState from "./EmptyState";
@@ -19,7 +25,9 @@ interface UpcomingSectionProps {
 
 const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
   <section>
-    <h2 className="text-2xl font-semibold mb-4">{TEXT.dashboard.upcoming.title}</h2>
+    <h2 className="text-2xl font-semibold mb-4">
+      {TEXT.dashboard.upcoming.title}
+    </h2>
 
     {isLoading ? (
       <Card>
@@ -27,7 +35,9 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
           <div className="flex justify-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
           </div>
-          <p className="text-muted-foreground">{TEXT.dashboard.upcoming.loading}</p>
+          <p className="text-muted-foreground">
+            {TEXT.dashboard.upcoming.loading}
+          </p>
         </CardContent>
       </Card>
     ) : events.length === 0 ? (

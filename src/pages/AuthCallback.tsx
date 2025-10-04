@@ -43,7 +43,9 @@ const AuthCallback = () => {
 
         if (error) {
           console.error("OAuth error:", error, errorDescription);
-          toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
+          toast.error(
+            errorDescription || TEXT.authCallback.toast.genericFailure,
+          );
           setStatus("error");
           if (typeof window !== "undefined") {
             sessionStorage.removeItem("postAuthRedirect");
@@ -117,7 +119,14 @@ const AuthCallback = () => {
       sessionStorage.removeItem("postAuthRedirect");
     }
     navigate(redirectPath, { replace: true });
-  }, [hasHandledProfile, isProfileLoading, navigate, profileError, redirectPath, userId]);
+  }, [
+    hasHandledProfile,
+    isProfileLoading,
+    navigate,
+    profileError,
+    redirectPath,
+    userId,
+  ]);
 
   return (
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">

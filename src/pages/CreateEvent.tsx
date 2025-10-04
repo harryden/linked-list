@@ -3,7 +3,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { TEXT } from "@/constants/text";
-import { useCreateEvent, useEvent, useUpdateEvent } from "@/hooks/useSupabaseData";
+import {
+  useCreateEvent,
+  useEvent,
+  useUpdateEvent,
+} from "@/hooks/useSupabaseData";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
 
@@ -18,7 +22,9 @@ const parseDateParts = (input?: string | null) => {
     return { date: "", time: "" };
   }
 
-  const tzAdjusted = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  const tzAdjusted = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60000,
+  );
 
   return {
     date: tzAdjusted.toISOString().slice(0, 10),
@@ -55,7 +61,9 @@ const CreateEvent = () => {
   const updateEvent = useUpdateEvent();
 
   const editingEventId = routerLocation.state?.eventId as string | undefined;
-  const eventSlugFromState = routerLocation.state?.eventSlug as string | undefined;
+  const eventSlugFromState = routerLocation.state?.eventSlug as
+    | string
+    | undefined;
   const isEditing = Boolean(editingEventId);
 
   const {
@@ -69,13 +77,13 @@ const CreateEvent = () => {
   const backPath = fromDashboard
     ? "/dashboard"
     : eventSlugFromState
-    ? `/event/${eventSlugFromState}`
-    : "/";
+      ? `/event/${eventSlugFromState}`
+      : "/";
   const backText = fromDashboard
     ? TEXT.createEvent.header.backToDashboard
     : eventSlugFromState
-    ? TEXT.createEvent.header.backToEvent
-    : TEXT.createEvent.header.backToHome;
+      ? TEXT.createEvent.header.backToEvent
+      : TEXT.createEvent.header.backToHome;
 
   useEffect(() => {
     if (eventError) {

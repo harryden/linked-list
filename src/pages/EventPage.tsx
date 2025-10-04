@@ -91,14 +91,12 @@ const EventPage = () => {
 
   const { data: organizerProfile } = useMyProfile(event?.organizer_id);
 
-  const {
-    data: userAttendance,
-    isLoading: isUserAttendanceLoading,
-  } = useAttendances({
-    eventId: event?.id,
-    userId: currentUserId ?? undefined,
-    enabled: Boolean(event?.id && currentUserId),
-  });
+  const { data: userAttendance, isLoading: isUserAttendanceLoading } =
+    useAttendances({
+      eventId: event?.id,
+      userId: currentUserId ?? undefined,
+      enabled: Boolean(event?.id && currentUserId),
+    });
 
   const isOrganizer = Boolean(
     currentUserId && event && currentUserId === event.organizer_id,
@@ -108,11 +106,12 @@ const EventPage = () => {
 
   const canViewAttendees = Boolean(event && (isOrganizer || isAttending));
 
-  const { data: attendeeRecords, isLoading: isAttendeesLoading } = useAttendances({
-    eventId: event?.id,
-    includeProfiles: true,
-    enabled: canViewAttendees,
-  });
+  const { data: attendeeRecords, isLoading: isAttendeesLoading } =
+    useAttendances({
+      eventId: event?.id,
+      includeProfiles: true,
+      enabled: canViewAttendees,
+    });
 
   const attendees = useMemo(() => {
     return (attendeeRecords ?? [])
@@ -132,7 +131,8 @@ const EventPage = () => {
       .padStart(6, "0");
   }, [event?.id]);
 
-  const isLoading = isSessionLoading || isEventLoading || isUserAttendanceLoading;
+  const isLoading =
+    isSessionLoading || isEventLoading || isUserAttendanceLoading;
 
   const joinEvent = useJoinEvent();
   const deleteEvent = useDeleteEvent();
@@ -223,7 +223,9 @@ const EventPage = () => {
         <Card className="max-w-md">
           <CardHeader>
             <CardTitle>{TEXT.event.page.notFoundTitle}</CardTitle>
-            <CardDescription>{TEXT.event.page.notFoundDescription}</CardDescription>
+            <CardDescription>
+              {TEXT.event.page.notFoundDescription}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <Link to="/">
@@ -249,7 +251,9 @@ const EventPage = () => {
               isAttending={isAttending}
               variant="compact"
               onEdit={isOrganizer ? handleEditEvent : undefined}
-              onDelete={isOrganizer ? () => setShowDeleteDialog(true) : undefined}
+              onDelete={
+                isOrganizer ? () => setShowDeleteDialog(true) : undefined
+              }
             />
 
             <div className="space-y-4">
@@ -319,14 +323,16 @@ const EventPage = () => {
               <EventHeader
                 event={event}
                 eventCode={eventCode}
-              organizer={organizerProfile}
-              currentUserId={currentUserId}
-              isOrganizer={isOrganizer}
-              isAttending={isAttending}
-              onEdit={isOrganizer ? handleEditEvent : undefined}
-              onDelete={isOrganizer ? () => setShowDeleteDialog(true) : undefined}
-              onShowQr={() => setShowQRDialog(true)}
-            />
+                organizer={organizerProfile}
+                currentUserId={currentUserId}
+                isOrganizer={isOrganizer}
+                isAttending={isAttending}
+                onEdit={isOrganizer ? handleEditEvent : undefined}
+                onDelete={
+                  isOrganizer ? () => setShowDeleteDialog(true) : undefined
+                }
+                onShowQr={() => setShowQRDialog(true)}
+              />
             </CardHeader>
             <CardContent className="space-y-6">
               <AttendButton

@@ -29,8 +29,8 @@ const DashboardHeader = ({
   const welcomeMessage = greeting
     ? greeting
     : name
-    ? `${TEXT.dashboard.header.welcomePrefix} ${name}!`
-    : TEXT.dashboard.header.welcomePrefix;
+      ? `${TEXT.dashboard.header.welcomePrefix} ${name}!`
+      : TEXT.dashboard.header.welcomePrefix;
 
   return (
     <>

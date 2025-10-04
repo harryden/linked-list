@@ -77,7 +77,9 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">{TEXT.createEvent.form.fields.locationLabel}</Label>
+          <Label htmlFor="location">
+            {TEXT.createEvent.form.fields.locationLabel}
+          </Label>
           <LocationAutocomplete
             id="location"
             value={location}
@@ -87,7 +89,9 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="event_date">{TEXT.createEvent.form.fields.dateLabel}</Label>
+          <Label htmlFor="event_date">
+            {TEXT.createEvent.form.fields.dateLabel}
+          </Label>
           <DatePickerField
             id="event_date"
             value={eventDate}
@@ -97,7 +101,9 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="start_time">{TEXT.createEvent.form.fields.startTimeLabel}</Label>
+          <Label htmlFor="start_time">
+            {TEXT.createEvent.form.fields.startTimeLabel}
+          </Label>
           <TimePickerField
             id="start_time"
             value={startTime}
@@ -106,8 +112,14 @@ const CreateEventForm = ({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="end_time">{TEXT.createEvent.form.fields.endTimeLabel}</Label>
-          <TimePickerField id="end_time" value={endTime} onChange={onEndTimeChange} />
+          <Label htmlFor="end_time">
+            {TEXT.createEvent.form.fields.endTimeLabel}
+          </Label>
+          <TimePickerField
+            id="end_time"
+            value={endTime}
+            onChange={onEndTimeChange}
+          />
         </div>
 
         <div className="space-y-2">
@@ -133,8 +145,8 @@ const CreateEventForm = ({
               ? TEXT.createEvent.form.editSubmitLoading
               : TEXT.createEvent.form.submitLoading
             : mode === "edit"
-            ? TEXT.createEvent.form.editSubmitIdle
-            : TEXT.createEvent.form.submitIdle}
+              ? TEXT.createEvent.form.editSubmitIdle
+              : TEXT.createEvent.form.submitIdle}
         </Button>
       </form>
     </CardContent>

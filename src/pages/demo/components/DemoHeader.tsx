@@ -20,7 +20,9 @@ const DemoHeader = () => (
 
     <div className="container mx-auto px-4 pt-12">
       <div className="max-w-4xl mx-auto text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold">{TEXT.demo.header.title}</h1>
+        <h1 className="text-4xl md:text-5xl font-bold">
+          {TEXT.demo.header.title}
+        </h1>
         <p className="text-xl text-muted-foreground">
           {TEXT.demo.header.subtitle}
         </p>

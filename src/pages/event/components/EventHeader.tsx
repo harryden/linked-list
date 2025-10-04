@@ -136,7 +136,9 @@ const EventHeader = ({
 
     const singleTime = startTime ?? endTime;
 
-    return singleTime ? `${singleTime}${zoneSuffix}` : TEXT.common.labels.timeNotSet;
+    return singleTime
+      ? `${singleTime}${zoneSuffix}`
+      : TEXT.common.labels.timeNotSet;
   }, [eventStartDate, eventEndDate, timeZoneAbbreviation]);
 
   const hostInitials = useMemo(() => {
@@ -179,13 +181,13 @@ const EventHeader = ({
     return (
       <div className="text-center space-y-6">
         <div className="space-y-2">
-              <h1 className="text-3xl font-bold mb-4">{event.name}</h1>
-              <div className="space-y-2 text-muted-foreground">
-                {eventCode && (
-                  <div className="text-sm text-primary font-medium">
-                    {TEXT.common.labels.eventCode}: {eventCode}
-                  </div>
-                )}
+          <h1 className="text-3xl font-bold mb-4">{event.name}</h1>
+          <div className="space-y-2 text-muted-foreground">
+            {eventCode && (
+              <div className="text-sm text-primary font-medium">
+                {TEXT.common.labels.eventCode}: {eventCode}
+              </div>
+            )}
             {dateReference && (
               <div className="flex items-center justify-center gap-2">
                 <Calendar className="h-4 w-4" />
@@ -310,7 +312,9 @@ const EventHeader = ({
                 <p className="text-sm text-muted-foreground mb-0.5">
                   {TEXT.event.header.hostedBy}
                 </p>
-                <p className="font-semibold text-foreground">{organizer.name}</p>
+                <p className="font-semibold text-foreground">
+                  {organizer.name}
+                </p>
                 {organizer.headline && (
                   <p className="text-sm text-muted-foreground truncate">
                     {organizer.headline}
@@ -351,7 +355,6 @@ const EventHeader = ({
           {TEXT.common.buttons.viewQrCode}
         </Button>
       )}
-
     </div>
   );
 };
