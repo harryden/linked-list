@@ -77,6 +77,7 @@ const JoinEvent = () => {
       if (userId && matchingEvent.organizer_id === userId) {
         setIsOwnEvent(true);
         setOwnEventSlug(matchingEvent.slug);
+        toast.info("You're the organizer of this event");
         return;
       }
 
