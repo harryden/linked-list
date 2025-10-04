@@ -301,6 +301,7 @@ export const TEXT = {
       viewSelfProfile: "View Your Profile",
       linkedInMissing: "LinkedIn profile unavailable",
       checkedIn: "You're checked in",
+      checkedInShort: "Checked in!",
       options: "Event options",
       edit: "Edit event",
       delete: "Delete event",
