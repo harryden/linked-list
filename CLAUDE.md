@@ -9,7 +9,7 @@ This document provides structured guidelines for AI agents (like Claude Code) co
 ### 1. Branch Creation
 
 git checkout main && git pull
-git checkout -b feature/LIN-<ticket> # or feature/<descriptive-name>
+git checkout -b feature/<descriptive-name>
 
 ### 2. Making Changes
 
@@ -22,15 +22,19 @@ git commit --fixup <commit-sha>
 ### 3. Before Opening PR
 
 # Squash all fixup commits
+
 git rebase -i --autosquash main
 
 # Rebase on latest main
+
 git fetch origin && git rebase origin/main
 
 # Verify everything passes
+
 # Run tests, linting, type checking locally before pushing
 
 # Push branch
+
 git push -u origin feature/<branch-name>
 
 ### 4. Open Pull Request
@@ -41,9 +45,11 @@ When you open a PR, GitHub will automatically populate the description with this
 Always follow the template structure.
 
 # The template will auto-populate when you create the PR
-gh pr create --title "[feature/LIN-X] What is changing"
+
+gh pr create --title "[feature/<name>] What is changing"
 
 # Or open PR in browser where the template will appear automatically
+
 gh pr create --web
 
 Do not write custom PR descriptions that deviate from the template. Fill in each section of the template completely.
@@ -59,15 +65,12 @@ Capitalize first letter and describe what the commit does
 Optional longer description explaining what is changing and why.
 Can span multiple paragraphs if needed.
 
-Reference: LIN-123
-
 ### Rules
 
 - No prefixes like "chore:", "fix:", "feat:"
 - Start with a capital letter
 - Use imperative mood: "Add feature" not "Added feature"
 - Be specific: "Add validation for email fields" not "Update form"
-- Include ticket reference if applicable
 
 ### Examples
 
@@ -78,8 +81,6 @@ Validates email format and checks for duplicate addresses
 before allowing registration. Prevents invalid emails from
 entering the system.
 
-Reference: LIN-156
-
 Bad:
 fix: updated stuff
 
@@ -88,10 +89,12 @@ fix: updated stuff
 ## PR Title Format
 
 ### Feature Changes
-[feature/LIN-<number>] Brief description of what is changing
-Example: [feature/LIN-42] Add user authentication system
+
+[feature/<name>] Brief description of what is changing
+Example: [feature/add-user-auth] Add user authentication system
 
 ### Non-feature Changes (chores, refactoring, etc.)
+
 [chore] Brief description of what is changing
 Example: [chore] Update dependencies to latest versions
 
@@ -165,22 +168,29 @@ Run through this checklist before marking a PR as ready:
 ## Quick Reference Commands
 
 # Create fixup commit for earlier commit
+
 git add -A
 git commit --fixup <sha>
 
 # Squash all fixups before pushing
+
 git rebase -i --autosquash main
 
 # Update branch with latest main
+
 git fetch origin
 git rebase origin/main
 
 # Force push after rebase (be careful!)
+
 git push --force-with-lease origin <branch-name>
 
 # Open PR (template will auto-populate)
-gh pr create --title "[feature/LIN-X] Title"
+
+gh pr create --title "[feature/<name>] Title"
+
 # or
+
 gh pr create --web
 
 ---

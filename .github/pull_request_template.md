@@ -1,7 +1,3 @@
-## Jira Issue
-
-- LIN-XX
-
 ## Summary
 
 Brief description of what this PR does.
