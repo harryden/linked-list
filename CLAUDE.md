@@ -35,7 +35,7 @@ git fetch origin && git rebase origin/main
 
 # Push branch
 
-git push -u origin feature/<branch-name>
+git push -u origin feature/<descriptive-name>
 
 ### 4. Open Pull Request
 
@@ -183,7 +183,7 @@ git rebase origin/main
 
 # Force push after rebase (be careful!)
 
-git push --force-with-lease origin <branch-name>
+git push --force-with-lease origin <descriptive-name>
 
 # Open PR (template will auto-populate)
 

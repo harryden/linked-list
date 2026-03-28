@@ -39,13 +39,12 @@ export function <ComponentName>({ className }: <ComponentName>Props) {
 ## Test template
 
 ```tsx
-import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import { <ComponentName> } from "@/components/<ComponentName>";
 
 describe("<ComponentName>", () => {
   it("renders without crashing", () => {
-    const { container } = render(<<ComponentName> />);
+    const { container } = render(<ComponentName />);
     expect(container).toBeTruthy();
   });
 });
