@@ -203,3 +203,14 @@ gh pr create --web
 - Test everything – Don’t rely on CI to catch basic issues
 - Follow the template – Always use .github/pull_request_template.md
 - Ask when uncertain – Better to ask than to guess
+
+---
+
+## gstack
+
+Use the /browse skill from gstack for all web browsing. Never use mcp__claude-in-chrome__* tools.
+
+Available skills:
+/office-hours, /plan-ceo-review, /plan-eng-review, /plan-design-review, /design-consultation, /design-shotgun, /review, /ship, /land-and-deploy, /canary, /benchmark, /browse, /connect-chrome, /qa, /qa-only, /design-review, /setup-browser-cookies, /setup-deploy, /retro, /investigate, /document-release, /codex, /cso, /autoplan, /careful, /freeze, /guard, /unfreeze, /gstack-upgrade
+
+If gstack skills aren't working, run: cd .claude/skills/gstack && ./setup
