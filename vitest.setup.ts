@@ -6,8 +6,8 @@ import { resetSupabaseStub } from "./src/test-utils/supabase";
 globalThis.import = {
   meta: {
     env: {
-      VITE_SUPABASE_URL: "https://supabase.test",
-      VITE_SUPABASE_PUBLISHABLE_KEY: "anon-key",
+      VITE_PUBLIC_SUPABASE_URL: "https://supabase.test",
+      VITE_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
     },
   },
 } as any;
