@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v jq >/dev/null 2>&1 || exit 0; jq -r '.tool_input.file_path // .tool_response.filePath' 2>/dev/null | { read -r f; case \"$f\" in (*.js|*.jsx|*.ts|*.tsx|*.json|*.yml|*.yaml|*.md|*.markdown|*.css|*.scss|*.less|*.html|*.htm|*.cjs|*.mjs) npx --no-install prettier --write \"$f\" ;; (*) : ;; esac; } || true",
+            "statusMessage": "Formatting with Prettier..."
+          }
+        ]
+      }
+    ]
+  }
+}

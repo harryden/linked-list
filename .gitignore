@@ -140,3 +140,7 @@ vite.config.ts.timestamp-*
 
 # macOS system files
 .DS_Store
+
+# Claude Code — personal tooling (installed globally, not committed)
+.claude/skills/
+.claude/settings.local.json
