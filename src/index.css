@@ -51,6 +51,14 @@ All colors MUST be HSL.
     --success: 142 76% 36%;
     --success-foreground: 0 0% 100%;
 
+    /* Brand colors */
+    --brand-linkedin: 210 77% 40%;
+    --brand-linkedin-hover: 210 100% 25%;
+
+    /* Glow effects - using HSL components for better transparency control */
+    --glow-primary: 330 80% 60%;
+    --glow-linkedin: 210 77% 40%;
+
     /* Border radius */
     --radius: 0.75rem;
 

@@ -329,7 +329,7 @@ const EventHeader = ({
                 )}
               </div>
               <Button
-                className={`flex items-center gap-2 ${LINKEDIN.buttonClass}`}
+                className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
                 onClick={() => {
                   if (organizer.linkedin_id) {
                     window.open(

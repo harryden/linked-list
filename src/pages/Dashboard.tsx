@@ -9,6 +9,7 @@ import { useMyProfile } from "@/hooks/useProfile";
 import DashboardHeader from "./dashboard/components/DashboardHeader";
 import MyEventsList from "./dashboard/components/MyEventsList";
 import UpcomingSection from "./dashboard/components/UpcomingSection";
+import PageContainer from "@/components/layout/PageContainer";
 
 const Dashboard = () => {
   const [userId, setUserId] = useState<string | null>(null);
@@ -123,15 +124,15 @@ const Dashboard = () => {
         greeting={greeting}
       />
 
-      <main className="container mx-auto px-4 pb-8">
-        <div className="max-w-6xl mx-auto space-y-8">
+      <PageContainer maxWidth="xl" withGradient={false} className="py-0 pb-8">
+        <div className="space-y-8">
           <MyEventsList events={myEvents} isLoading={isMyEventsLoading} />
           <UpcomingSection
             events={upcomingEvents}
             isLoading={isUpcomingLoading}
           />
         </div>
-      </main>
+      </PageContainer>
     </div>
   );
 };

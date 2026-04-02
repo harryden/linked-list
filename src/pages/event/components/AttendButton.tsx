@@ -31,10 +31,10 @@ const AttendButton = ({
   }
 
   const buttonClasses = cn(
-    "w-full rounded-full h-12 text-base font-medium",
+    "w-full rounded-full h-12 text-base font-medium transition-all hover:shadow-lg",
     mode === "linkedin"
-      ? `flex items-center justify-center gap-2 ${LINKEDIN.buttonClass}`
-      : "",
+      ? "bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin"
+      : "bg-primary text-primary-foreground shadow-glow-primary hover:bg-primary-hover",
     className,
   );
 

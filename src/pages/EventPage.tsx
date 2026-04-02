@@ -22,6 +22,7 @@ import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";
+import PageContainer from "@/components/layout/PageContainer";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -204,19 +205,19 @@ const EventPage = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
+      <PageContainer className="items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   if (!event) {
     return (
-      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
-        <Card className="max-w-md">
+      <PageContainer className="items-center justify-center">
+        <Card className="max-w-md w-full shadow-lg">
           <CardHeader>
             <CardTitle>{TEXT.event.page.notFoundTitle}</CardTitle>
             <CardDescription>
@@ -229,14 +230,14 @@ const EventPage = () => {
             </Link>
           </CardContent>
         </Card>
-      </div>
+      </PageContainer>
     );
   }
 
   if (!currentUserId || !canViewAttendees) {
     return (
-      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
-        <Card className="w-full max-w-md shadow-2xl">
+      <PageContainer maxWidth="sm" className="justify-center">
+        <Card className="w-full shadow-2xl">
           <CardContent className="pt-8 pb-6 px-6 space-y-6">
             <EventHeader
               event={event}
@@ -279,12 +280,12 @@ const EventPage = () => {
             )}
           </CardContent>
         </Card>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-gradient-subtle flex flex-col">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link
@@ -303,8 +304,8 @@ const EventPage = () => {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
-        <div className="max-w-4xl mx-auto space-y-8">
+      <PageContainer withGradient={false} className="py-8">
+        <div className="space-y-8">
           {currentUserId && (
             <Link to="/dashboard">
               <Button variant="ghost">
@@ -367,7 +368,7 @@ const EventPage = () => {
             />
           </div>
         </div>
-      </main>
+      </PageContainer>
 
       <QRCodeDialog
         open={showQRDialog}

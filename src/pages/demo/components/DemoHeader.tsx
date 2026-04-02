@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
+import Heading from "@/components/ui/heading";
 
 const DemoHeader = () => (
   <>
@@ -20,9 +21,7 @@ const DemoHeader = () => (
 
     <div className="container mx-auto px-4 pt-12">
       <div className="max-w-4xl mx-auto text-center space-y-4">
-        <h1 className="text-4xl md:text-5xl font-bold">
-          {TEXT.demo.header.title}
-        </h1>
+        <Heading level={1}>{TEXT.demo.header.title}</Heading>
         <p className="text-xl text-muted-foreground">
           {TEXT.demo.header.subtitle}
         </p>

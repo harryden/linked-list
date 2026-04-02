@@ -57,12 +57,20 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        linkedin: {
+          DEFAULT: "hsl(var(--brand-linkedin))",
+          hover: "hsl(var(--brand-linkedin-hover))",
+        },
       },
       boxShadow: {
         sm: "var(--shadow-sm)",
         md: "var(--shadow-md)",
         lg: "var(--shadow-lg)",
         xl: "var(--shadow-xl)",
+        "glow-primary":
+          "0 0 20px hsla(var(--glow-primary) / 0.4), 0 0 40px hsla(var(--glow-primary) / 0.2)",
+        "glow-linkedin":
+          "0 0 20px hsla(var(--glow-linkedin) / 0.4), 0 0 40px hsla(var(--glow-linkedin) / 0.2)",
       },
       backgroundImage: {
         "gradient-subtle": "var(--gradient-subtle)",
@@ -108,11 +116,11 @@ export default {
         "border-glow": {
           "0%, 100%": {
             boxShadow:
-              "0 0 20px rgba(255, 150, 200, 0.4), 0 0 40px rgba(255, 150, 200, 0.2)",
+              "0 0 20px hsla(var(--glow-primary) / 0.4), 0 0 40px hsla(var(--glow-primary) / 0.2)",
           },
           "50%": {
             boxShadow:
-              "0 0 30px rgba(255, 150, 200, 0.6), 0 0 60px rgba(255, 150, 200, 0.3), 0 0 80px rgba(255, 150, 200, 0.1)",
+              "0 0 30px hsla(var(--glow-primary) / 0.6), 0 0 60px hsla(var(--glow-primary) / 0.3), 0 0 80px hsla(var(--glow-primary) / 0.1)",
           },
         },
       },

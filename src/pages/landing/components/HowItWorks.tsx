@@ -17,10 +17,7 @@ const HowItWorks = () => (
                 animationFillMode: "both",
               }}
             >
-              <div
-                className="flex-shrink-0 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold"
-                style={{ boxShadow: "0 0 20px rgba(255, 150, 200, 0.4)" }}
-              >
+              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold shadow-glow-primary">
                 {step}
               </div>
               <div>
