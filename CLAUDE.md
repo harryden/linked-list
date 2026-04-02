@@ -183,7 +183,7 @@ git rebase origin/main
 
 # Force push after rebase (be careful!)
 
-git push --force-with-lease origin <descriptive-name>
+git push --force-with-lease origin feature/<descriptive-name>
 
 # Open PR (template will auto-populate)
 
