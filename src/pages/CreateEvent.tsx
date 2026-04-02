@@ -181,8 +181,12 @@ const CreateEvent = () => {
 
           toast.success(TEXT.event.toast.updateSuccess);
           navigate(`/event/${updatedEvent.slug}`);
-        } catch (error: any) {
-          toast.error(error.message || TEXT.event.toast.updateFailure);
+        } catch (error: unknown) {
+          const message =
+            error instanceof Error
+              ? error.message
+              : TEXT.event.toast.updateFailure;
+          toast.error(message);
         }
       } else {
         const slug = generateSlug(name);
@@ -200,8 +204,10 @@ const CreateEvent = () => {
         toast.success(TEXT.createEvent.toast.success);
         navigate(`/event-success/${slug}`);
       }
-    } catch (error: any) {
-      toast.error(error.message || TEXT.createEvent.toast.failure);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : TEXT.createEvent.toast.failure;
+      toast.error(message);
     } finally {
       setIsLoading(false);
     }

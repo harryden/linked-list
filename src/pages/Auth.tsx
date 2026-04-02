@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
+import { LINKEDIN } from "@/constants/brands";
 import linkbackLogo from "@/assets/linkback-logo.png";
 
 const Auth = () => {
@@ -67,8 +68,10 @@ const Auth = () => {
       });
 
       if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || TEXT.auth.toast.failure);
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : TEXT.auth.toast.failure;
+      toast.error(message);
       setIsLoading(false);
       if (typeof window !== "undefined") {
         sessionStorage.removeItem("postAuthRedirect");
@@ -99,7 +102,7 @@ const Auth = () => {
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
               size="lg"
-              className="w-full rounded-full h-12 text-base font-medium bg-[#0A66C2] hover:bg-[#004182] text-white"
+              className={`w-full rounded-full h-12 text-base font-medium ${LINKEDIN.buttonClass}`}
             >
               {isLoading ? (
                 <>
@@ -146,7 +149,7 @@ const Auth = () => {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:underline"
-                  style={{ color: "#0A66C2" }}
+                  style={{ color: LINKEDIN.blue }}
                 >
                   {TEXT.auth.info.linkedInSettings}
                 </a>
