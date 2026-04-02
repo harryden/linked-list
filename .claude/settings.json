@@ -18,7 +18,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // .tool_response.filePath // \"\"'); if echo \"$file\" | grep -qE '(^|/)\\.env' && ! echo \"$file\" | grep -qE '(^|/)\\.env\\.example'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Cannot write to .env files directly. Use .env.example for templates.\"}}'; fi"
+            "command": "input=$(cat); file=$(echo \"$input\" | jq -r '.tool_input.file_path // .tool_response.filePath // \"\"'); if echo \"$file\" | grep -qE '(^|/)\\.env' && ! echo \"$file\" | grep -qE '(^|/)\\.env\\.(example|local)'; then echo '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"deny\",\"permissionDecisionReason\":\"Cannot write to .env files directly. Use .env.example for templates.\"}}'; fi"
           }
         ]
       }
