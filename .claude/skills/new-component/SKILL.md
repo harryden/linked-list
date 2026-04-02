@@ -27,7 +27,7 @@ interface <ComponentName>Props {
   className?: string;
 }
 
-export function <ComponentName>({ className }: <ComponentName>Props) {
+export default function <ComponentName>({ className }: <ComponentName>Props) {
   return (
     <div className={cn("", className)}>
       {/* TODO: implement */}
@@ -40,8 +40,9 @@ export function <ComponentName>({ className }: <ComponentName>Props) {
 
 ```tsx
 import { render } from "@testing-library/react";
-import { <ComponentName> } from "@/components/<ComponentName>";
+import <ComponentName> from "@/components/<ComponentName>";
 
+// describe/it/expect are Vitest globals (globals: true in vitest.config.ts) — no import needed
 describe("<ComponentName>", () => {
   it("renders without crashing", () => {
     const { container } = render(<ComponentName />);
@@ -56,7 +57,7 @@ describe("<ComponentName>", () => {
 - Use Tailwind for all styling — no inline styles
 - Use `cn()` from `@/lib/utils` for conditional class merging
 - Props interface always named `<ComponentName>Props`
-- Export as named export, not default
+- Export as default export (matches existing component conventions in this project)
 - If the component fetches data, use a hook from `useSupabaseData.ts` — don't call Supabase directly from the component
 
 After creating both files, run `npm run test:run` to confirm the test passes.
