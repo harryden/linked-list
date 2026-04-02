@@ -6,6 +6,7 @@ import { CalendarCheck, Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
+import { eventCodeFromId } from "@/lib/events";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,12 +35,7 @@ const EventSuccess = () => {
 
     setEventName(event.name);
 
-    const code = Math.abs(
-      parseInt(event.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
-    )
-      .toString()
-      .padStart(6, "0");
-    setEventCode(code);
+    setEventCode(eventCodeFromId(event.id));
   }, [event]);
 
   const isLoading = isEventLoading;
