@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { LINKEDIN } from "@/constants/brands";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CardTitle } from "@/components/ui/card";
 import {
@@ -327,7 +328,7 @@ const EventHeader = ({
                 )}
               </div>
               <Button
-                className="flex items-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white"
+                className={`flex items-center gap-2 ${LINKEDIN.buttonClass}`}
                 onClick={() => {
                   if (organizer.linkedin_id) {
                     window.open(

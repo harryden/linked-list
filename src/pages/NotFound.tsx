@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { TEXT } from "@/constants/text";
 
@@ -13,13 +13,15 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-subtle">
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">{TEXT.notFound.title}</h1>
-        <p className="mb-4 text-xl text-gray-600">{TEXT.notFound.subtitle}</p>
-        <a href="/" className="text-blue-500 underline hover:text-blue-700">
+        <p className="mb-4 text-xl text-muted-foreground">
+          {TEXT.notFound.subtitle}
+        </p>
+        <Link to="/" className="text-primary underline hover:text-primary/80">
           {TEXT.notFound.link}
-        </a>
+        </Link>
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { TEXT } from "@/constants/text";
+import { LINKEDIN } from "@/constants/brands";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
@@ -72,7 +73,7 @@ const Landing = () => {
               <Link to="/auth">
                 <Button
                   variant="ghost"
-                  className="rounded-full shadow-[0_0_18px_rgba(10,102,194,0.45)] hover:shadow-[0_0_24px_rgba(10,102,194,0.6)] text-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2] text-sm sm:text-base"
+                  className={`rounded-full shadow-[0_0_18px_rgba(${LINKEDIN.blueRgb},0.45)] hover:shadow-[0_0_24px_rgba(${LINKEDIN.blueRgb},0.6)] text-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2] text-sm sm:text-base`}
                 >
                   {TEXT.common.buttons.signInWithLinkedIn}
                 </Button>

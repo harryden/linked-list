@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
+import { LINKEDIN } from "@/constants/brands";
 
 interface AttendButtonProps {
   currentUserId: string | null;
@@ -32,7 +33,7 @@ const AttendButton = ({
   const buttonClasses = cn(
     "w-full rounded-full h-12 text-base font-medium",
     mode === "linkedin"
-      ? "flex items-center justify-center gap-2 bg-[#0A66C2] hover:bg-[#004182] text-white"
+      ? `flex items-center justify-center gap-2 ${LINKEDIN.buttonClass}`
       : "",
     className,
   );

@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { QrCode, Calendar, Linkedin } from "lucide-react";
 import { TEXT } from "@/constants/text";
+import { LINKEDIN } from "@/constants/brands";
 
 interface HeroSectionProps {
   isAuthenticated: boolean;
@@ -56,7 +57,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => (
             <Link to="/auth">
               <Button
                 size="lg"
-                className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg bg-[#0A66C2] hover:bg-[#004182] text-white shadow-[0_0_20px_rgba(10,102,194,0.5)] hover:shadow-[0_0_30px_rgba(10,102,194,0.7)]"
+                className={`rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg ${LINKEDIN.buttonClass} shadow-[0_0_20px_rgba(${LINKEDIN.blueRgb},0.5)] hover:shadow-[0_0_30px_rgba(${LINKEDIN.blueRgb},0.7)]`}
               >
                 <Linkedin className="h-5 w-5 mr-2" />
                 {TEXT.landing.hero.signInButton}

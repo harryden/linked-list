@@ -24,6 +24,7 @@ import {
   useDeleteEvent,
 } from "@/hooks/useSupabaseData";
 import { TEXT } from "@/constants/text";
+import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import {
   AlertDialog,
@@ -84,7 +85,6 @@ const EventPage = () => {
 
   useEffect(() => {
     if (eventError) {
-      console.error("Error loading event:", eventError);
       toast.error(TEXT.event.toast.loadFailure);
     }
   }, [eventError]);
@@ -120,15 +120,8 @@ const EventPage = () => {
   }, [attendeeRecords]);
 
   const eventCode = useMemo(() => {
-    if (!event?.id) {
-      return "";
-    }
-
-    return Math.abs(
-      parseInt(event.id.replace(/-/g, "").substring(0, 8), 16) % 1000000,
-    )
-      .toString()
-      .padStart(6, "0");
+    if (!event?.id) return "";
+    return eventCodeFromId(event.id);
   }, [event?.id]);
 
   const isLoading =
@@ -167,7 +160,6 @@ const EventPage = () => {
         return;
       }
 
-      console.error("Failed to check in:", error);
       toast.error(TEXT.event.toast.checkInFailure);
     }
   };
@@ -199,7 +191,6 @@ const EventPage = () => {
       toast.success(TEXT.event.toast.deleteSuccess);
       navigate("/dashboard");
     } catch (error) {
-      console.error("Failed to delete event:", error);
       toast.error(TEXT.event.toast.deleteFailure);
     } finally {
       setShowDeleteDialog(false);
