@@ -144,3 +144,4 @@ vite.config.ts.timestamp-*
 # Claude Code — personal tooling (installed globally, not committed)
 .claude/skills/
 .claude/settings.local.json
+.gstack/
