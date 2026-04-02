@@ -8,43 +8,13 @@ import {
   useEvent,
   useUpdateEvent,
 } from "@/hooks/useEvents";
+import {
+  generateSlug,
+  parseEventDateParts,
+  combineEventDateAndTime,
+} from "@/lib/events";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
-
-const parseDateParts = (input?: string | null) => {
-  if (!input) {
-    return { date: "", time: "" };
-  }
-
-  const date = new Date(input);
-
-  if (Number.isNaN(date.getTime())) {
-    return { date: "", time: "" };
-  }
-
-  const tzAdjusted = new Date(
-    date.getTime() - date.getTimezoneOffset() * 60000,
-  );
-
-  return {
-    date: tzAdjusted.toISOString().slice(0, 10),
-    time: tzAdjusted.toISOString().slice(11, 16),
-  };
-};
-
-const combineDateAndTime = (date: string, time: string) => {
-  if (!date || !time) {
-    return null;
-  }
-
-  const combined = new Date(`${date}T${time}`);
-
-  if (Number.isNaN(combined.getTime())) {
-    return null;
-  }
-
-  return combined.toISOString();
-};
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
@@ -96,10 +66,10 @@ const CreateEvent = () => {
     if (isEditing && existingEvent && !isPrefilled) {
       setName(existingEvent.name ?? "");
       setEventLocation(existingEvent.location ?? "");
-      const { date: parsedDate, time: parsedStartTime } = parseDateParts(
+      const { date: parsedDate, time: parsedStartTime } = parseEventDateParts(
         existingEvent.starts_at,
       );
-      const { time: parsedEndTime } = parseDateParts(existingEvent.ends_at);
+      const { time: parsedEndTime } = parseEventDateParts(existingEvent.ends_at);
       setEventDate(parsedDate);
       setStartTime(parsedStartTime);
       setEndTime(parsedEndTime);
@@ -107,17 +77,6 @@ const CreateEvent = () => {
       setIsPrefilled(true);
     }
   }, [isEditing, existingEvent, isPrefilled]);
-
-  const generateSlug = (name: string) => {
-    return (
-      name
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/(^-|-$)/g, "") +
-      "-" +
-      Math.random().toString(36).substring(2, 8)
-    );
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -134,8 +93,8 @@ const CreateEvent = () => {
         return;
       }
 
-      const normalizedStartsAt = combineDateAndTime(eventDate, startTime);
-      const normalizedEndsAt = combineDateAndTime(eventDate, endTime);
+      const normalizedStartsAt = combineEventDateAndTime(eventDate, startTime);
+      const normalizedEndsAt = combineEventDateAndTime(eventDate, endTime);
 
       if (!eventDate) {
         toast.error(TEXT.createEvent.toast.missingDateTime);
@@ -212,6 +171,7 @@ const CreateEvent = () => {
       setIsLoading(false);
     }
   };
+
 
   if (isEditing && isEventLoading && !isPrefilled) {
     return (
