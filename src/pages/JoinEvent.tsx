@@ -34,14 +34,6 @@ const JoinEvent = () => {
     ? TEXT.common.links.backToDashboard
     : TEXT.common.links.backToHome;
 
-  const generateEventCode = (eventId: string): string => {
-    return Math.abs(
-      parseInt(eventId.replace(/-/g, "").substring(0, 8), 16) % 1000000,
-    )
-      .toString()
-      .padStart(6, "0");
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!eventCode.trim()) {
@@ -60,13 +52,12 @@ const JoinEvent = () => {
       } = await supabase.auth.getSession();
       const userId = session?.user?.id;
 
-      // Fetch all events to find matching code
-      const events = await fetchEventsWithClient(queryClient);
+      // Fetch only the event with the matching short code
+      const events = await fetchEventsWithClient(queryClient, {
+        shortCode: eventCode.trim(),
+      });
 
-      // Find event with matching code
-      const matchingEvent = events?.find(
-        (event) => generateEventCode(event.id) === eventCode.trim(),
-      );
+      const matchingEvent = events?.[0];
 
       if (!matchingEvent) {
         toast.error(TEXT.joinEvent.toast.notFound);
