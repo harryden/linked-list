@@ -16,14 +16,9 @@ import { QRCodeDialog } from "@/components/QRCodeDialog";
 import EventHeader from "@/pages/event/components/EventHeader";
 import AttendButton from "@/pages/event/components/AttendButton";
 import AttendeeList from "@/pages/event/components/AttendeeList";
-import {
-  useAttendances,
-  useEvent,
-  useJoinEvent,
-  useMyProfile,
-  type ProfileRow,
-  useDeleteEvent,
-} from "@/hooks/useSupabaseData";
+import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
+import { useAttendances, useJoinEvent } from "@/hooks/useAttendances";
+import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";

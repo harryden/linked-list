@@ -15,7 +15,8 @@ import {
   Users,
 } from "lucide-react";
 import { useMemo } from "react";
-import type { EventRow, ProfileRow } from "@/hooks/useSupabaseData";
+import type { EventRow } from "@/hooks/useEvents";
+import type { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";

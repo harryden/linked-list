@@ -7,7 +7,7 @@ import {
   useCreateEvent,
   useEvent,
   useUpdateEvent,
-} from "@/hooks/useSupabaseData";
+} from "@/hooks/useEvents";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
 

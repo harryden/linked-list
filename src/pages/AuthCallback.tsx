@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useMyProfile } from "@/hooks/useSupabaseData";
+import { useMyProfile } from "@/hooks/useProfile";
 import { toast } from "sonner";
 import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
