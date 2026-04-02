@@ -5,18 +5,12 @@ description: Scaffold a new React component for this project — creates the com
 
 # New Component
 
-Scaffold a new React component following this project's conventions.
-
-## Usage
-
 `/new-component <ComponentName> [description]`
 
-## What to create
+Create two files:
 
-Given a component name (PascalCase), create:
-
-1. **`src/components/<ComponentName>.tsx`** — the component file
-2. **`src/__tests__/ui/<ComponentName>.test.tsx`** — a smoke test
+1. **`src/components/<ComponentName>.tsx`**
+2. **`src/__tests__/ui/<ComponentName>.test.tsx`**
 
 ## Component template
 
@@ -51,13 +45,13 @@ describe("<ComponentName>", () => {
 });
 ```
 
-## Conventions to follow
+## Conventions
 
-- Use Shadcn/UI primitives from `@/components/ui/` where appropriate (Button, Card, Dialog, etc.)
-- Use Tailwind for all styling — no inline styles
+- Use Shadcn/UI primitives from `@/components/ui/` where appropriate
+- Tailwind for all styling — no inline styles
 - Use `cn()` from `@/lib/utils` for conditional class merging
 - Props interface always named `<ComponentName>Props`
-- Export as default export (matches existing component conventions in this project)
-- If the component fetches data, use a hook from `useSupabaseData.ts` — don't call Supabase directly from the component
+- Export as default export
+- If the component fetches data, use a hook from `useSupabaseData.ts` — don't call Supabase directly
 
 After creating both files, run `npm run test:run` to confirm the test passes.
