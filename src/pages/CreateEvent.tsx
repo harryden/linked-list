@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -12,26 +12,40 @@ import {
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
 import PageContainer from "@/components/layout/PageContainer";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { createEventSchema, CreateEventValues } from "./create-event/schema";
 
 const CreateEvent = () => {
-  const [name, setName] = useState("");
-  const [eventLocation, setEventLocation] = useState("");
-  const [eventDate, setEventDate] = useState("");
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [isPrefilled, setIsPrefilled] = useState(false);
   const navigate = useNavigate();
   const routerLocation = useLocation();
   const createEvent = useCreateEvent();
   const updateEvent = useUpdateEvent();
+  const isPrefilled = useRef(false);
 
   const editingEventId = routerLocation.state?.eventId as string | undefined;
   const eventSlugFromState = routerLocation.state?.eventSlug as
     | string
     | undefined;
   const isEditing = Boolean(editingEventId);
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = useForm<CreateEventValues>({
+    resolver: zodResolver(createEventSchema),
+    defaultValues: {
+      name: "",
+      location: "",
+      eventDate: "",
+      startTime: "",
+      endTime: "",
+      linkedinUrl: "",
+    },
+  });
 
   const {
     data: existingEvent,
@@ -60,27 +74,24 @@ const CreateEvent = () => {
   }, [eventError, navigate, fromDashboard]);
 
   useEffect(() => {
-    if (isEditing && existingEvent && !isPrefilled) {
-      setName(existingEvent.name ?? "");
-      setEventLocation(existingEvent.location ?? "");
+    if (isEditing && existingEvent && !isPrefilled.current) {
+      isPrefilled.current = true;
+      setValue("name", existingEvent.name ?? "");
+      setValue("location", existingEvent.location ?? "");
       const { date: parsedDate, time: parsedStartTime } = parseEventDateParts(
         existingEvent.starts_at,
       );
       const { time: parsedEndTime } = parseEventDateParts(
         existingEvent.ends_at,
       );
-      setEventDate(parsedDate);
-      setStartTime(parsedStartTime);
-      setEndTime(parsedEndTime);
-      setLinkedinUrl(existingEvent.linkedin_event_url ?? "");
-      setIsPrefilled(true);
+      setValue("eventDate", parsedDate);
+      setValue("startTime", parsedStartTime);
+      setValue("endTime", parsedEndTime);
+      setValue("linkedinUrl", existingEvent.linkedin_event_url ?? "");
     }
-  }, [isEditing, existingEvent, isPrefilled]);
+  }, [isEditing, existingEvent, setValue]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
+  const onSubmit = async (values: CreateEventValues) => {
     try {
       const {
         data: { session },
@@ -92,70 +103,44 @@ const CreateEvent = () => {
         return;
       }
 
-      const normalizedStartsAt = combineEventDateAndTime(eventDate, startTime);
-      const normalizedEndsAt = combineEventDateAndTime(eventDate, endTime);
+      const normalizedStartsAt = combineEventDateAndTime(
+        values.eventDate,
+        values.startTime,
+      );
+      const normalizedEndsAt = combineEventDateAndTime(
+        values.eventDate,
+        values.endTime,
+      );
 
-      if (!eventDate) {
+      if (!normalizedStartsAt || !normalizedEndsAt) {
         toast.error(TEXT.createEvent.toast.missingDateTime);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!normalizedStartsAt) {
-        toast.error(TEXT.createEvent.toast.missingDateTime);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!normalizedEndsAt) {
-        toast.error(TEXT.createEvent.toast.missingEndTime);
-        setIsLoading(false);
-        return;
-      }
-
-      if (
-        normalizedStartsAt &&
-        normalizedEndsAt &&
-        new Date(normalizedEndsAt).getTime() <=
-          new Date(normalizedStartsAt).getTime()
-      ) {
-        toast.error(TEXT.createEvent.toast.invalidTimeRange);
-        setIsLoading(false);
         return;
       }
 
       if (isEditing && editingEventId) {
-        try {
-          const updatedEvent = await updateEvent.mutateAsync({
-            eventId: editingEventId,
-            payload: {
-              name,
-              location: eventLocation || null,
-              starts_at: normalizedStartsAt,
-              ends_at: normalizedEndsAt,
-              linkedin_event_url: linkedinUrl || null,
-            },
-          });
+        const updatedEvent = await updateEvent.mutateAsync({
+          eventId: editingEventId,
+          payload: {
+            name: values.name,
+            location: values.location || null,
+            starts_at: normalizedStartsAt,
+            ends_at: normalizedEndsAt,
+            linkedin_event_url: values.linkedinUrl || null,
+          },
+        });
 
-          toast.success(TEXT.event.toast.updateSuccess);
-          navigate(`/event/${updatedEvent.slug}`);
-        } catch (error: unknown) {
-          const message =
-            error instanceof Error
-              ? error.message
-              : TEXT.event.toast.updateFailure;
-          toast.error(message);
-        }
+        toast.success(TEXT.event.toast.updateSuccess);
+        navigate(`/event/${updatedEvent.slug}`);
       } else {
-        const slug = generateSlug(name);
+        const slug = generateSlug(values.name);
 
         await createEvent.mutateAsync({
-          name,
+          name: values.name,
           slug,
-          location: eventLocation || null,
+          location: values.location || null,
           starts_at: normalizedStartsAt,
           ends_at: normalizedEndsAt,
-          linkedin_event_url: linkedinUrl || null,
+          linkedin_event_url: values.linkedinUrl || null,
           organizer_id: session.user.id,
         });
 
@@ -166,12 +151,10 @@ const CreateEvent = () => {
       const message =
         error instanceof Error ? error.message : TEXT.createEvent.toast.failure;
       toast.error(message);
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  if (isEditing && isEventLoading && !isPrefilled) {
+  if (isEditing && isEventLoading) {
     return (
       <PageContainer className="items-center justify-center">
         <div className="text-center space-y-4">
@@ -188,21 +171,12 @@ const CreateEvent = () => {
 
       <div className="mt-8">
         <CreateEventForm
-          name={name}
-          location={eventLocation}
-          eventDate={eventDate}
-          startTime={startTime}
-          endTime={endTime}
-          linkedinUrl={linkedinUrl}
-          isSubmitting={isLoading || (isEditing && isEventLoading)}
+          register={register}
+          control={control}
+          errors={errors}
+          isSubmitting={isSubmitting || (isEditing && isEventLoading)}
           mode={isEditing ? "edit" : "create"}
-          onNameChange={setName}
-          onLocationChange={setEventLocation}
-          onEventDateChange={setEventDate}
-          onStartTimeChange={setStartTime}
-          onEndTimeChange={setEndTime}
-          onLinkedinUrlChange={setLinkedinUrl}
-          onSubmit={handleSubmit}
+          onSubmit={handleSubmit(onSubmit)}
         />
       </div>
     </PageContainer>
