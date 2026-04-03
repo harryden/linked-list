@@ -15,7 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQueryClient } from "@tanstack/react-query";
-import { fetchEventsWithClient } from "@/hooks/useSupabaseData";
+import { fetchEventsWithClient } from "@/hooks/useEvents";
 import { TEXT } from "@/constants/text";
 
 const JoinEvent = () => {

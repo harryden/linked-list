@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { TEXT } from "@/constants/text";
-import {
-  useMyEvents,
-  useUpcoming,
-  useMyProfile,
-} from "@/hooks/useSupabaseData";
+import { useMyEvents } from "@/hooks/useEvents";
+import { useUpcoming } from "@/hooks/useAttendances";
+import { useMyProfile } from "@/hooks/useProfile";
 import DashboardHeader from "./dashboard/components/DashboardHeader";
 import MyEventsList from "./dashboard/components/MyEventsList";
 import UpcomingSection from "./dashboard/components/UpcomingSection";

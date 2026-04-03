@@ -7,9 +7,8 @@ import {
   fetchEvents,
   useCreateEvent,
   useDeleteEvent,
-  useJoinEvent,
-  useLeaveEvent,
-} from "@/hooks/useSupabaseData";
+} from "@/hooks/useEvents";
+import { useJoinEvent, useLeaveEvent } from "@/hooks/useAttendances";
 import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 
 const createWrapper = () => {
@@ -24,7 +23,7 @@ const createWrapper = () => {
   return { client, wrapper };
 };
 
-describe("useSupabaseData", () => {
+describe("supabase hooks", () => {
   it("fetches events with the organizer filter and descending order", async () => {
     const result = { data: [{ id: "event-1" }], error: null };
     const query = createQueryStub({ baseResult: result });

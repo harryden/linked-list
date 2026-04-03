@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CalendarCheck, Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
-import { useEvent } from "@/hooks/useSupabaseData";
+import { useEvent } from "@/hooks/useEvents";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 
