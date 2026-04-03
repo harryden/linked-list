@@ -7,8 +7,11 @@ echo "🔎 Checking Prettier formatting..."
 npx prettier --check $PATTERNS || {
   echo "❌ Formatting issues found. Applying fixes…"
   npx prettier --write $PATTERNS
+  echo ""
   echo "✨ Prettier wrote changes locally."
-  echo "➡️  Please add & commit the changes, then push again."
+  echo "➡️  For each commit that introduced formatting issues, create a fixup:"
+  echo "      git add <files> && git commit -m 'fixup! <that commit message>'"
+  echo "   Then squash with: git rebase -i --autosquash main"
   exit 1
 }
 
