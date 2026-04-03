@@ -11,6 +11,7 @@ import {
 } from "@/lib/events";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
+import PageContainer from "@/components/layout/PageContainer";
 
 const CreateEvent = () => {
   const [name, setName] = useState("");
@@ -172,41 +173,39 @@ const CreateEvent = () => {
 
   if (isEditing && isEventLoading && !isPrefilled) {
     return (
-      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
+      <PageContainer className="items-center justify-center">
         <div className="text-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
           <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <PageContainer maxWidth="md" className="pt-0 pb-8">
       <CreateEventHeader backPath={backPath} backText={backText} />
 
-      <main className="container mx-auto px-4 pb-8">
-        <div className="max-w-2xl mx-auto">
-          <CreateEventForm
-            name={name}
-            location={eventLocation}
-            eventDate={eventDate}
-            startTime={startTime}
-            endTime={endTime}
-            linkedinUrl={linkedinUrl}
-            isSubmitting={isLoading || (isEditing && isEventLoading)}
-            mode={isEditing ? "edit" : "create"}
-            onNameChange={setName}
-            onLocationChange={setEventLocation}
-            onEventDateChange={setEventDate}
-            onStartTimeChange={setStartTime}
-            onEndTimeChange={setEndTime}
-            onLinkedinUrlChange={setLinkedinUrl}
-            onSubmit={handleSubmit}
-          />
-        </div>
-      </main>
-    </div>
+      <div className="mt-8">
+        <CreateEventForm
+          name={name}
+          location={eventLocation}
+          eventDate={eventDate}
+          startTime={startTime}
+          endTime={endTime}
+          linkedinUrl={linkedinUrl}
+          isSubmitting={isLoading || (isEditing && isEventLoading)}
+          mode={isEditing ? "edit" : "create"}
+          onNameChange={setName}
+          onLocationChange={setEventLocation}
+          onEventDateChange={setEventDate}
+          onStartTimeChange={setStartTime}
+          onEndTimeChange={setEndTime}
+          onLinkedinUrlChange={setLinkedinUrl}
+          onSubmit={handleSubmit}
+        />
+      </div>
+    </PageContainer>
   );
 };
 

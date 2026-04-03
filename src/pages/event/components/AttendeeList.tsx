@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Linkedin, Users } from "lucide-react";
 import type { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 import { toast } from "sonner";
 
 interface AttendeeListProps {
@@ -77,7 +76,7 @@ const AttendeeList = ({
                     )}
                   </div>
                   <Button
-                    className={`flex items-center gap-2 ${LINKEDIN.buttonClass}`}
+                    className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
                     onClick={() => {
                       if (attendee.linkedin_id) {
                         window.open(

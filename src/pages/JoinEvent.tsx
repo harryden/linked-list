@@ -6,7 +6,6 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -17,6 +16,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchEventsWithClient } from "@/hooks/useEvents";
 import { TEXT } from "@/constants/text";
+import PageContainer from "@/components/layout/PageContainer";
+import Heading from "@/components/ui/heading";
 
 const JoinEvent = () => {
   const [eventCode, setEventCode] = useState("");
@@ -83,8 +84,8 @@ const JoinEvent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col items-center justify-center p-4">
-      <div className="w-full max-w-md mb-8">
+    <PageContainer maxWidth="sm" className="justify-center">
+      <div className="w-full mb-8">
         <Link
           to={backPath}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -94,14 +95,12 @@ const JoinEvent = () => {
         </Link>
       </div>
 
-      <Card className="w-full max-w-md shadow-lg">
+      <Card className="w-full shadow-lg">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center">
+          <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-glow-primary">
             <QrCode className="h-8 w-8 text-primary-foreground" />
           </div>
-          <CardTitle className="text-2xl">
-            {TEXT.joinEvent.header.title}
-          </CardTitle>
+          <Heading level={2}>{TEXT.joinEvent.header.title}</Heading>
           <CardDescription className="text-base">
             {TEXT.joinEvent.header.description}
           </CardDescription>
@@ -160,7 +159,7 @@ const JoinEvent = () => {
           </form>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 };
 

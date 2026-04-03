@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 
 const FooterCTA = () => (
   <section className="py-20 pb-32">
@@ -18,7 +17,7 @@ const FooterCTA = () => (
         <Link to="/auth">
           <Button
             size="lg"
-            className={`rounded-full px-8 h-12 text-base font-medium shadow-lg hover:scale-105 transition-transform ${LINKEDIN.buttonClass}`}
+            className="rounded-full px-8 h-12 text-base font-medium shadow-lg hover:scale-105 transition-transform bg-linkedin hover:bg-linkedin-hover text-white"
           >
             <Linkedin className="h-5 w-5 mr-2" />
             {TEXT.common.buttons.signInWithLinkedIn}

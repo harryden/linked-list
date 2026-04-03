@@ -12,7 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 import linkbackLogo from "@/assets/linkback-logo.png";
 
 const Auth = () => {
@@ -102,7 +101,7 @@ const Auth = () => {
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
               size="lg"
-              className={`w-full rounded-full h-12 text-base font-medium ${LINKEDIN.buttonClass}`}
+              className="w-full rounded-full h-12 text-base font-medium bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
             >
               {isLoading ? (
                 <>
@@ -148,8 +147,7 @@ const Auth = () => {
                   href="https://www.linkedin.com/mypreferences/d/apps"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:underline"
-                  style={{ color: LINKEDIN.blue }}
+                  className="hover:underline font-medium text-linkedin"
                 >
                   {TEXT.auth.info.linkedInSettings}
                 </a>

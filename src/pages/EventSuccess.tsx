@@ -7,6 +7,8 @@ import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useEvents";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
+import PageContainer from "@/components/layout/PageContainer";
+import Heading from "@/components/ui/heading";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -34,7 +36,6 @@ const EventSuccess = () => {
     }
 
     setEventName(event.name);
-
     setEventCode(eventCodeFromId(event.id));
   }, [event]);
 
@@ -55,12 +56,12 @@ const EventSuccess = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-subtle flex items-center justify-center">
+      <PageContainer className="items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">{TEXT.eventSuccess.loading}</p>
         </div>
-      </div>
+      </PageContainer>
     );
   }
 
@@ -69,19 +70,19 @@ const EventSuccess = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
-      <Card className="max-w-md w-full shadow-2xl">
+    <PageContainer maxWidth="sm" className="justify-center">
+      <Card className="w-full shadow-2xl">
         <CardContent className="pt-8 pb-6 px-6 space-y-6">
           {/* Success Icon */}
           <div className="flex justify-center">
-            <div className="bg-success/10 p-4 rounded-full">
+            <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
               <CalendarCheck className="h-12 w-12 text-success" />
             </div>
           </div>
 
           {/* Title and Description */}
           <div className="text-center space-y-2">
-            <h1 className="text-3xl font-bold">{TEXT.eventSuccess.title}</h1>
+            <Heading level={2}>{TEXT.eventSuccess.title}</Heading>
             <p className="text-muted-foreground">
               {TEXT.eventSuccess.description}
             </p>
@@ -109,7 +110,7 @@ const EventSuccess = () => {
             <Button
               onClick={handleDownload}
               variant="outline"
-              className="w-full"
+              className="w-full h-12 rounded-full"
               disabled={!qrCodeUrl}
             >
               <Download className="h-4 w-4 mr-2" />
@@ -117,14 +118,14 @@ const EventSuccess = () => {
             </Button>
 
             <Link to={`/event/${slug}`} className="block">
-              <Button className="w-full rounded-full h-12 text-base font-medium">
+              <Button className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary">
                 {TEXT.common.buttons.viewEventDashboard}
               </Button>
             </Link>
           </div>
         </CardContent>
       </Card>
-    </div>
+    </PageContainer>
   );
 };
 

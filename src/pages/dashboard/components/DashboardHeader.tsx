@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
+import Heading from "@/components/ui/heading";
 
 interface DashboardHeaderProps {
   name?: string | null;
@@ -65,8 +66,10 @@ const DashboardHeader = ({
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl font-bold mb-2">{welcomeMessage}</h1>
-          <p className="text-muted-foreground">
+          <Heading level={1} className="mb-2 leading-tight">
+            {welcomeMessage}
+          </Heading>
+          <p className="text-muted-foreground text-lg">
             {TEXT.dashboard.header.tagline}
           </p>
         </div>
