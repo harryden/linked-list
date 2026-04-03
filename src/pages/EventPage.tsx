@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, CheckCircle, X } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
 import EventHeader from "@/pages/event/components/EventHeader";
@@ -45,6 +46,8 @@ const EventPage = () => {
   const [isSessionLoading, setIsSessionLoading] = useState(true);
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [justJoined, setJustJoined] = useState(false);
+  const attendeeListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -127,6 +130,12 @@ const EventPage = () => {
   const isLoading =
     isSessionLoading || isEventLoading || isUserAttendanceLoading;
 
+  useEffect(() => {
+    if (justJoined && !isAttendeesLoading) {
+      attendeeListRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [justJoined, isAttendeesLoading]);
+
   const joinEvent = useJoinEvent();
   const deleteEvent = useDeleteEvent();
 
@@ -149,6 +158,7 @@ const EventPage = () => {
       });
 
       toast.success(TEXT.event.toast.checkInSuccess);
+      setJustJoined(true);
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -338,12 +348,29 @@ const EventPage = () => {
             </CardContent>
           </Card>
 
-          <AttendeeList
-            attendees={attendees}
-            currentUserId={currentUserId}
-            isOrganizer={isOrganizer}
-            isLoading={isAttendeesLoading}
-          />
+          <div ref={attendeeListRef}>
+            {justJoined && (
+              <Alert className="mb-4">
+                <CheckCircle className="h-4 w-4" />
+                <AlertDescription className="flex items-center justify-between">
+                  <span>You're in! Here's who else is coming.</span>
+                  <button
+                    onClick={() => setJustJoined(false)}
+                    className="ml-4 text-muted-foreground hover:text-foreground"
+                    aria-label="Dismiss"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </AlertDescription>
+              </Alert>
+            )}
+            <AttendeeList
+              attendees={attendees}
+              currentUserId={currentUserId}
+              isOrganizer={isOrganizer}
+              isLoading={isAttendeesLoading}
+            />
+          </div>
         </div>
       </main>
 
