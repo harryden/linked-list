@@ -6,7 +6,7 @@ import Auth from "@/pages/Auth";
 import AuthCallback from "@/pages/AuthCallback";
 import { TEXT } from "@/constants/text";
 import type { Mock } from "vitest";
-import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mockNavigate = vi.fn();
 
@@ -38,23 +38,18 @@ vi.mock("sonner", async () => {
 
 const getSessionMock = supabase.auth.getSession as unknown as Mock;
 const signInMock = supabase.auth.signInWithOAuth as unknown as Mock;
+const onAuthStateChangeMock = supabase.auth
+  .onAuthStateChange as unknown as Mock;
 
 const configureSignIn = () =>
-  signInMock.mockResolvedValue({
-    data: null,
-    error: null,
-  });
+  signInMock.mockResolvedValue({ data: null, error: null });
 
 describe("Auth redirect flow", () => {
   beforeEach(() => {
-    sessionStorage.clear();
     mockNavigate.mockReset();
     signInMock.mockClear();
     getSessionMock.mockClear();
-  });
-
-  afterEach(() => {
-    sessionStorage.clear();
+    onAuthStateChangeMock.mockReset();
   });
 
   it("preserves a safe redirect path from the query string when starting OAuth", async () => {
@@ -75,13 +70,10 @@ describe("Auth redirect flow", () => {
       }),
     );
 
-    expect(sessionStorage.getItem("postAuthRedirect")).toBe(
-      "/event/test-event",
-    );
     expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "linkedin_oidc",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Fevent%2Ftest-event`,
         scopes: "openid profile email",
       },
     });
@@ -105,27 +97,25 @@ describe("Auth redirect flow", () => {
       }),
     );
 
-    expect(sessionStorage.getItem("postAuthRedirect")).toBe("/");
     expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
       provider: "linkedin_oidc",
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo: `${window.location.origin}/auth/callback?next=%2F`,
         scopes: "openid profile email",
       },
     });
   });
 
-  it("navigates back to the stored path on successful callback", async () => {
+  it("navigates to the next path encoded in the callback URL on successful auth", async () => {
     mockNavigate.mockReset();
-    getSessionMock.mockResolvedValue({
-      data: { session: { user: { id: "user_test" } } },
-      error: null,
+
+    onAuthStateChangeMock.mockImplementation((cb) => {
+      queueMicrotask(() => cb("SIGNED_IN", { user: { id: "user_test" } }));
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
     });
 
-    sessionStorage.setItem("postAuthRedirect", "/event/test-event");
-
     renderWithProviders(<AuthCallback />, {
-      route: "/auth/callback?redirect=/event/test-event",
+      route: "/auth/callback?next=%2Fevent%2Ftest-event",
     });
 
     await waitFor(() => {
@@ -133,7 +123,46 @@ describe("Auth redirect flow", () => {
         replace: true,
       });
     });
+  });
 
-    expect(sessionStorage.getItem("postAuthRedirect")).toBeNull();
+  it("navigates to the next path on INITIAL_SESSION with valid session", async () => {
+    mockNavigate.mockReset();
+
+    onAuthStateChangeMock.mockImplementation((cb) => {
+      queueMicrotask(() =>
+        cb("INITIAL_SESSION", { user: { id: "user_test" } }),
+      );
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
+    });
+
+    renderWithProviders(<AuthCallback />, {
+      route: "/auth/callback?next=%2Fdashboard",
+    });
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/dashboard", {
+        replace: true,
+      });
+    });
+  });
+
+  it("redirects to auth on failed session establishment", async () => {
+    mockNavigate.mockReset();
+
+    onAuthStateChangeMock.mockImplementation((cb) => {
+      queueMicrotask(() => cb("SIGNED_OUT", null));
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
+    });
+
+    renderWithProviders(<AuthCallback />, {
+      route: "/auth/callback",
+    });
+
+    await waitFor(
+      () => {
+        expect(mockNavigate).toHaveBeenCalledWith("/auth");
+      },
+      { timeout: 3000 },
+    );
   });
 });

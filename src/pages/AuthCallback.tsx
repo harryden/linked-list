@@ -1,17 +1,24 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useProfile";
 import { toast } from "sonner";
 import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
+import { isSafeRedirect } from "@/lib/utils";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [status, setStatus] = useState<"loading" | "error">("loading");
   const [userId, setUserId] = useState<string | null>(null);
   const [hasHandledProfile, setHasHandledProfile] = useState(false);
-  const [redirectPath, setRedirectPath] = useState<string>("/");
+
+  const redirectPath = (() => {
+    const params = new URLSearchParams(location.search);
+    const next = params.get("next");
+    return isSafeRedirect(next) ? (next as string) : "/";
+  })();
 
   const {
     data: _profile,
@@ -20,84 +27,41 @@ const AuthCallback = () => {
   } = useMyProfile(userId ?? undefined);
 
   useEffect(() => {
-    const handleAuthCallback = async () => {
-      try {
-        const params = new URLSearchParams(window.location.search);
-        const error = params.get("error");
-        const errorDescription = params.get("error_description");
-        const redirectParam = params.get("redirect");
+    const params = new URLSearchParams(location.search);
+    const error = params.get("error");
+    const errorDescription = params.get("error_description");
 
-        let resolvedRedirect = "/";
+    if (error) {
+      console.error("OAuth error:", error, errorDescription);
+      toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
+      setStatus("error");
+      setTimeout(() => navigate("/auth"), 2000);
+      return;
+    }
 
-        if (redirectParam && redirectParam.startsWith("/")) {
-          resolvedRedirect = redirectParam;
-        } else if (typeof window !== "undefined") {
-          const stored = sessionStorage.getItem("postAuthRedirect");
-
-          if (stored && stored.startsWith("/")) {
-            resolvedRedirect = stored;
-          }
-        }
-
-        setRedirectPath(resolvedRedirect);
-
-        if (error) {
-          console.error("OAuth error:", error, errorDescription);
-          toast.error(
-            errorDescription || TEXT.authCallback.toast.genericFailure,
-          );
-          setStatus("error");
-          if (typeof window !== "undefined") {
-            sessionStorage.removeItem("postAuthRedirect");
-          }
-          setTimeout(() => navigate("/auth"), 2000);
-          return;
-        }
-
-        const {
-          data: { session },
-          error: sessionError,
-        } = await supabase.auth.getSession();
-
-        if (sessionError) {
-          console.error("Session error:", sessionError);
-          toast.error(TEXT.authCallback.toast.sessionFailure);
-          setStatus("error");
-          if (typeof window !== "undefined") {
-            sessionStorage.removeItem("postAuthRedirect");
-          }
-          setTimeout(() => navigate("/auth"), 2000);
-          return;
-        }
-
-        if (!session) {
-          toast.error(TEXT.authCallback.toast.noSession);
-          setStatus("error");
-          if (typeof window !== "undefined") {
-            sessionStorage.removeItem("postAuthRedirect");
-          }
-          setTimeout(() => navigate("/auth"), 2000);
-          return;
-        }
-
+    // onAuthStateChange is more reliable than getSession() at callback time —
+    // it waits for Supabase to finish processing the token from the URL fragment.
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if ((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session) {
         setUserId(session.user.id);
-      } catch (error: unknown) {
-        console.error("Auth callback error:", error);
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : TEXT.authCallback.toast.genericFailure,
-        );
+        subscription.unsubscribe();
+        return;
+      }
+
+      if (event === "SIGNED_OUT" || (!session && event !== "INITIAL_SESSION")) {
+        toast.error(TEXT.authCallback.toast.noSession);
         setStatus("error");
-        if (typeof window !== "undefined") {
-          sessionStorage.removeItem("postAuthRedirect");
-        }
+        subscription.unsubscribe();
         setTimeout(() => navigate("/auth"), 2000);
       }
-    };
+    });
 
-    handleAuthCallback();
-  }, [navigate]);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [location.search, navigate]);
 
   useEffect(() => {
     if (!userId || isProfileLoading || hasHandledProfile) {
@@ -115,9 +79,6 @@ const AuthCallback = () => {
 
     toast.success(TEXT.authCallback.toast.success);
     setHasHandledProfile(true);
-    if (typeof window !== "undefined") {
-      sessionStorage.removeItem("postAuthRedirect");
-    }
     navigate(redirectPath, { replace: true });
   }, [
     hasHandledProfile,
