@@ -2,10 +2,10 @@
 -- This mirrors the logic in src/lib/events.ts: eventCodeFromId
 
 -- 1. Add the column
-ALTER TABLE events ADD COLUMN IF NOT EXISTS short_code text;
+ALTER TABLE public.events ADD COLUMN IF NOT EXISTS short_code text;
 
 -- 2. Create a function to derive the code from ID
-CREATE OR REPLACE FUNCTION derive_event_short_code(event_id uuid) 
+CREATE OR REPLACE FUNCTION derive_event_short_code(event_id uuid)
 RETURNS text AS $$
 BEGIN
   -- Replicates: Math.abs(parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000).toString().padStart(6, "0")
@@ -14,16 +14,13 @@ END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 -- 3. Backfill existing records
-UPDATE events SET short_code = derive_event_short_code(id) WHERE short_code IS NULL;
+UPDATE public.events SET short_code = derive_event_short_code(id) WHERE short_code IS NULL;
 
 -- 4. Make it NOT NULL and UNIQUE
-ALTER TABLE events ALTER COLUMN short_code SET NOT NULL;
-ALTER TABLE events ADD CONSTRAINT events_short_code_key UNIQUE (short_code);
+ALTER TABLE public.events ALTER COLUMN short_code SET NOT NULL;
+ALTER TABLE public.events ADD CONSTRAINT events_short_code_key UNIQUE (short_code);
 
--- 5. Create an index for O(1) lookups
-CREATE INDEX IF NOT EXISTS idx_events_short_code ON events (short_code);
-
--- 6. Create a trigger to auto-populate on insert
+-- 5. Create a trigger to auto-populate on insert
 CREATE OR REPLACE FUNCTION populate_event_short_code()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -35,6 +32,6 @@ END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER trg_populate_event_short_code
-BEFORE INSERT ON events
+BEFORE INSERT ON public.events
 FOR EACH ROW
 EXECUTE FUNCTION populate_event_short_code();

@@ -67,6 +67,7 @@ export type Database = {
           location: string | null;
           name: string;
           organizer_id: string;
+          short_code: string;
           slug: string;
           starts_at: string | null;
           ends_at: string;
@@ -79,6 +80,7 @@ export type Database = {
           location?: string | null;
           name: string;
           organizer_id: string;
+          short_code?: string;
           slug: string;
           starts_at?: string | null;
           ends_at: string;
@@ -91,6 +93,7 @@ export type Database = {
           location?: string | null;
           name?: string;
           organizer_id?: string;
+          short_code?: string;
           slug?: string;
           starts_at?: string | null;
           ends_at?: string;
