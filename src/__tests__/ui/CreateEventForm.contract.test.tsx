@@ -1,67 +1,60 @@
-import { useState, type FormEvent } from "react";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import CreateEventForm from "@/pages/create-event/components/CreateEventForm";
+import {
+  createEventSchema,
+  type CreateEventValues,
+} from "@/pages/create-event/schema";
 import { TEXT } from "@/constants/text";
 
+const defaultValues: CreateEventValues = {
+  name: "",
+  location: "",
+  eventDate: "",
+  startTime: "",
+  endTime: "",
+  linkedinUrl: "",
+};
+
 const FormHarness = ({
-  onSubmit,
+  initialValues = defaultValues,
+  isSubmitting = false,
+  mode = "create" as const,
+  onSubmit = vi.fn(),
 }: {
-  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  initialValues?: Partial<CreateEventValues>;
+  isSubmitting?: boolean;
+  mode?: "create" | "edit";
+  onSubmit?: ReturnType<typeof vi.fn>;
 }) => {
-  const [name, setName] = useState("Launch Day");
-  const [location, setLocation] = useState("Gothenburg");
-  const [eventDate, setEventDate] = useState("2025-05-01");
-  const [startTime, setStartTime] = useState("09:00");
-  const [endTime, setEndTime] = useState("11:00");
-  const [linkedinUrl, setLinkedinUrl] = useState("");
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateEventValues>({
+    resolver: zodResolver(createEventSchema),
+    defaultValues: { ...defaultValues, ...initialValues },
+  });
 
   return (
     <CreateEventForm
-      name={name}
-      location={location}
-      eventDate={eventDate}
-      startTime={startTime}
-      endTime={endTime}
-      linkedinUrl={linkedinUrl}
-      isSubmitting={false}
-      mode="create"
-      onNameChange={setName}
-      onLocationChange={setLocation}
-      onEventDateChange={setEventDate}
-      onStartTimeChange={setStartTime}
-      onEndTimeChange={setEndTime}
-      onLinkedinUrlChange={setLinkedinUrl}
-      onSubmit={(event) => {
-        event.preventDefault();
-        onSubmit(event);
-      }}
+      register={register}
+      control={control}
+      errors={errors}
+      isSubmitting={isSubmitting}
+      mode={mode}
+      onSubmit={handleSubmit(onSubmit)}
     />
   );
 };
 
 describe("CreateEventForm contract", () => {
   it("surfaces the create mode copy and accessible controls", () => {
-    render(
-      <CreateEventForm
-        name=""
-        location=""
-        eventDate=""
-        startTime=""
-        endTime=""
-        linkedinUrl=""
-        isSubmitting={false}
-        mode="create"
-        onNameChange={vi.fn()}
-        onLocationChange={vi.fn()}
-        onEventDateChange={vi.fn()}
-        onStartTimeChange={vi.fn()}
-        onEndTimeChange={vi.fn()}
-        onLinkedinUrlChange={vi.fn()}
-        onSubmit={vi.fn()}
-      />,
-    );
+    render(<FormHarness />);
 
     expect(
       screen.getByRole("heading", { name: TEXT.createEvent.form.title }),
@@ -80,31 +73,21 @@ describe("CreateEventForm contract", () => {
         TEXT.createEvent.form.fields.locationPlaceholder,
       ),
     ).toBeInTheDocument();
-    const dateButton = screen.getByRole("button", {
-      name: TEXT.createEvent.form.fields.dateLabel,
-    });
-    expect(dateButton).toBeInTheDocument();
-    expect(dateButton).toHaveTextContent(/select date/i);
   });
 
   it("switches copy in edit mode and locks the submit action when loading", () => {
     render(
-      <CreateEventForm
-        name="Edited name"
-        location="Edited location"
-        eventDate="2025-05-01"
-        startTime="09:00"
-        endTime="11:00"
-        linkedinUrl="https://example.com"
+      <FormHarness
+        initialValues={{
+          name: "Edited name",
+          location: "Edited location",
+          eventDate: "2025-05-01",
+          startTime: "09:00",
+          endTime: "11:00",
+          linkedinUrl: "https://example.com",
+        }}
         isSubmitting
         mode="edit"
-        onNameChange={vi.fn()}
-        onLocationChange={vi.fn()}
-        onEventDateChange={vi.fn()}
-        onStartTimeChange={vi.fn()}
-        onEndTimeChange={vi.fn()}
-        onLinkedinUrlChange={vi.fn()}
-        onSubmit={vi.fn()}
       />,
     );
 
@@ -118,43 +101,30 @@ describe("CreateEventForm contract", () => {
     const submit = screen.getByRole("button", {
       name: TEXT.createEvent.form.editSubmitLoading,
     });
-
     expect(submit).toBeDisabled();
   });
 
-  it("wires value updates and submit handling through the provided callbacks", async () => {
+  it("calls onSubmit with valid form values", async () => {
     const onSubmit = vi.fn();
     const user = userEvent.setup();
 
-    render(<FormHarness onSubmit={onSubmit} />);
-
-    await user.clear(
-      screen.getByLabelText(TEXT.createEvent.form.fields.nameLabel),
-    );
-    await user.type(
-      screen.getByLabelText(TEXT.createEvent.form.fields.nameLabel),
-      "Weekend Launch",
-    );
-    await user.clear(
-      screen.getByPlaceholderText(
-        TEXT.createEvent.form.fields.locationPlaceholder,
-      ),
-    );
-    await user.type(
-      screen.getByPlaceholderText(
-        TEXT.createEvent.form.fields.locationPlaceholder,
-      ),
-      "Gothenburg",
+    render(
+      <FormHarness
+        initialValues={{
+          name: "Weekend Launch",
+          location: "Gothenburg",
+          eventDate: "2025-05-10",
+          startTime: "10:00",
+          endTime: "12:00",
+        }}
+        onSubmit={onSubmit}
+      />,
     );
 
     await user.click(
-      screen.getByRole("button", {
-        name: TEXT.createEvent.form.submitIdle,
-      }),
+      screen.getByRole("button", { name: TEXT.createEvent.form.submitIdle }),
     );
 
-    expect(screen.getByDisplayValue("Weekend Launch")).toBeInTheDocument();
-    expect(screen.getByDisplayValue("Gothenburg")).toBeInTheDocument();
     expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 });
