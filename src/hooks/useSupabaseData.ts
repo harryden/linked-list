@@ -74,11 +74,13 @@ export const useEvent = (identifier?: EventIdentifier) => {
 
 type UseEventsOptions = {
   organizerId?: string;
+  shortCode?: string;
   enabled?: boolean;
 };
 
 const normalizeEventsOptions = (options?: UseEventsOptions) => ({
   organizerId: options?.organizerId ?? undefined,
+  shortCode: options?.shortCode ?? undefined,
 });
 
 export const eventsQueryKey = (options?: UseEventsOptions) => [
@@ -94,6 +96,10 @@ export const fetchEvents = async (
 
   if (normalized.organizerId) {
     query = query.eq("organizer_id", normalized.organizerId);
+  }
+
+  if (normalized.shortCode) {
+    query = query.eq("short_code", normalized.shortCode);
   }
 
   query = query.order("created_at", { ascending: false });
