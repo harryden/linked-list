@@ -131,6 +131,13 @@ export const TEXT = {
       emptyDescription: "Enter a code to check in.",
       viewAttendeeList: "View attendee list →",
     },
+    greetings: {
+      newJoiner: "Hey, glad to have you here! Ready to start connecting?",
+      firstCheckIn: "Nice, you got your first check in!",
+      firstHost:
+        "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!",
+      welcomeBack: "Welcome back, {name}!",
+    },
   },
   demo: {
     header: {
@@ -243,6 +250,7 @@ export const TEXT = {
       missingCode: "Enter an event code",
       notFound: "Event not found. Check the code and try again.",
       failure: "Failed to find event. Try again.",
+      organizerNotice: "You're the organizer of this event",
     },
   },
   auth: {

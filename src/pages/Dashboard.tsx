@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { TEXT } from "@/constants/text";
@@ -11,10 +11,9 @@ import MyEventsList from "./dashboard/components/MyEventsList";
 import UpcomingSection from "./dashboard/components/UpcomingSection";
 import PageContainer from "@/components/layout/PageContainer";
 
-const Dashboard = () => {
+const useSession = (navigate: NavigateFunction) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -24,9 +23,7 @@ const Dashboard = () => {
         data: { session },
       } = await supabase.auth.getSession();
 
-      if (!isMounted) {
-        return;
-      }
+      if (!isMounted) return;
 
       if (!session) {
         setIsSessionLoading(false);
@@ -39,11 +36,40 @@ const Dashboard = () => {
     };
 
     loadSession();
-
     return () => {
       isMounted = false;
     };
   }, [navigate]);
+
+  return { userId, isSessionLoading };
+};
+
+const getDashboardGreeting = (
+  profileName: string | undefined,
+  myEventsCount: number,
+  upcomingEventsCount: number,
+) => {
+  if (myEventsCount === 0 && upcomingEventsCount === 0) {
+    return TEXT.dashboard.greetings.newJoiner;
+  }
+
+  if (myEventsCount === 0 && upcomingEventsCount === 1) {
+    return TEXT.dashboard.greetings.firstCheckIn;
+  }
+
+  if (myEventsCount === 1 && upcomingEventsCount === 0) {
+    return TEXT.dashboard.greetings.firstHost;
+  }
+
+  return TEXT.dashboard.greetings.welcomeBack.replace(
+    "{name}",
+    profileName ?? "friend",
+  );
+};
+
+const Dashboard = () => {
+  const navigate = useNavigate();
+  const { userId, isSessionLoading } = useSession(navigate);
 
   const { data: profile, isLoading: isProfileLoading } = useMyProfile(
     userId ?? undefined,
@@ -57,45 +83,39 @@ const Dashboard = () => {
   const { data: upcomingEventsData, isLoading: isUpcomingLoading } =
     useUpcoming(userId ?? undefined, { enabled: Boolean(userId) });
 
-  const myEvents = (myEventsData ?? []).map((event) => ({
-    id: event.id,
-    name: event.name,
-    slug: event.slug,
-    starts_at: event.starts_at ?? null,
-  }));
+  const myEvents = useMemo(
+    () =>
+      (myEventsData ?? []).map((event) => ({
+        id: event.id,
+        name: event.name,
+        slug: event.slug,
+        starts_at: event.starts_at ?? null,
+      })),
+    [myEventsData],
+  );
 
-  const upcomingEvents = (upcomingEventsData ?? []).map((event) => ({
-    id: event.id,
-    name: event.name,
-    slug: event.slug,
-    starts_at: event.starts_at ?? null,
-  }));
+  const upcomingEvents = useMemo(
+    () =>
+      (upcomingEventsData ?? []).map((event) => ({
+        id: event.id,
+        name: event.name,
+        slug: event.slug,
+        starts_at: event.starts_at ?? null,
+      })),
+    [upcomingEventsData],
+  );
 
   const isInitialLoading = isSessionLoading || isProfileLoading;
 
-  const greeting = useMemo(() => {
-    if (
-      !profile?.name &&
-      myEvents.length === 0 &&
-      upcomingEvents.length === 0
-    ) {
-      return "Hey, glad to have you here! Ready to start connecting?";
-    }
-
-    if (myEvents.length === 0 && upcomingEvents.length === 0) {
-      return "Hey, glad to have you here! Ready to start connecting?";
-    }
-
-    if (myEvents.length === 0 && upcomingEvents.length === 1) {
-      return "Nice, you got your first check in!";
-    }
-
-    if (myEvents.length === 1 && upcomingEvents.length === 0) {
-      return "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!";
-    }
-
-    return `Welcome back, ${profile?.name ?? "friend"}!`;
-  }, [myEvents.length, upcomingEvents.length, profile?.name]);
+  const greeting = useMemo(
+    () =>
+      getDashboardGreeting(
+        profile?.name,
+        myEvents.length,
+        upcomingEvents.length,
+      ),
+    [profile?.name, myEvents.length, upcomingEvents.length],
+  );
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();

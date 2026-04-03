@@ -124,6 +124,7 @@ describe("EventHeader", () => {
       expect(openSpy).toHaveBeenCalledWith(
         "https://www.linkedin.com/in/janedoe",
         "_blank",
+        "noopener,noreferrer",
       );
 
       openSpy.mockRestore();

@@ -73,14 +73,12 @@ const EventSuccess = () => {
     <PageContainer maxWidth="sm" className="justify-center">
       <Card className="w-full shadow-2xl">
         <CardContent className="pt-8 pb-6 px-6 space-y-6">
-          {/* Success Icon */}
           <div className="flex justify-center">
             <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
               <CalendarCheck className="h-12 w-12 text-success" />
             </div>
           </div>
 
-          {/* Title and Description */}
           <div className="text-center space-y-2">
             <Heading level={2}>{TEXT.eventSuccess.title}</Heading>
             <p className="text-muted-foreground">
@@ -88,7 +86,6 @@ const EventSuccess = () => {
             </p>
           </div>
 
-          {/* Event Code */}
           <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
             <p className="text-sm text-muted-foreground">
               {TEXT.eventSuccess.codeLabel}
@@ -96,7 +93,6 @@ const EventSuccess = () => {
             <p className="text-4xl font-bold tracking-wider">{eventCode}</p>
           </div>
 
-          {/* QR Code */}
           <div className="flex justify-center">
             <QRCodePreview
               value={`${window.location.origin}/event/${event.slug}?ref=qr`}
@@ -105,7 +101,6 @@ const EventSuccess = () => {
             />
           </div>
 
-          {/* Action Buttons */}
           <div className="space-y-3">
             <Button
               onClick={handleDownload}

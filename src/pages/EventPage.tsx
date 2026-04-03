@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
+import {
+  useParams,
+  Link,
+  useNavigate,
+  useLocation,
+  NavigateFunction,
+} from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,16 +40,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const EventPage = () => {
-  const { slug } = useParams<{ slug: string }>();
-  const navigate = useNavigate();
-  const location = useLocation();
+const useSession = (navigate: NavigateFunction) => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
-  const [showQRDialog, setShowQRDialog] = useState(false);
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const [justJoined, setJustJoined] = useState(false);
-  const attendeeListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -54,11 +53,9 @@ const EventPage = () => {
           data: { session },
         } = await supabase.auth.getSession();
 
-        if (!isMounted) {
-          return;
+        if (isMounted) {
+          setCurrentUserId(session?.user?.id ?? null);
         }
-
-        setCurrentUserId(session?.user?.id ?? null);
       } catch (error) {
         console.error("Error loading session:", error);
       } finally {
@@ -69,11 +66,23 @@ const EventPage = () => {
     };
 
     loadSession();
-
     return () => {
       isMounted = false;
     };
   }, []);
+
+  return { currentUserId, isSessionLoading };
+};
+
+const EventPage = () => {
+  const { slug } = useParams<{ slug: string }>();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { currentUserId, isSessionLoading } = useSession(navigate);
+  const [showQRDialog, setShowQRDialog] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [justJoined, setJustJoined] = useState(false);
+  const attendeeListRef = useRef<HTMLDivElement>(null);
 
   const eventIdentifier = slug ? { slug } : undefined;
   const {

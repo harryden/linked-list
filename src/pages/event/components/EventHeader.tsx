@@ -334,6 +334,7 @@ const EventHeader = ({
                     window.open(
                       `https://www.linkedin.com/in/${organizer.linkedin_id}`,
                       "_blank",
+                      "noopener,noreferrer",
                     );
                   } else {
                     toast.info(TEXT.event.header.linkedInMissing);

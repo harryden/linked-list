@@ -136,6 +136,7 @@ describe("AttendeeList", () => {
       expect(openSpy).toHaveBeenCalledWith(
         "https://www.linkedin.com/in/alicesmith",
         "_blank",
+        "noopener,noreferrer",
       );
 
       openSpy.mockRestore();

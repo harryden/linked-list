@@ -39,11 +39,7 @@ const AuthCallback = () => {
       return;
     }
 
-    // onAuthStateChange is more reliable than getSession() at callback time —
-    // it waits for Supabase to finish processing the token from the URL fragment.
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
+    const handleAuthChange = (event, session, subscription) => {
       if ((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session) {
         setUserId(session.user.id);
         subscription.unsubscribe();
@@ -56,6 +52,12 @@ const AuthCallback = () => {
         subscription.unsubscribe();
         setTimeout(() => navigate("/auth"), 2000);
       }
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      handleAuthChange(event, session, subscription);
     });
 
     return () => {
