@@ -14,11 +14,12 @@ export function eventCodeFromId(id: string): string {
  * Generates a URL-friendly slug from a name with a random suffix.
  */
 export function generateSlug(name: string): string {
-  const base = name
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
-  
+  const base =
+    name
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "") || "event";
+
   const randomSuffix = Math.random().toString(36).substring(2, 8);
   return `${base}-${randomSuffix}`;
 }
@@ -46,7 +47,10 @@ export function parseEventDateParts(input?: string | null) {
 /**
  * Combines a date string (YYYY-MM-DD) and time string (HH:mm) into an ISO string.
  */
-export function combineEventDateAndTime(date: string, time: string): string | null {
+export function combineEventDateAndTime(
+  date: string,
+  time: string,
+): string | null {
   if (!date || !time) {
     return null;
   }

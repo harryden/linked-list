@@ -2,8 +2,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import { EventRow } from "./useEvents";
-import { ProfileRow } from "./useProfile";
+import type { EventRow } from "./useEvents";
+import type { ProfileRow } from "./useProfile";
 
 export type AttendanceRow = Database["public"]["Tables"]["attendances"]["Row"];
 
