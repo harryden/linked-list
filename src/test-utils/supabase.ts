@@ -11,7 +11,23 @@ type QueryOverrides = {
   maybeSingleResult?: SupabaseQueryResult;
 };
 
-export const createQueryStub = (overrides?: QueryOverrides) => {
+type QueryStub = {
+  select: any;
+  insert: any;
+  update: any;
+  delete: any;
+  eq: any;
+  order: any;
+  limit: any;
+  range: any;
+  single: any;
+  maybeSingle: any;
+  then: any;
+  catch: any;
+  finally: any;
+};
+
+export const createQueryStub = (overrides?: QueryOverrides): QueryStub => {
   const baseResult = overrides?.baseResult ?? { data: [], error: null };
   const singleResult = overrides?.singleResult ?? { data: null, error: null };
   const maybeSingleResult = overrides?.maybeSingleResult ?? {
@@ -19,7 +35,7 @@ export const createQueryStub = (overrides?: QueryOverrides) => {
     error: null,
   };
 
-  const query: any = {};
+  const query = {} as QueryStub;
 
   query.select = vi.fn().mockReturnValue(query);
   query.insert = vi.fn().mockReturnValue(query);
