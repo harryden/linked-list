@@ -3,11 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { TEXT } from "@/constants/text";
-import {
-  useCreateEvent,
-  useEvent,
-  useUpdateEvent,
-} from "@/hooks/useEvents";
+import { useCreateEvent, useEvent, useUpdateEvent } from "@/hooks/useEvents";
 import {
   generateSlug,
   parseEventDateParts,
@@ -69,7 +65,9 @@ const CreateEvent = () => {
       const { date: parsedDate, time: parsedStartTime } = parseEventDateParts(
         existingEvent.starts_at,
       );
-      const { time: parsedEndTime } = parseEventDateParts(existingEvent.ends_at);
+      const { time: parsedEndTime } = parseEventDateParts(
+        existingEvent.ends_at,
+      );
       setEventDate(parsedDate);
       setStartTime(parsedStartTime);
       setEndTime(parsedEndTime);
@@ -171,7 +169,6 @@ const CreateEvent = () => {
       setIsLoading(false);
     }
   };
-
 
   if (isEditing && isEventLoading && !isPrefilled) {
     return (
