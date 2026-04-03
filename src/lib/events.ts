@@ -1,18 +1,11 @@
 import { format, parseISO } from "date-fns";
 
-/**
- * Derives a short 6-digit numeric code from a UUID event ID.
- * Used to give attendees an easy code to reference at check-in.
- */
 export function eventCodeFromId(id: string): string {
   return Math.abs(parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
     .toString()
     .padStart(6, "0");
 }
 
-/**
- * Generates a URL-friendly slug from a name with a random suffix.
- */
 export function generateSlug(name: string): string {
   const base =
     name
@@ -24,9 +17,6 @@ export function generateSlug(name: string): string {
   return `${base}-${randomSuffix}`;
 }
 
-/**
- * Parses an ISO date string into its date (YYYY-MM-DD) and time (HH:mm) components.
- */
 export function parseEventDateParts(input?: string | null) {
   if (!input) {
     return { date: "", time: "" };
@@ -44,9 +34,6 @@ export function parseEventDateParts(input?: string | null) {
   }
 }
 
-/**
- * Combines a date string (YYYY-MM-DD) and time string (HH:mm) into an ISO string.
- */
 export function combineEventDateAndTime(
   date: string,
   time: string,
