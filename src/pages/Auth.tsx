@@ -12,7 +12,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 import linkbackLogo from "@/assets/linkback-logo.png";
 
 const Auth = () => {

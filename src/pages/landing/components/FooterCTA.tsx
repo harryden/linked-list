@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 
 const FooterCTA = () => (
   <section className="py-20 pb-32">

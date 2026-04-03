@@ -4,7 +4,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Linkedin, Users } from "lucide-react";
 import type { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 import { toast } from "sonner";
 
 interface AttendeeListProps {

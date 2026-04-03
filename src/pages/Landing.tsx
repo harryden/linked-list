@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";

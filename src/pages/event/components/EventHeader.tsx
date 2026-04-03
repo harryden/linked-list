@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { LINKEDIN } from "@/constants/brands";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { CardTitle } from "@/components/ui/card";
 import {

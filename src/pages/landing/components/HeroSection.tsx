@@ -60,7 +60,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => (
             <Link to="/auth">
               <Button
                 size="lg"
-                className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+                className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
               >
                 <Linkedin className="h-5 w-5 mr-2" />
                 {TEXT.landing.hero.signInButton}

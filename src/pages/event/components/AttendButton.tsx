@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
-import { LINKEDIN } from "@/constants/brands";
 
 interface AttendButtonProps {
   currentUserId: string | null;
