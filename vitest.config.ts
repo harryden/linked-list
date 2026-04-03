@@ -1,4 +1,4 @@
-import { defineConfig } from "vitest/config";
+import { defineConfig, configDefaults } from "vitest/config";
 import path from "node:path";
 
 export default defineConfig({
@@ -7,6 +7,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./vitest.polyfill.ts", "./vitest.setup.ts"],
     css: true,
+    exclude: [...configDefaults.exclude, "**/e2e/**"],
   },
   resolve: {
     alias: {
