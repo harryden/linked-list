@@ -44,19 +44,35 @@ vi.mock("@/components/TimePickerField", () => ({
 
 import { renderWithProviders } from "@/test-utils/render";
 import { Route, Routes } from "react-router-dom";
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateEvent from "@/pages/CreateEvent";
 import { TEXT } from "@/constants/text";
+import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 
-const renderCreateEvent = () =>
-  renderWithProviders(
+const renderCreateEvent = () => {
+  const query = createQueryStub({
+    singleResult: {
+      data: {
+        id: "event-1",
+        slug: "weekend-mvp-launch-abc123",
+        organizer_id: "user_test",
+      },
+      error: null,
+    },
+  });
+  query.insert = vi.fn().mockReturnValue(query);
+  query.select = vi.fn().mockReturnValue(query);
+  supabaseStub.from.mockImplementation(() => query);
+
+  return renderWithProviders(
     <Routes>
       <Route path="/create-event" element={<CreateEvent />} />
       <Route path="/event-success/:slug" element={<div />} />
     </Routes>,
     { route: "/create-event" },
   );
+};
 
 describe("CreateEvent smoke", () => {
   it("submits when form is valid and surfaces the success toast", async () => {

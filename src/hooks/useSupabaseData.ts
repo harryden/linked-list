@@ -4,8 +4,8 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
+  type UseQueryResult,
 } from "@tanstack/react-query";
-import type { UseQueryResult } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
@@ -339,7 +339,11 @@ export const useCreateEvent = () => {
         throw error;
       }
 
-      return data as EventRow;
+      if (!data) {
+        throw new Error("No data returned");
+      }
+
+      return data;
     },
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
@@ -369,7 +373,11 @@ export const useUpdateEvent = () => {
         throw error;
       }
 
-      return data as EventRow;
+      if (!data) {
+        throw new Error("No data returned");
+      }
+
+      return data;
     },
     onSuccess: (updatedEvent) => {
       queryClient.invalidateQueries({ queryKey: ["events"] });
