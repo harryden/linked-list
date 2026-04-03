@@ -13,6 +13,59 @@ interface AttendeeListProps {
   isLoading: boolean;
 }
 
+interface AttendeeItemProps {
+  attendee: ProfileRow;
+  currentUserId: string | null;
+}
+
+const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
+  const initials = attendee.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+
+  const handleViewProfile = () => {
+    if (attendee.linkedin_id) {
+      window.open(
+        `https://www.linkedin.com/in/${attendee.linkedin_id}`,
+        "_blank",
+        "noopener,noreferrer",
+      );
+    } else {
+      toast.info(TEXT.event.header.linkedInMissing);
+    }
+  };
+
+  return (
+    <div className="flex items-center gap-4 py-4 border-b last:border-0">
+      <Avatar className="h-14 w-14">
+        <AvatarImage src={attendee.avatar_url ?? undefined} />
+        <AvatarFallback className="bg-primary text-primary-foreground text-lg">
+          {initials}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1 min-w-0">
+        <p className="font-semibold text-foreground">{attendee.name}</p>
+        {attendee.headline && (
+          <p className="text-sm text-muted-foreground truncate">
+            {attendee.headline}
+          </p>
+        )}
+      </div>
+      <Button
+        className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
+        onClick={handleViewProfile}
+      >
+        <Linkedin className="h-4 w-4" />
+        {currentUserId === attendee.id
+          ? TEXT.event.header.viewSelfProfile
+          : TEXT.event.header.viewProfile}
+      </Button>
+    </div>
+  );
+};
+
 const AttendeeList = ({
   attendees,
   currentUserId,
@@ -47,55 +100,13 @@ const AttendeeList = ({
           </p>
         ) : (
           <div className="space-y-3">
-            {attendees.map((attendee) => {
-              const initials = attendee.name
-                .split(" ")
-                .map((part) => part[0])
-                .join("")
-                .toUpperCase();
-
-              return (
-                <div
-                  key={attendee.id}
-                  className="flex items-center gap-4 py-4 border-b last:border-0"
-                >
-                  <Avatar className="h-14 w-14">
-                    <AvatarImage src={attendee.avatar_url ?? undefined} />
-                    <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground">
-                      {attendee.name}
-                    </p>
-                    {attendee.headline && (
-                      <p className="text-sm text-muted-foreground truncate">
-                        {attendee.headline}
-                      </p>
-                    )}
-                  </div>
-                  <Button
-                    className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
-                    onClick={() => {
-                      if (attendee.linkedin_id) {
-                        window.open(
-                          `https://www.linkedin.com/in/${attendee.linkedin_id}`,
-                          "_blank",
-                        );
-                      } else {
-                        toast.info(TEXT.event.header.linkedInMissing);
-                      }
-                    }}
-                  >
-                    <Linkedin className="h-4 w-4" />
-                    {currentUserId === attendee.id
-                      ? TEXT.event.header.viewSelfProfile
-                      : TEXT.event.header.viewProfile}
-                  </Button>
-                </div>
-              );
-            })}
+            {attendees.map((attendee) => (
+              <AttendeeItem
+                key={attendee.id}
+                attendee={attendee}
+                currentUserId={currentUserId}
+              />
+            ))}
           </div>
         )}
       </CardContent>
