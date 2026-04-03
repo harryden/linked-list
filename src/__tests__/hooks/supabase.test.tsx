@@ -8,10 +8,7 @@ import {
   useCreateEvent,
   useDeleteEvent,
 } from "@/hooks/useEvents";
-import {
-  useJoinEvent,
-  useLeaveEvent,
-} from "@/hooks/useAttendances";
+import { useJoinEvent, useLeaveEvent } from "@/hooks/useAttendances";
 import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 
 const createWrapper = () => {
@@ -188,8 +185,5 @@ describe("supabase hooks", () => {
     });
 
     invalidateSpy.mockRestore();
-  });
-});
-validateSpy.mockRestore();
   });
 });
