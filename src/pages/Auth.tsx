@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
+import { isSafeRedirect } from "@/lib/utils";
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,23 +26,14 @@ const Auth = () => {
     const params = new URLSearchParams(location.search);
     const fromQuery = params.get("redirect");
 
-    if (fromQuery && fromQuery.startsWith("/")) {
-      return fromQuery;
-    }
-
-    if (typeof window !== "undefined") {
-      const stored = sessionStorage.getItem("postAuthRedirect");
-
-      if (stored && stored.startsWith("/")) {
-        return stored;
-      }
+    if (isSafeRedirect(fromQuery)) {
+      return fromQuery as string;
     }
 
     return "/";
   }, [location.search]);
 
   useEffect(() => {
-    // Check if user is already authenticated
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate(redirectPath, { replace: true });
@@ -52,16 +44,12 @@ const Auth = () => {
   const handleLinkedInSignIn = async () => {
     setIsLoading(true);
     try {
-      const safeRedirect = redirectPath.startsWith("/") ? redirectPath : "/";
-
-      if (typeof window !== "undefined") {
-        sessionStorage.setItem("postAuthRedirect", safeRedirect);
-      }
+      const safeRedirect = isSafeRedirect(redirectPath) ? redirectPath : "/";
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "linkedin_oidc",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
+          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(safeRedirect)}`,
           scopes: "openid profile email",
         },
       });
@@ -72,9 +60,6 @@ const Auth = () => {
         error instanceof Error ? error.message : TEXT.auth.toast.failure;
       toast.error(message);
       setIsLoading(false);
-      if (typeof window !== "undefined") {
-        sessionStorage.removeItem("postAuthRedirect");
-      }
     }
   };
 
