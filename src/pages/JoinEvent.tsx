@@ -28,16 +28,31 @@ const JoinEvent = () => {
   const location = useLocation();
   const queryClient = useQueryClient();
 
-  // Check if coming from dashboard, default to home
   const fromDashboard = location.state?.fromDashboard;
   const backPath = fromDashboard ? "/dashboard" : "/";
   const backText = fromDashboard
     ? TEXT.common.links.backToDashboard
     : TEXT.common.links.backToHome;
 
+  const getAuthenticatedUserId = async () => {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    return session?.user?.id;
+  };
+
+  const findEventByShortCode = async (shortCode: string) => {
+    const events = await fetchEventsWithClient(queryClient, {
+      shortCode: shortCode.trim(),
+    });
+    return events?.[0];
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!eventCode.trim()) {
+    const trimmedCode = eventCode.trim();
+
+    if (!trimmedCode) {
       toast.error(TEXT.joinEvent.toast.missingCode);
       return;
     }
@@ -47,33 +62,21 @@ const JoinEvent = () => {
     setOwnEventSlug(null);
 
     try {
-      // Get current user
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const userId = session?.user?.id;
-
-      // Fetch only the event with the matching short code
-      const events = await fetchEventsWithClient(queryClient, {
-        shortCode: eventCode.trim(),
-      });
-
-      const matchingEvent = events?.[0];
+      const userId = await getAuthenticatedUserId();
+      const matchingEvent = await findEventByShortCode(trimmedCode);
 
       if (!matchingEvent) {
         toast.error(TEXT.joinEvent.toast.notFound);
         return;
       }
 
-      // Check if user is the organizer
       if (userId && matchingEvent.organizer_id === userId) {
         setIsOwnEvent(true);
         setOwnEventSlug(matchingEvent.slug);
-        toast.info("You're the organizer of this event");
+        toast.info(TEXT.joinEvent.toast.organizerNotice);
         return;
       }
 
-      // Navigate to event page
       navigate(`/event/${matchingEvent.slug}`);
     } catch (error) {
       console.error("Error finding event:", error);
