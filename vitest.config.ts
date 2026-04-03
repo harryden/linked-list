@@ -5,7 +5,7 @@ export default defineConfig({
   test: {
     environment: "happy-dom",
     globals: true,
-    setupFiles: ["./vitest.setup.ts"],
+    setupFiles: ["./vitest.polyfill.ts", "./vitest.setup.ts"],
     css: true,
   },
   resolve: {
