@@ -7,6 +7,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ["./vitest.polyfill.ts", "./vitest.setup.ts"],
     css: true,
+    exclude: ["**/node_modules/**", "**/e2e/**"],
   },
   resolve: {
     alias: {
