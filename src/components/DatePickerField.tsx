@@ -37,7 +37,7 @@ const DatePickerField = ({
 
     try {
       return parseISO(value);
-    } catch (error) {
+    } catch (_error) {
       return undefined;
     }
   }, [value]);

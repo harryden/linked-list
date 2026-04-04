@@ -23,14 +23,5 @@ export default defineConfig(({ mode }) => ({
     target: "es2020",
     sourcemap: mode === "development" ? "hidden" : false,
     minify: "terser",
-    // Raised from Vite's default (500KB) to accommodate the recharts chunk
-    chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          recharts: ["recharts"],
-        },
-      },
-    },
   },
 }));

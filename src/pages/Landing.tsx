@@ -13,7 +13,6 @@ import FooterCTA from "./landing/components/FooterCTA";
 
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {

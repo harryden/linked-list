@@ -40,7 +40,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-const useSession = (navigate: NavigateFunction) => {
+const useSession = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
 
@@ -56,8 +56,8 @@ const useSession = (navigate: NavigateFunction) => {
         if (isMounted) {
           setCurrentUserId(session?.user?.id ?? null);
         }
-      } catch (error) {
-        console.error("Error loading session:", error);
+      } catch (_error) {
+        console.error("Error loading session:", _error);
       } finally {
         if (isMounted) {
           setIsSessionLoading(false);
@@ -78,7 +78,7 @@ const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUserId, isSessionLoading } = useSession(navigate);
+  const { currentUserId, isSessionLoading } = useSession();
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [justJoined, setJustJoined] = useState(false);

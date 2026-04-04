@@ -15,7 +15,6 @@ const EventSuccess = () => {
   const navigate = useNavigate();
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [eventCode, setEventCode] = useState<string>("");
-  const [eventName, setEventName] = useState<string>("");
 
   const {
     data: event,

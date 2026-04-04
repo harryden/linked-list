@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
 
 interface CreateEventHeaderProps {

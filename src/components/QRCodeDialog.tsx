@@ -21,7 +21,7 @@ export const QRCodeDialog = ({
   open,
   onClose,
   eventSlug,
-  eventName,
+  _eventName,
 }: QRCodeDialogProps) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
