@@ -1,7 +1,8 @@
 import React, { Component, ErrorInfo, ReactNode } from "react";
 import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, MessageSquare } from "lucide-react";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
 
 interface Props {
   children: ReactNode;
@@ -11,10 +12,6 @@ interface State {
   hasError: boolean;
 }
 
-/**
- * Catches errors during the render phase of child components.
- * Prevents the entire app from crashing.
- */
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
@@ -52,14 +49,26 @@ class ErrorBoundary extends Component<Props, State> {
                 looking into it.
               </p>
             </div>
-            <Button
-              onClick={this.handleReload}
-              variant="default"
-              size="lg"
-              className="w-full rounded-full"
-            >
-              Reload page
-            </Button>
+            <div className="flex flex-col gap-3">
+              <Button
+                onClick={this.handleReload}
+                variant="default"
+                size="lg"
+                className="w-full rounded-full"
+              >
+                Reload page
+              </Button>
+              <FeedbackDialog>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="w-full rounded-full"
+                >
+                  <MessageSquare className="h-4 w-4 mr-2" />
+                  Report what happened
+                </Button>
+              </FeedbackDialog>
+            </div>
           </div>
         </div>
       );

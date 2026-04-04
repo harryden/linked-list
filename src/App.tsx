@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { FeedbackDialog } from "@/components/FeedbackDialog";
 import { logger } from "@/lib/logger";
 
 const Landing = lazy(() => import("./pages/Landing"));
@@ -41,7 +42,6 @@ const queryClient = new QueryClient({
   }),
 });
 
-// Lightweight fallback component
 const PageSkeleton = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
@@ -56,11 +56,11 @@ const MinimalFallback = () => (
 );
 
 const App = () => (
-  <ErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <BrowserRouter>
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <BrowserRouter>
+        <ErrorBoundary>
           <Routes>
             <Route
               path="/"
@@ -144,10 +144,11 @@ const App = () => (
               }
             />
           </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </ErrorBoundary>
+          <FeedbackDialog />
+        </ErrorBoundary>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
 );
 
 export default App;
