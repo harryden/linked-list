@@ -15,6 +15,7 @@ import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
 import { logger } from "@/lib/logger";
+import { getBaseUrl } from "@/lib/urls";
 
 const Auth = () => {
   const { toast } = useToast();
@@ -51,7 +52,7 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "linkedin_oidc",
         options: {
-          redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(safeRedirect)}`,
+          redirectTo: `${getBaseUrl()}/auth/callback?next=${encodeURIComponent(safeRedirect)}`,
           scopes: "openid profile email",
         },
       });
