@@ -11,7 +11,7 @@ import { Label } from "@/components/ui/label";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchEventsWithClient } from "@/hooks/useEvents";
@@ -20,6 +20,7 @@ import PageContainer from "@/components/layout/PageContainer";
 import Heading from "@/components/ui/heading";
 
 const JoinEvent = () => {
+  const { toast } = useToast();
   const [eventCode, setEventCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isOwnEvent, setIsOwnEvent] = useState(false);
@@ -53,7 +54,11 @@ const JoinEvent = () => {
     const trimmedCode = eventCode.trim();
 
     if (!trimmedCode) {
-      toast.error(TEXT.joinEvent.toast.missingCode);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: TEXT.joinEvent.toast.missingCode,
+      });
       return;
     }
 
@@ -66,21 +71,31 @@ const JoinEvent = () => {
       const matchingEvent = await findEventByShortCode(trimmedCode);
 
       if (!matchingEvent) {
-        toast.error(TEXT.joinEvent.toast.notFound);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: TEXT.joinEvent.toast.notFound,
+        });
         return;
       }
 
       if (userId && matchingEvent.organizer_id === userId) {
         setIsOwnEvent(true);
         setOwnEventSlug(matchingEvent.slug);
-        toast.info(TEXT.joinEvent.toast.organizerNotice);
+        toast({
+          description: TEXT.joinEvent.toast.organizerNotice,
+        });
         return;
       }
 
       navigate(`/event/${matchingEvent.slug}`);
     } catch (error) {
       console.error("Error finding event:", error);
-      toast.error(TEXT.joinEvent.toast.failure);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: TEXT.joinEvent.toast.failure,
+      });
     } finally {
       setIsLoading(false);
     }

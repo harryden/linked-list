@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useProfile";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 const AuthCallback = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const location = useLocation();
   const [status, setStatus] = useState<"loading" | "error">("loading");
@@ -33,7 +35,11 @@ const AuthCallback = () => {
 
     if (error) {
       console.error("OAuth error:", error, errorDescription);
-      toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: errorDescription || TEXT.authCallback.toast.genericFailure,
+      });
       setStatus("error");
       setTimeout(() => navigate("/auth"), 2000);
       return;
@@ -47,7 +53,11 @@ const AuthCallback = () => {
       }
 
       if (event === "SIGNED_OUT" || (!session && event !== "INITIAL_SESSION")) {
-        toast.error(TEXT.authCallback.toast.noSession);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: TEXT.authCallback.toast.noSession,
+        });
         setStatus("error");
         subscription.unsubscribe();
         setTimeout(() => navigate("/auth"), 2000);
@@ -72,14 +82,23 @@ const AuthCallback = () => {
 
     if (profileError) {
       console.error("Profile fetch error:", profileError);
-      toast.error(TEXT.authCallback.toast.loadProfileFailure);
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: TEXT.authCallback.toast.loadProfileFailure,
+      });
       setStatus("error");
       setHasHandledProfile(true);
       setTimeout(() => navigate("/auth"), 2000);
       return;
     }
 
-    toast.success(TEXT.authCallback.toast.success);
+    analytics.identify(userId, { name: _profile?.name });
+
+    toast({
+      title: "Success",
+      description: TEXT.authCallback.toast.success,
+    });
     setHasHandledProfile(true);
     navigate(redirectPath, { replace: true });
   }, [

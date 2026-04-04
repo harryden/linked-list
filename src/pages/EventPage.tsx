@@ -8,37 +8,30 @@ import {
 } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { ArrowLeft, CheckCircle, X } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { toast } from "sonner";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
 import EventHeader from "@/pages/event/components/EventHeader";
 import AttendButton from "@/pages/event/components/AttendButton";
 import AttendeeList from "@/pages/event/components/AttendeeList";
+import EventLoading from "@/pages/event/components/EventLoading";
+import EventNotFound from "@/pages/event/components/EventNotFound";
+import EventUnauthorized from "@/pages/event/components/EventUnauthorized";
+import EventDeleteDialog from "@/pages/event/components/EventDeleteDialog";
+import CheckInSuccess from "@/pages/event/components/CheckInSuccess";
 import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
-import { useAttendances, useJoinEvent } from "@/hooks/useAttendances";
+import {
+  useAttendances,
+  useJoinEvent,
+  useRealtimeAttendances,
+} from "@/hooks/useAttendances";
 import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import PageContainer from "@/components/layout/PageContainer";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import { analytics } from "@/lib/analytics";
 
 const useSession = (navigate: NavigateFunction) => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -75,6 +68,7 @@ const useSession = (navigate: NavigateFunction) => {
 };
 
 const EventPage = () => {
+  const { toast } = useToast();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
@@ -91,11 +85,16 @@ const EventPage = () => {
     error: eventError,
   } = useEvent(eventIdentifier);
 
+  useRealtimeAttendances(event?.id);
+
   useEffect(() => {
     if (eventError) {
-      toast.error(TEXT.event.toast.loadFailure);
+      toast({
+        variant: "destructive",
+        description: TEXT.event.toast.loadFailure,
+      });
     }
-  }, [eventError]);
+  }, [eventError, toast]);
 
   const { data: organizerProfile } = useMyProfile(event?.organizer_id);
 
@@ -151,7 +150,10 @@ const EventPage = () => {
     }
 
     if (!event?.id) {
-      toast.error(TEXT.event.toast.eventNotFound);
+      toast({
+        variant: "destructive",
+        description: TEXT.event.toast.eventNotFound,
+      });
       return;
     }
 
@@ -162,7 +164,11 @@ const EventPage = () => {
         source: "manual",
       });
 
-      toast.success(TEXT.event.toast.checkInSuccess);
+      analytics.track("event_joined", { eventId: event.id, source: "manual" });
+
+      toast({
+        description: TEXT.event.toast.checkInSuccess,
+      });
       setJustJoined(true);
     } catch (error) {
       if (
@@ -171,11 +177,16 @@ const EventPage = () => {
         "code" in error &&
         (error as { code?: string }).code === "23505"
       ) {
-        toast.info(TEXT.event.toast.alreadyCheckedIn);
+        toast({
+          description: TEXT.event.toast.alreadyCheckedIn,
+        });
         return;
       }
 
-      toast.error(TEXT.event.toast.checkInFailure);
+      toast({
+        variant: "destructive",
+        description: TEXT.event.toast.checkInFailure,
+      });
     }
   };
 
@@ -203,93 +214,43 @@ const EventPage = () => {
         organizerId: event.organizer_id ?? undefined,
         eventSlug: event.slug,
       });
-      toast.success(TEXT.event.toast.deleteSuccess);
+      toast({
+        description: TEXT.event.toast.deleteSuccess,
+      });
       navigate("/dashboard");
     } catch (error) {
-      toast.error(TEXT.event.toast.deleteFailure);
+      toast({
+        variant: "destructive",
+        description: TEXT.event.toast.deleteFailure,
+      });
     } finally {
       setShowDeleteDialog(false);
     }
   };
 
   if (isLoading) {
-    return (
-      <PageContainer className="items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
-        </div>
-      </PageContainer>
-    );
+    return <EventLoading />;
   }
 
   if (!event) {
-    return (
-      <PageContainer className="items-center justify-center">
-        <Card className="max-w-md w-full shadow-lg">
-          <CardHeader>
-            <CardTitle>{TEXT.event.page.notFoundTitle}</CardTitle>
-            <CardDescription>
-              {TEXT.event.page.notFoundDescription}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link to="/">
-              <Button className="w-full">{TEXT.event.page.homeButton}</Button>
-            </Link>
-          </CardContent>
-        </Card>
-      </PageContainer>
-    );
+    return <EventNotFound />;
   }
 
   if (!currentUserId || !canViewAttendees) {
     return (
-      <PageContainer maxWidth="sm" className="justify-center">
-        <Card className="w-full shadow-2xl">
-          <CardContent className="pt-8 pb-6 px-6 space-y-6">
-            <EventHeader
-              event={event}
-              eventCode={eventCode}
-              organizer={organizerProfile}
-              currentUserId={currentUserId}
-              isOrganizer={isOrganizer}
-              isAttending={isAttending}
-              variant="compact"
-              onEdit={isOrganizer ? handleEditEvent : undefined}
-              onDelete={
-                isOrganizer ? () => setShowDeleteDialog(true) : undefined
-              }
-            />
-
-            <div className="space-y-4">
-              <AttendButton
-                currentUserId={currentUserId}
-                isOrganizer={isOrganizer}
-                isAttending={isAttending}
-                onCheckIn={handleCheckIn}
-                isLoading={joinEvent.isPending}
-                mode="linkedin"
-                redirectPath={`${location.pathname}${location.search}`}
-              />
-              <p className="text-xs text-center text-muted-foreground px-4">
-                {TEXT.event.page.guestNotice}
-              </p>
-            </div>
-
-            {currentUserId && (
-              <div className="text-center pt-2">
-                <Link
-                  to="/dashboard"
-                  className="text-sm text-primary hover:underline"
-                >
-                  {TEXT.common.links.viewPastEvents}
-                </Link>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      </PageContainer>
+      <EventUnauthorized
+        event={event}
+        eventCode={eventCode}
+        organizer={organizerProfile}
+        currentUserId={currentUserId}
+        isOrganizer={isOrganizer}
+        isAttending={isAttending}
+        onCheckIn={handleCheckIn}
+        isLoading={joinEvent.isPending}
+        onEdit={isOrganizer ? handleEditEvent : undefined}
+        onDelete={isOrganizer ? () => setShowDeleteDialog(true) : undefined}
+        redirectPath={`${location.pathname}${location.search}`}
+      />
     );
   }
 
@@ -355,25 +316,14 @@ const EventPage = () => {
 
           <div ref={attendeeListRef}>
             {justJoined && (
-              <Alert className="mb-4">
-                <CheckCircle className="h-4 w-4" />
-                <AlertDescription className="flex items-center justify-between">
-                  <span>You're in! Here's who else is coming.</span>
-                  <button
-                    onClick={() => setJustJoined(false)}
-                    className="ml-4 text-muted-foreground hover:text-foreground"
-                    aria-label="Dismiss"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </AlertDescription>
-              </Alert>
+              <CheckInSuccess onDismiss={() => setJustJoined(false)} />
             )}
             <AttendeeList
-              attendees={attendees}
+              attendees={attendeeRecords ?? []}
               currentUserId={currentUserId}
               isOrganizer={isOrganizer}
               isLoading={isAttendeesLoading}
+              eventName={event.name}
             />
           </div>
         </div>
@@ -386,29 +336,12 @@ const EventPage = () => {
         eventName={event.name}
       />
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>
-              {TEXT.event.header.deleteConfirmTitle}
-            </AlertDialogTitle>
-            <AlertDialogDescription>
-              {TEXT.event.header.deleteConfirmDescription}
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={deleteEvent.isPending}>
-              {TEXT.event.header.deleteConfirmCancel}
-            </AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteEvent}
-              disabled={deleteEvent.isPending}
-            >
-              {TEXT.event.header.deleteConfirmSubmit}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      <EventDeleteDialog
+        open={showDeleteDialog}
+        onOpenChange={setShowDeleteDialog}
+        onConfirm={handleDeleteEvent}
+        isDeleting={deleteEvent.isPending}
+      />
     </div>
   );
 };

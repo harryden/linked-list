@@ -330,6 +330,7 @@ export const TEXT = {
       loading: "Loading attendees...",
       organizerEmpty: "No attendees yet. Share your code to get started.",
       attendeeEmpty: "No attendees yet. Be the first to check in.",
+      exportCsv: "Export CSV",
     },
     page: {
       loading: "Loading event...",
@@ -351,6 +352,8 @@ export const TEXT = {
       updateFailure: "Failed to update event",
       deleteSuccess: "Event deleted successfully",
       deleteFailure: "Failed to delete event",
+      exportSuccess: "Attendee list exported to CSV",
+      exportFailure: "Failed to export attendee list to CSV",
     },
   },
   eventSuccess: {

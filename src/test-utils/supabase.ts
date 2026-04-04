@@ -57,6 +57,16 @@ export const createQueryStub = (overrides?: QueryOverrides): QueryStub => {
   return query;
 };
 
+const makeChannelStub = () => {
+  const channelStub = {
+    on: vi.fn(),
+    subscribe: vi.fn(),
+  };
+  channelStub.on.mockReturnValue(channelStub);
+  channelStub.subscribe.mockReturnValue(channelStub);
+  return channelStub;
+};
+
 export const supabaseStub = {
   auth: {
     getUser: vi.fn(),
@@ -68,6 +78,8 @@ export const supabaseStub = {
       .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
   },
   from: vi.fn(),
+  channel: vi.fn().mockImplementation(() => makeChannelStub()),
+  removeChannel: vi.fn().mockResolvedValue(undefined),
 };
 
 export const resetSupabaseStub = () => {
@@ -77,6 +89,10 @@ export const resetSupabaseStub = () => {
   supabaseStub.auth.signOut.mockReset();
   supabaseStub.auth.onAuthStateChange.mockReset();
   supabaseStub.from.mockReset();
+  supabaseStub.channel.mockReset();
+  supabaseStub.channel.mockImplementation(() => makeChannelStub());
+  supabaseStub.removeChannel.mockReset();
+  supabaseStub.removeChannel.mockResolvedValue(undefined);
 
   supabaseStub.auth.getUser.mockResolvedValue({
     data: { user: { id: "user_test" } },

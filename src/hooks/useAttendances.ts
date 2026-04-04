@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { UseQueryResult } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -81,6 +82,36 @@ export const useAttendances = (options: UseAttendancesOptions) => {
     enabled,
     queryFn: () => fetchAttendances(options),
   });
+};
+
+export const useRealtimeAttendances = (eventId?: string) => {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!eventId) return;
+
+    const channel = supabase
+      .channel(`attendances:event_id=eq.${eventId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "attendances",
+          filter: `event_id=eq.${eventId}`,
+        },
+        () => {
+          queryClient.invalidateQueries({
+            queryKey: ["attendances", { eventId }],
+          });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [eventId, queryClient]);
 };
 
 export const useUpcoming = (
