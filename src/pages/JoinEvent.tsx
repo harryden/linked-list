@@ -12,6 +12,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { logger } from "@/lib/logger";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchEventsWithClient } from "@/hooks/useEvents";
@@ -90,7 +91,10 @@ const JoinEvent = () => {
 
       navigate(`/event/${matchingEvent.slug}`);
     } catch (error) {
-      console.error("Error finding event:", error);
+      logger.error(error, {
+        category: "Events",
+        extra: { message: "Error finding event" },
+      });
       toast({
         variant: "destructive",
         title: "Error",

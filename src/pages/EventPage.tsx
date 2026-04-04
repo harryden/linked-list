@@ -7,6 +7,7 @@ import {
   NavigateFunction,
 } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
@@ -50,7 +51,7 @@ const useSession = (navigate: NavigateFunction) => {
           setCurrentUserId(session?.user?.id ?? null);
         }
       } catch (error) {
-        console.error("Error loading session:", error);
+        logger.error(error, { category: "Events" });
       } finally {
         if (isMounted) {
           setIsSessionLoading(false);

@@ -2,6 +2,17 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import "./lib/i18n";
+import { logger } from "@/lib/logger";
+
+// Catch unhandled promise rejections (e.g. Supabase failures)
+window.addEventListener("unhandledrejection", (event) => {
+  logger.error(event.reason, { category: "GlobalUnhandledRejection" });
+});
+
+// Catch global errors not caught by React ErrorBoundary
+window.addEventListener("error", (event) => {
+  logger.error(event.error, { category: "GlobalError" });
+});
 
 // Preload EventPage chunk when entering via deep link
 if (location.pathname.startsWith("/event/")) {

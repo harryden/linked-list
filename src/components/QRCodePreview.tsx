@@ -1,4 +1,5 @@
 import { useEffect, useState, type ReactNode } from "react";
+import { logger } from "@/lib/logger";
 import { cn } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
 
@@ -41,7 +42,7 @@ const QRCodePreview = ({
           onDataUrlChange?.(url);
         }
       } catch (error) {
-        console.error("Error generating QR code:", error);
+        logger.error(error, { category: "UI" });
         if (isMounted) {
           setDataUrl("");
           onDataUrlChange?.("");

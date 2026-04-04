@@ -7,6 +7,7 @@ import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
 import { analytics } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 const AuthCallback = () => {
   const { toast } = useToast();
@@ -34,7 +35,10 @@ const AuthCallback = () => {
     const errorDescription = params.get("error_description");
 
     if (error) {
-      console.error("OAuth error:", error, errorDescription);
+      logger.error(error, {
+        category: "Auth",
+        extra: { errorDescription },
+      });
       toast({
         variant: "destructive",
         title: "Error",
@@ -81,7 +85,7 @@ const AuthCallback = () => {
     }
 
     if (profileError) {
-      console.error("Profile fetch error:", profileError);
+      logger.error(profileError, { category: "Auth" });
       toast({
         variant: "destructive",
         title: "Error",
