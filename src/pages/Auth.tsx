@@ -9,13 +9,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
 
 const Auth = () => {
+  const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -58,7 +59,10 @@ const Auth = () => {
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : TEXT.auth.toast.failure;
-      toast.error(message);
+      toast({
+        variant: "destructive",
+        description: message,
+      });
       setIsLoading(false);
     }
   };

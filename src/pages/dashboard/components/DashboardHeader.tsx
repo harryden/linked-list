@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { TEXT } from "@/constants/text";
@@ -42,12 +42,7 @@ const DashboardHeader = ({
           </Link>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src={avatarUrl ?? undefined} />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar src={avatarUrl} name={name} className="h-10 w-10" />
               <div className="text-right hidden sm:block">
                 <p className="font-medium">{name}</p>
                 {headline && (
