@@ -10,6 +10,7 @@ import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import PageContainer from "@/components/layout/PageContainer";
 import Heading from "@/components/ui/heading";
+import { getEventUrl } from "@/lib/urls";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -99,7 +100,7 @@ const EventSuccess = () => {
 
           <div className="flex justify-center">
             <QRCodePreview
-              value={`${window.location.origin}/event/${event.slug}?ref=qr`}
+              value={`${getEventUrl(event.slug)}?ref=qr`}
               size={400}
               onDataUrlChange={setQrCodeUrl}
             />

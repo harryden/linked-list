@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { TEXT } from "@/constants/text";
+import { getEventUrl } from "@/lib/urls";
 
 interface QRCodeDialogProps {
   open: boolean;
@@ -61,7 +62,7 @@ export const QRCodeDialog = ({
           {open && (
             <div className="flex justify-center">
               <QRCodePreview
-                value={`${window.location.origin}/event/${eventSlug}?ref=qr`}
+                value={`${getEventUrl(eventSlug)}?ref=qr`}
                 size={400}
                 onDataUrlChange={setQrCodeUrl}
               />
