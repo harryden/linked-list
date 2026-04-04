@@ -12,6 +12,10 @@ const baseEvent = {
   starts_at: "2025-06-15T09:00:00.000Z",
   ends_at: "2025-06-15T11:00:00.000Z",
   location: "Gothenburg, Sweden",
+  created_at: "2025-01-01T00:00:00Z",
+  updated_at: "2025-01-01T00:00:00Z",
+  short_code: "123456",
+  linkedin_event_url: null,
 };
 
 const organizer = {
@@ -20,6 +24,9 @@ const organizer = {
   headline: "Event Organizer",
   avatar_url: null,
   linkedin_id: "janedoe",
+  created_at: "2025-01-01T00:00:00Z",
+  updated_at: "2025-01-01T00:00:00Z",
+  role: "user",
 };
 
 const defaultProps = {

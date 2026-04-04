@@ -1,6 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Card,
   CardContent,
@@ -10,18 +8,11 @@ import {
 } from "@/components/ui/card";
 import { LocationAutocomplete } from "@/components/LocationAutocomplete";
 import { TEXT } from "@/constants/text";
-import DatePickerField from "@/components/DatePickerField";
-import TimePickerField from "@/components/TimePickerField";
-import {
-  Control,
-  Controller,
-  UseFormRegister,
-  FieldErrors,
-} from "react-hook-form";
+import FormField from "@/components/FormField";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { CreateEventValues } from "../schema";
 
 interface CreateEventFormProps {
-  register: UseFormRegister<CreateEventValues>;
   control: Control<CreateEventValues>;
   errors: FieldErrors<CreateEventValues>;
   isSubmitting: boolean;
@@ -30,7 +21,6 @@ interface CreateEventFormProps {
 }
 
 const CreateEventForm = ({
-  register,
   control,
   errors,
   isSubmitting,
@@ -52,35 +42,30 @@ const CreateEventForm = ({
     </CardHeader>
     <CardContent>
       <form onSubmit={onSubmit} className="space-y-8">
-        <div className="space-y-2">
-          <Label
-            htmlFor="name"
-            className={errors.name ? "text-destructive" : ""}
-          >
-            {TEXT.createEvent.form.fields.nameLabel}
-          </Label>
-          <Input
-            id="name"
-            type="text"
-            placeholder={TEXT.createEvent.form.fields.namePlaceholder}
-            {...register("name")}
-            className={
-              errors.name
-                ? "border-destructive focus-visible:ring-destructive"
-                : ""
-            }
-          />
-          {errors.name && (
-            <p className="text-xs font-medium text-destructive">
-              {errors.name.message}
-            </p>
+        <Controller
+          name="name"
+          control={control}
+          render={({ field }) => (
+            <FormField
+              id="name"
+              label={TEXT.createEvent.form.fields.nameLabel}
+              placeholder={TEXT.createEvent.form.fields.namePlaceholder}
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={errors.name?.message}
+            />
           )}
-        </div>
+        />
 
         <div className="space-y-2">
-          <Label htmlFor="location">
+          <label
+            htmlFor="location"
+            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
             {TEXT.createEvent.form.fields.locationLabel}
-          </Label>
+          </label>
           <Controller
             name="location"
             control={control}
@@ -95,112 +80,74 @@ const CreateEventForm = ({
           />
         </div>
 
-        <div className="space-y-2">
-          <Label
-            htmlFor="eventDate"
-            className={errors.eventDate ? "text-destructive" : ""}
-          >
-            {TEXT.createEvent.form.fields.dateLabel}
-          </Label>
+        <Controller
+          name="eventDate"
+          control={control}
+          render={({ field }) => (
+            <FormField
+              id="eventDate"
+              type="date"
+              label={TEXT.createEvent.form.fields.dateLabel}
+              placeholder={TEXT.createEvent.form.fields.datePlaceholder}
+              value={field.value}
+              onChange={field.onChange}
+              ref={field.ref}
+              error={errors.eventDate?.message}
+            />
+          )}
+        />
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           <Controller
-            name="eventDate"
+            name="startTime"
             control={control}
             render={({ field }) => (
-              <DatePickerField
-                id="eventDate"
+              <FormField
+                id="startTime"
+                type="time"
+                label={TEXT.createEvent.form.fields.startTimeLabel}
                 value={field.value}
                 onChange={field.onChange}
-                placeholder={TEXT.createEvent.form.fields.datePlaceholder}
-                className={errors.eventDate ? "border-destructive" : ""}
+                ref={field.ref}
+                error={errors.startTime?.message}
               />
             )}
           />
-          {errors.eventDate && (
-            <p className="text-xs font-medium text-destructive">
-              {errors.eventDate.message}
-            </p>
-          )}
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            <Label
-              htmlFor="startTime"
-              className={errors.startTime ? "text-destructive" : ""}
-            >
-              {TEXT.createEvent.form.fields.startTimeLabel}
-            </Label>
-            <Controller
-              name="startTime"
-              control={control}
-              render={({ field }) => (
-                <TimePickerField
-                  id="startTime"
-                  value={field.value}
-                  onChange={field.onChange}
-                  className={errors.startTime ? "border-destructive" : ""}
-                />
-              )}
-            />
-            {errors.startTime && (
-              <p className="text-xs font-medium text-destructive">
-                {errors.startTime.message}
-              </p>
+          <Controller
+            name="endTime"
+            control={control}
+            render={({ field }) => (
+              <FormField
+                id="endTime"
+                type="time"
+                label={TEXT.createEvent.form.fields.endTimeLabel}
+                value={field.value}
+                onChange={field.onChange}
+                ref={field.ref}
+                error={errors.endTime?.message}
+              />
             )}
-          </div>
-
-          <div className="space-y-2">
-            <Label
-              htmlFor="endTime"
-              className={errors.endTime ? "text-destructive" : ""}
-            >
-              {TEXT.createEvent.form.fields.endTimeLabel}
-            </Label>
-            <Controller
-              name="endTime"
-              control={control}
-              render={({ field }) => (
-                <TimePickerField
-                  id="endTime"
-                  value={field.value}
-                  onChange={field.onChange}
-                  className={errors.endTime ? "border-destructive" : ""}
-                />
-              )}
-            />
-            {errors.endTime && (
-              <p className="text-xs font-medium text-destructive">
-                {errors.endTime.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-2">
-          <Label
-            htmlFor="linkedinUrl"
-            className={errors.linkedinUrl ? "text-destructive" : ""}
-          >
-            {TEXT.createEvent.form.fields.linkedinUrlLabel}
-          </Label>
-          <Input
-            id="linkedinUrl"
-            type="url"
-            placeholder={TEXT.createEvent.form.fields.linkedinUrlPlaceholder}
-            {...register("linkedinUrl")}
-            className={
-              errors.linkedinUrl
-                ? "border-destructive focus-visible:ring-destructive"
-                : ""
-            }
           />
-          {errors.linkedinUrl && (
-            <p className="text-xs font-medium text-destructive">
-              {errors.linkedinUrl.message}
-            </p>
-          )}
         </div>
 
+        <Controller
+          name="linkedinUrl"
+          control={control}
+          render={({ field }) => (
+            <FormField
+              id="linkedinUrl"
+              type="url"
+              label={TEXT.createEvent.form.fields.linkedinUrlLabel}
+              placeholder={TEXT.createEvent.form.fields.linkedinUrlPlaceholder}
+              value={field.value ?? ""}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              ref={field.ref}
+              error={errors.linkedinUrl?.message}
+            />
+          )}
+        />
         <Button
           type="submit"
           className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary"

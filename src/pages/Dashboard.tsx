@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { useNavigate, NavigateFunction } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
 import { useMyEvents } from "@/hooks/useEvents";
 import { useUpcoming } from "@/hooks/useAttendances";
@@ -68,6 +68,7 @@ const getDashboardGreeting = (
 };
 
 const Dashboard = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const { userId, isSessionLoading } = useSession(navigate);
 
@@ -119,7 +120,9 @@ const Dashboard = () => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    toast.success(TEXT.dashboard.header.signOutSuccess);
+    toast({
+      description: TEXT.dashboard.header.signOutSuccess,
+    });
     navigate("/");
   };
 

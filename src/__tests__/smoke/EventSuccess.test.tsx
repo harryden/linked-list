@@ -37,9 +37,9 @@ describe("EventSuccess smoke", () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single,
-    } as const;
+    } as any;
 
-    supabase.from.mockImplementation(() => query);
+    vi.mocked(supabase.from).mockImplementation(() => query);
 
     renderPage();
 
@@ -52,9 +52,9 @@ describe("EventSuccess smoke", () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single,
-    } as const;
+    } as any;
 
-    supabase.from.mockImplementation(() => query);
+    vi.mocked(supabase.from).mockImplementation(() => query);
 
     renderPage();
 
@@ -74,9 +74,9 @@ describe("EventSuccess smoke", () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single,
-    } as const;
+    } as any;
 
-    supabase.from.mockImplementation(() => query);
+    vi.mocked(supabase.from).mockImplementation(() => query);
 
     renderPage();
 
