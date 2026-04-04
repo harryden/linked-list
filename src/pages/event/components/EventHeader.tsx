@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { CardTitle } from "@/components/ui/card";
 import {
   Calendar,
@@ -17,7 +17,7 @@ import { useMemo } from "react";
 import type { EventRow } from "@/hooks/useEvents";
 import type { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
@@ -51,6 +51,7 @@ const EventHeader = ({
   onEdit,
   onDelete,
 }: EventHeaderProps) => {
+  const { toast } = useToast();
   const eventStartDate = useMemo(() => {
     if (!event.starts_at) {
       return null;
@@ -308,13 +309,13 @@ const EventHeader = ({
           )}
           {organizer && (
             <div className="flex items-center gap-4 mt-4 pt-4 border-t border-border">
-              <Avatar className="h-12 w-12">
-                <AvatarImage src={organizer.avatar_url ?? undefined} />
-                <AvatarFallback className="bg-primary text-primary-foreground">
-                  {hostInitials}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                src={organizer.avatar_url}
+                name={organizer.name}
+                className="h-12 w-12"
+              />
               <div className="flex-1 min-w-0">
+
                 <p className="text-sm text-muted-foreground mb-0.5">
                   {TEXT.event.header.hostedBy}
                 </p>
@@ -337,7 +338,9 @@ const EventHeader = ({
                       "noopener,noreferrer",
                     );
                   } else {
-                    toast.info(TEXT.event.header.linkedInMissing);
+                    toast({
+                      description: TEXT.event.header.linkedInMissing,
+                    });
                   }
                 }}
               >
