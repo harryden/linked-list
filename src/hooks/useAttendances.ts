@@ -69,7 +69,7 @@ export const fetchAttendances = async (
     throw error;
   }
 
-  return (data ?? []) as AttendanceRecord[];
+  return (data as any) || [];
 };
 
 export const useAttendances = (options: UseAttendancesOptions) => {

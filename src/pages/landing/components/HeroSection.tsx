@@ -14,18 +14,15 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => (
       <Heading level={1}>
         {TEXT.landing.hero.titleLine}
         <br />
-        <Heading
-          as="span"
-          level={1}
-          gradient
-          className="inline-block animate-fade-in [animation-delay:0.3s] [animation-fill-mode:both]"
+        <span
+          className="inline-block animate-fade-in [animation-delay:0.3s] [animation-fill-mode:both] bg-gradient-to-r from-primary via-primary to-primary bg-[length:200%_100%] animate-[shimmer_3s_ease-in-out_infinite] bg-clip-text text-transparent"
           style={{
             textShadow:
               "0 0 30px hsla(var(--glow-primary) / 0.9), 0 0 60px hsla(var(--glow-primary) / 0.7), 0 0 90px hsla(var(--glow-primary) / 0.5)",
           }}
         >
           {TEXT.landing.hero.highlight}
-        </Heading>
+        </span>
       </Heading>
       <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
         {isAuthenticated

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
 import { useCreateEvent, useEvent, useUpdateEvent } from "@/hooks/useEvents";
 import {
@@ -17,6 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { createEventSchema, CreateEventValues } from "./create-event/schema";
 
 const CreateEvent = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const routerLocation = useLocation();
   const createEvent = useCreateEvent();
@@ -68,10 +69,13 @@ const CreateEvent = () => {
 
   useEffect(() => {
     if (eventError) {
-      toast.error(TEXT.event.toast.eventNotFound);
+      toast({
+        variant: "destructive",
+        description: TEXT.event.toast.eventNotFound,
+      });
       navigate(fromDashboard ? "/dashboard" : "/");
     }
-  }, [eventError, navigate, fromDashboard]);
+  }, [eventError, navigate, fromDashboard, toast]);
 
   useEffect(() => {
     if (isEditing && existingEvent && !isPrefilled.current) {
@@ -98,7 +102,10 @@ const CreateEvent = () => {
       } = await supabase.auth.getSession();
 
       if (!session) {
-        toast.error(TEXT.createEvent.toast.authRequired);
+        toast({
+          variant: "destructive",
+          description: TEXT.createEvent.toast.authRequired,
+        });
         navigate("/auth");
         return;
       }
@@ -113,7 +120,10 @@ const CreateEvent = () => {
       );
 
       if (!normalizedStartsAt || !normalizedEndsAt) {
-        toast.error(TEXT.createEvent.toast.missingDateTime);
+        toast({
+          variant: "destructive",
+          description: TEXT.createEvent.toast.missingDateTime,
+        });
         return;
       }
 
@@ -129,7 +139,9 @@ const CreateEvent = () => {
           },
         });
 
-        toast.success(TEXT.event.toast.updateSuccess);
+        toast({
+          description: TEXT.event.toast.updateSuccess,
+        });
         navigate(`/event/${updatedEvent.slug}`);
       } else {
         const slug = generateSlug(values.name);
@@ -144,13 +156,18 @@ const CreateEvent = () => {
           organizer_id: session.user.id,
         });
 
-        toast.success(TEXT.createEvent.toast.success);
+        toast({
+          description: TEXT.createEvent.toast.success,
+        });
         navigate(`/event-success/${slug}`);
       }
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : TEXT.createEvent.toast.failure;
-      toast.error(message);
+      toast({
+        variant: "destructive",
+        description: message,
+      });
     }
   };
 

@@ -1,10 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { UserAvatar } from "@/components/ui/user-avatar";
 import { Linkedin, Users } from "lucide-react";
-import type { ProfileRow } from "@/hooks/useProfile";
+import { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
-import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 interface AttendeeListProps {
   attendees: ProfileRow[];
@@ -19,6 +19,7 @@ interface AttendeeItemProps {
 }
 
 const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
+  const { toast } = useToast();
   const initials = attendee.name
     .split(" ")
     .map((part) => part[0])
@@ -33,18 +34,20 @@ const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
         "noopener,noreferrer",
       );
     } else {
-      toast.info(TEXT.event.header.linkedInMissing);
+      toast({
+        description: TEXT.event.header.linkedInMissing,
+      });
     }
   };
 
   return (
     <div className="flex items-center gap-4 py-4 border-b last:border-0">
-      <Avatar className="h-14 w-14">
-        <AvatarImage src={attendee.avatar_url ?? undefined} />
-        <AvatarFallback className="bg-primary text-primary-foreground text-lg">
-          {initials}
-        </AvatarFallback>
-      </Avatar>
+      <UserAvatar
+        src={attendee.avatar_url}
+        name={attendee.name}
+        className="h-14 w-14"
+        fallbackClassName="text-lg"
+      />
       <div className="flex-1 min-w-0">
         <p className="font-semibold text-foreground">{attendee.name}</p>
         {attendee.headline && (
