@@ -15,9 +15,9 @@ describe("EventPage states", () => {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single,
-    } as const;
+    } as any;
 
-    supabase.from.mockImplementationOnce(() => query);
+    vi.mocked(supabase.from).mockImplementationOnce(() => query);
 
     renderWithProviders(
       <Routes>

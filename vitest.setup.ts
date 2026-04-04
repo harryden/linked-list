@@ -1,7 +1,9 @@
-import "@testing-library/jest-dom";
-import { beforeEach } from "vitest";
+import * as matchers from "@testing-library/jest-dom/matchers";
+import { expect, beforeEach } from "vitest";
 import "./src/test-utils/msw";
 import { resetSupabaseStub } from "./src/test-utils/supabase";
+
+expect.extend(matchers);
 
 globalThis.import = {
   meta: {
