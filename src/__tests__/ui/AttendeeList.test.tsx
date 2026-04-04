@@ -4,19 +4,34 @@ import { vi } from "vitest";
 import AttendeeList from "@/pages/event/components/AttendeeList";
 import { TEXT } from "@/constants/text";
 
-const makeAttendee = (
-  overrides?: Partial<Parameters<typeof AttendeeList>[0]["attendees"][number]>,
-) => ({
-  id: "user-1",
-  name: "Alice Smith",
-  headline: "Software Engineer",
-  avatar_url: null,
-  linkedin_id: "alicesmith",
-  created_at: "2025-01-01T00:00:00Z",
-  updated_at: "2025-01-01T00:00:00Z",
-  role: "user",
-  ...overrides,
-});
+let attendeeCounter = 0;
+const makeAttendee = (profileOverrides?: {
+  id?: string;
+  name?: string;
+  headline?: string | null;
+  avatar_url?: string | null;
+  linkedin_id?: string | null;
+}) => {
+  attendeeCounter += 1;
+  return {
+    id: `attendance-${attendeeCounter}`,
+    event_id: "event-1",
+    user_id: profileOverrides?.id ?? "user-1",
+    source: "manual",
+    created_at: "2025-01-01T00:00:00Z",
+    profiles: {
+      id: "user-1",
+      name: "Alice Smith",
+      headline: "Software Engineer",
+      avatar_url: null,
+      linkedin_id: "alicesmith",
+      created_at: "2025-01-01T00:00:00Z",
+      updated_at: "2025-01-01T00:00:00Z",
+      role: "user",
+      ...profileOverrides,
+    },
+  };
+};
 
 const attendees = [makeAttendee()];
 
@@ -145,17 +160,18 @@ describe("AttendeeList", () => {
       openSpy.mockRestore();
     });
 
-    it("shows an info toast instead of opening a tab when linkedin_id is missing", async () => {
+    it("disables the button and does not open a tab when linkedin_id is missing", async () => {
       const openSpy = vi.spyOn(window, "open").mockImplementation(() => null);
-      const user = userEvent.setup();
 
       renderList({
         attendees: [makeAttendee({ linkedin_id: null })],
         currentUserId: "other-user",
       });
 
-      await user.click(screen.getByText(TEXT.event.header.viewProfile));
-
+      const button = screen.getByRole("button", {
+        name: TEXT.event.header.viewProfile,
+      });
+      expect(button).toBeDisabled();
       expect(openSpy).not.toHaveBeenCalled();
 
       openSpy.mockRestore();

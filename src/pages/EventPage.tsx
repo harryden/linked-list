@@ -319,10 +319,11 @@ const EventPage = () => {
               <CheckInSuccess onDismiss={() => setJustJoined(false)} />
             )}
             <AttendeeList
-              attendees={attendees}
+              attendees={attendeeRecords ?? []}
               currentUserId={currentUserId}
               isOrganizer={isOrganizer}
               isLoading={isAttendeesLoading}
+              eventName={event.name}
             />
           </div>
         </div>
