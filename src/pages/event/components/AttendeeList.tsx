@@ -29,6 +29,7 @@ const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
       window.open(
         `https://www.linkedin.com/in/${attendee.linkedin_id}`,
         "_blank",
+        "noopener,noreferrer",
       );
     }
   };
