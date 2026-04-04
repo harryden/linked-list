@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
+import { analytics } from "@/lib/analytics";
 
 const AuthCallback = () => {
   const { toast } = useToast();
@@ -91,6 +92,8 @@ const AuthCallback = () => {
       setTimeout(() => navigate("/auth"), 2000);
       return;
     }
+
+    analytics.identify(userId, { name: _profile?.name });
 
     toast({
       title: "Success",

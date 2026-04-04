@@ -15,6 +15,7 @@ import PageContainer from "@/components/layout/PageContainer";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createEventSchema, CreateEventValues } from "./create-event/schema";
+import { analytics } from "@/lib/analytics";
 
 const CreateEvent = () => {
   const { toast } = useToast();
@@ -139,6 +140,8 @@ const CreateEvent = () => {
           },
         });
 
+        analytics.track("event_updated", { eventId: updatedEvent.id });
+
         toast({
           description: TEXT.event.toast.updateSuccess,
         });
@@ -146,7 +149,7 @@ const CreateEvent = () => {
       } else {
         const slug = generateSlug(values.name);
 
-        await createEvent.mutateAsync({
+        const newEvent = await createEvent.mutateAsync({
           name: values.name,
           slug,
           location: values.location || null,
@@ -155,6 +158,9 @@ const CreateEvent = () => {
           linkedin_event_url: values.linkedinUrl || null,
           organizer_id: session.user.id,
         });
+
+        // The hook might return the new event, but if not we can track slug
+        analytics.track("event_created", { slug });
 
         toast({
           description: TEXT.createEvent.toast.success,

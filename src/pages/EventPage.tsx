@@ -31,6 +31,7 @@ import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import PageContainer from "@/components/layout/PageContainer";
+import { analytics } from "@/lib/analytics";
 
 const useSession = (navigate: NavigateFunction) => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -162,6 +163,8 @@ const EventPage = () => {
         userId: currentUserId,
         source: "manual",
       });
+
+      analytics.track("event_joined", { eventId: event.id, source: "manual" });
 
       toast({
         description: TEXT.event.toast.checkInSuccess,
@@ -312,7 +315,9 @@ const EventPage = () => {
           </Card>
 
           <div ref={attendeeListRef}>
-            {justJoined && <CheckInSuccess onDismiss={() => setJustJoined(false)} />}
+            {justJoined && (
+              <CheckInSuccess onDismiss={() => setJustJoined(false)} />
+            )}
             <AttendeeList
               attendees={attendees}
               currentUserId={currentUserId}
