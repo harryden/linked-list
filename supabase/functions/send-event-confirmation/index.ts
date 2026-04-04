@@ -2,42 +2,61 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
+const EMAIL_FROM =
+  Deno.env.get("EMAIL_FROM") ?? "LinkBack <events@updates.linkback.com>";
+const APP_URL =
+  Deno.env.get("APP_URL") ?? "https://linked-list-nine.vercel.app";
 
 serve(async (req) => {
+  if (!RESEND_API_KEY) {
+    return new Response(
+      JSON.stringify({ error: "RESEND_API_KEY is not configured" }),
+      {
+        headers: { "Content-Type": "application/json" },
+        status: 500,
+      },
+    );
+  }
+
   try {
     const payload = await req.json();
     const { record, type } = payload;
 
     // Only handle new event insertions
     if (type !== "INSERT" || !record) {
-      return new Response(JSON.stringify({ message: "Skipping non-insert event" }), {
-        headers: { "Content-Type": "application/json" },
-        status: 200,
-      });
+      return new Response(
+        JSON.stringify({ message: "Skipping non-insert event" }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 200,
+        },
+      );
     }
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
     );
 
     // Get the organizer's email from auth.users
-    const { data: userData, error: userError } = await supabase.auth.admin.getUserById(
-      record.organizer_id
-    );
+    const { data: userData, error: userError } =
+      await supabase.auth.admin.getUserById(record.organizer_id);
 
     if (userError || !userData.user?.email) {
       console.error("Error fetching user email:", userError);
-      return new Response(JSON.stringify({ error: "Could not find organizer email" }), {
-        headers: { "Content-Type": "application/json" },
-        status: 400,
-      });
+      return new Response(
+        JSON.stringify({ error: "Could not find organizer email" }),
+        {
+          headers: { "Content-Type": "application/json" },
+          status: 400,
+        },
+      );
     }
 
     const email = userData.user.email;
     const eventName = record.name;
     const shortCode = record.short_code;
-    const dashboardUrl = `https://linked-list-nine.vercel.app/event/${record.slug}`;
+    const dashboardUrl = `${APP_URL}/event/${record.slug}`;
 
     // Send email via Resend
     const res = await fetch("https://api.resend.com/emails", {
@@ -47,7 +66,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "LinkBack <events@updates.linkback.com>",
+        from: EMAIL_FROM,
         to: [email],
         subject: `Your event is live: ${eventName}`,
         html: `
