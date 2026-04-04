@@ -7,6 +7,7 @@ interface HeadingProps {
   className?: string;
   as?: ElementType;
   gradient?: boolean;
+  style?: React.CSSProperties;
 }
 
 /**
@@ -19,6 +20,7 @@ const Heading = ({
   className,
   as,
   gradient,
+  style,
 }: HeadingProps) => {
   const Component = as ?? (`h${level}` as ElementType);
 
@@ -37,6 +39,7 @@ const Heading = ({
   return (
     <Component
       className={cn(levelStyles, gradient && gradientStyles, className)}
+      style={style}
     >
       {children}
     </Component>
