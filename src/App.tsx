@@ -2,9 +2,15 @@ import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {
+  QueryClient,
+  QueryClientProvider,
+  QueryCache,
+  MutationCache,
+} from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { logger } from "@/lib/logger";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -17,7 +23,24 @@ const Demo = lazy(() => import("./pages/Demo"));
 const JoinEvent = lazy(() => import("./pages/JoinEvent"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error, query) => {
+      logger.error(error, {
+        category: "QueryCache",
+        extra: { queryKey: query.queryKey },
+      });
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error, _variables, _context, mutation) => {
+      logger.error(error, {
+        category: "MutationCache",
+        extra: { mutationKey: mutation.options.mutationKey },
+      });
+    },
+  }),
+});
 
 // Lightweight fallback components
 const PageSkeleton = () => (
