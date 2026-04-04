@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
@@ -32,7 +33,10 @@ const AuthCallback = () => {
     const errorDescription = params.get("error_description");
 
     if (error) {
-      console.error("OAuth error:", error, errorDescription);
+      logger.error(error, {
+        category: "Auth",
+        extra: { errorDescription },
+      });
       toast.error(errorDescription || TEXT.authCallback.toast.genericFailure);
       setStatus("error");
       setTimeout(() => navigate("/auth"), 2000);
@@ -71,7 +75,7 @@ const AuthCallback = () => {
     }
 
     if (profileError) {
-      console.error("Profile fetch error:", profileError);
+      logger.error(profileError, { category: "Auth" });
       toast.error(TEXT.authCallback.toast.loadProfileFailure);
       setStatus("error");
       setHasHandledProfile(true);
