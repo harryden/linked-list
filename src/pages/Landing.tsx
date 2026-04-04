@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { LogOut } from "lucide-react";
+import { LogOut, Languages } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { TEXT } from "@/constants/text";
@@ -10,10 +11,21 @@ import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
 import HowItWorks from "./landing/components/HowItWorks";
 import FooterCTA from "./landing/components/FooterCTA";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
+
+  const toggleLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -46,6 +58,22 @@ const Landing = () => {
             />
           </div>
           <div className="flex items-center gap-2 sm:gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="rounded-full">
+                  <Languages className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => toggleLanguage("en")}>
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => toggleLanguage("sv")}>
+                  Svenska
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             {user ? (
               <>
                 <Link to="/dashboard">
@@ -53,7 +81,7 @@ const Landing = () => {
                     variant="ghost"
                     className="rounded-full text-sm sm:text-base"
                   >
-                    {TEXT.common.buttons.myEvents}
+                    {t("common.buttons.myEvents")}
                   </Button>
                 </Link>
                 <Button
@@ -71,7 +99,7 @@ const Landing = () => {
                   variant="ghost"
                   className="rounded-full shadow-glow-linkedin hover:shadow-lg text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
                 >
-                  {TEXT.common.buttons.signInWithLinkedIn}
+                  {t("common.buttons.signInWithLinkedIn")}
                 </Button>
               </Link>
             )}
@@ -88,7 +116,7 @@ const Landing = () => {
 
       <footer className="border-t border-border py-8">
         <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>{TEXT.common.copy.footer}</p>
+          <p>{t("common.copy.footer")}</p>
         </div>
       </footer>
     </div>
