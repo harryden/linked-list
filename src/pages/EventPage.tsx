@@ -23,7 +23,11 @@ import EventHeader from "@/pages/event/components/EventHeader";
 import AttendButton from "@/pages/event/components/AttendButton";
 import AttendeeList from "@/pages/event/components/AttendeeList";
 import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
-import { useAttendances, useJoinEvent } from "@/hooks/useAttendances";
+import {
+  useAttendances,
+  useJoinEvent,
+  useRealtimeAttendances,
+} from "@/hooks/useAttendances";
 import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
@@ -90,6 +94,8 @@ const EventPage = () => {
     isLoading: isEventLoading,
     error: eventError,
   } = useEvent(eventIdentifier);
+
+  useRealtimeAttendances(event?.id);
 
   useEffect(() => {
     if (eventError) {
