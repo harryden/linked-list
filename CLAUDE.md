@@ -18,6 +18,12 @@
 - Feature: `[feature/<name>] Brief description`
 - Everything else: `[chore] Brief description`
 
+## PR Strategy
+
+- **No Dependent PRs:** Do not split related changes across multiple PRs (e.g. adding a component in one and using it in another).
+- **Atomic at PR Level:** Related additions, migrations, and cleanups should go in a single PR so the build remains green and the entire change can be reverted in one step.
+- **Independence:** Every PR must pass CI independently without depending on another open PR.
+
 ## PR Descriptions
 
 Always use `.github/pull_request_template.md`. When using `gh pr create`, do not pass `--body` — let GitHub auto-populate the template, then fill in every section.
@@ -40,6 +46,7 @@ Always use `.github/pull_request_template.md`. When using `gh pr create`, do not
 
 ## Code Quality
 
+- No comments in code — code must be self-documentary
 - Prefer explicit over clever
 - Follow existing patterns in the codebase
 - Don't remove code you don't understand — ask first
