@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Auth = lazy(() => import("./pages/Auth"));
@@ -33,97 +34,99 @@ const MinimalFallback = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <Suspense fallback={<MinimalFallback />}>
-                <Landing />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/auth"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <Auth />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/auth/callback"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <AuthCallback />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <Dashboard />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/create-event"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <CreateEvent />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/join-event"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <JoinEvent />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/event/:slug"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <EventPage />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/event-success/:slug"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <EventSuccess />
-              </Suspense>
-            }
-          />
-          <Route
-            path="/demo"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <Demo />
-              </Suspense>
-            }
-          />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route
-            path="*"
-            element={
-              <Suspense fallback={<PageSkeleton />}>
-                <NotFound />
-              </Suspense>
-            }
-          />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <Suspense fallback={<MinimalFallback />}>
+                  <Landing />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <Auth />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/auth/callback"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <AuthCallback />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <Dashboard />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/create-event"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <CreateEvent />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/join-event"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <JoinEvent />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/event/:slug"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <EventPage />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/event-success/:slug"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <EventSuccess />
+                </Suspense>
+              }
+            />
+            <Route
+              path="/demo"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <Demo />
+                </Suspense>
+              }
+            />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route
+              path="*"
+              element={
+                <Suspense fallback={<PageSkeleton />}>
+                  <NotFound />
+                </Suspense>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;
