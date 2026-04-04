@@ -2,26 +2,20 @@ import React from "react";
 import { vi } from "vitest";
 
 vi.mock("@/components/FormField", () => ({
-  default: React.forwardRef(
+  default: React.forwardRef<
+    HTMLInputElement,
+    {
+      label?: string;
+      value: string;
+      onChange: (val: string) => void;
+      type?: string;
+      placeholder?: string;
+      id?: string;
+      error?: string;
+    }
+  >(
     (
-      {
-        label,
-        value,
-        onChange,
-        type,
-        placeholder,
-        id,
-        error,
-        ...props
-      }: {
-        label?: string;
-        value: string;
-        onChange: (val: string) => void;
-        type?: string;
-        placeholder?: string;
-        id?: string;
-        error?: string;
-      },
+      { label, value, onChange, type, placeholder, id, error, ...props },
       ref,
     ) => (
       <div data-testid={`field-${id}`}>
@@ -32,7 +26,7 @@ vi.mock("@/components/FormField", () => ({
           value={value ?? ""}
           placeholder={placeholder}
           onChange={(e) => onChange(e.target.value)}
-          ref={ref as any}
+          ref={ref}
           {...props}
         />
         {error && <div role="alert">{error}</div>}

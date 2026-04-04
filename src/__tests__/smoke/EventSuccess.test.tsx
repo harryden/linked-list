@@ -1,5 +1,6 @@
 import { renderWithProviders } from "@/test-utils/render";
 import { supabase } from "@/integrations/supabase/client";
+import { createQueryStub } from "@/test-utils/supabase";
 import { Route, Routes } from "react-router-dom";
 import { screen } from "@testing-library/react";
 import { vi } from "vitest";
@@ -32,12 +33,8 @@ describe("EventSuccess smoke", () => {
     );
 
   it("shows a loading indicator while the event is being fetched", () => {
-    const single = vi.fn().mockReturnValue(new Promise(() => {}));
-    const query = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single,
-    } as any;
+    const query = createQueryStub();
+    query.single.mockReturnValue(new Promise(() => {}));
 
     vi.mocked(supabase.from).mockImplementation(() => query);
 
@@ -47,12 +44,9 @@ describe("EventSuccess smoke", () => {
   });
 
   it("displays the event title and code once the event has loaded", async () => {
-    const single = vi.fn().mockResolvedValue({ data: event, error: null });
-    const query = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single,
-    } as any;
+    const query = createQueryStub({
+      singleResult: { data: event, error: null },
+    });
 
     vi.mocked(supabase.from).mockImplementation(() => query);
 
@@ -67,14 +61,9 @@ describe("EventSuccess smoke", () => {
   });
 
   it("redirects to the dashboard when the event fails to load", async () => {
-    const single = vi
-      .fn()
-      .mockResolvedValue({ data: null, error: { message: "not found" } });
-    const query = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single,
-    } as any;
+    const query = createQueryStub({
+      singleResult: { data: null, error: { message: "not found" } },
+    });
 
     vi.mocked(supabase.from).mockImplementation(() => query);
 

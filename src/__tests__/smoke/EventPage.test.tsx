@@ -1,5 +1,6 @@
 import { renderWithProviders } from "@/test-utils/render";
 import { supabase } from "@/integrations/supabase/client";
+import { createQueryStub } from "@/test-utils/supabase";
 import { Route, Routes } from "react-router-dom";
 import { screen } from "@testing-library/react";
 import { vi } from "vitest";
@@ -8,14 +9,9 @@ import { TEXT } from "@/constants/text";
 
 describe("EventPage states", () => {
   it("renders the not-found view when the event does not exist", async () => {
-    const single = vi
-      .fn()
-      .mockResolvedValue({ data: null, error: { message: "not found" } });
-    const query = {
-      select: vi.fn().mockReturnThis(),
-      eq: vi.fn().mockReturnThis(),
-      single,
-    } as any;
+    const query = createQueryStub({
+      singleResult: { data: null, error: { message: "not found" } },
+    });
 
     vi.mocked(supabase.from).mockImplementationOnce(() => query);
 
