@@ -5,6 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CalendarCheck, Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useEvents";
+import { logger } from "@/lib/logger";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import PageContainer from "@/components/layout/PageContainer";
@@ -25,7 +26,10 @@ const EventSuccess = () => {
 
   useEffect(() => {
     if (eventError) {
-      console.error("Error loading event:", eventError);
+      logger.error(eventError, {
+        category: "Events",
+        extra: { message: "Error loading event" },
+      });
       navigate("/dashboard");
     }
   }, [eventError, navigate]);

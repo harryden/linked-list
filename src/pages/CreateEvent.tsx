@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createEventSchema, CreateEventValues } from "./create-event/schema";
 import { analytics } from "@/lib/analytics";
+import { logger } from "@/lib/logger";
 
 const CreateEvent = () => {
   const { toast } = useToast();
@@ -168,6 +169,7 @@ const CreateEvent = () => {
         navigate(`/event-success/${slug}`);
       }
     } catch (error: unknown) {
+      logger.error(error, { category: "Events" });
       const message =
         error instanceof Error ? error.message : TEXT.createEvent.toast.failure;
       toast({

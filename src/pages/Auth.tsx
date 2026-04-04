@@ -14,6 +14,7 @@ import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
+import { logger } from "@/lib/logger";
 
 const Auth = () => {
   const { toast } = useToast();
@@ -57,6 +58,7 @@ const Auth = () => {
 
       if (error) throw error;
     } catch (error: unknown) {
+      logger.error(error, { category: "Auth" });
       const message =
         error instanceof Error ? error.message : TEXT.auth.toast.failure;
       toast({

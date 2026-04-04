@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { logger } from "@/lib/logger";
 import { Input } from "@/components/ui/input";
 import { MapPin, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -67,7 +68,7 @@ export const LocationAutocomplete = ({
         setShowSuggestions(true);
       }
     } catch (error) {
-      console.error("Error fetching locations:", error);
+      logger.error(error, { category: "UI" });
     } finally {
       setIsLoading(false);
     }

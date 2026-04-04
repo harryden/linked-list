@@ -1,4 +1,5 @@
 import { format, parseISO } from "date-fns";
+import { logger } from "@/lib/logger";
 
 export function eventCodeFromId(id: string): string {
   return Math.abs(parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
@@ -29,7 +30,7 @@ export function parseEventDateParts(input?: string | null) {
       time: format(date, "HH:mm"),
     };
   } catch (error) {
-    console.error("Error parsing date:", error);
+    logger.error(error, { category: "Events" });
     return { date: "", time: "" };
   }
 }
@@ -49,7 +50,7 @@ export function combineEventDateAndTime(
     }
     return combined.toISOString();
   } catch (error) {
-    console.error("Error combining date and time:", error);
+    logger.error(error, { category: "Events" });
     return null;
   }
 }
