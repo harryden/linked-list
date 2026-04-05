@@ -16,7 +16,11 @@ import { useFeedback, FeedbackType } from "@/hooks/useFeedback";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
-export const FeedbackDialog = ({ children }: { children?: React.ReactNode }) => {
+export const FeedbackDialog = ({
+  children,
+}: {
+  children?: React.ReactNode;
+}) => {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<FeedbackType>("other");
   const [message, setMessage] = useState("");
@@ -34,12 +38,12 @@ export const FeedbackDialog = ({ children }: { children?: React.ReactNode }) => 
         message,
         page_path: location.pathname,
       });
-      
+
       toast({
         title: "Thank you!",
         description: "Your feedback helps us make LinkBack better.",
       });
-      
+
       setMessage("");
       setOpen(false);
     } catch (error) {
@@ -82,12 +86,13 @@ export const FeedbackDialog = ({ children }: { children?: React.ReactNode }) => 
               <button
                 key={item.id}
                 type="button"
+                aria-pressed={type === item.id}
                 onClick={() => setType(item.id as FeedbackType)}
                 className={cn(
                   "flex-1 flex flex-col items-center gap-2 p-3 rounded-xl border-2 transition-all",
                   type === item.id
                     ? "border-primary bg-primary/5 text-primary"
-                    : "border-transparent bg-muted/50 text-muted-foreground hover:bg-muted"
+                    : "border-transparent bg-muted/50 text-muted-foreground hover:bg-muted",
                 )}
               >
                 <item.icon className="h-5 w-5" />
@@ -95,14 +100,14 @@ export const FeedbackDialog = ({ children }: { children?: React.ReactNode }) => 
               </button>
             ))}
           </div>
-          
+
           <Textarea
             placeholder={
-              type === "bug" 
-                ? "What happened? (Optional: steps to reproduce)" 
+              type === "bug"
+                ? "What happened? (Optional: steps to reproduce)"
                 : type === "feature"
-                ? "What would you like to see added to LinkBack?"
-                : "Your message..."
+                  ? "What would you like to see added to LinkBack?"
+                  : "Your message..."
             }
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -111,9 +116,9 @@ export const FeedbackDialog = ({ children }: { children?: React.ReactNode }) => 
           />
 
           <DialogFooter>
-            <Button 
-              type="submit" 
-              className="w-full rounded-full" 
+            <Button
+              type="submit"
+              className="w-full rounded-full"
               disabled={submitFeedback.isPending || !message.trim()}
             >
               {submitFeedback.isPending ? "Sending..." : "Send Feedback"}
