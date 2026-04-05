@@ -123,6 +123,15 @@ export default {
               "0 0 30px hsla(var(--glow-primary) / 0.6), 0 0 60px hsla(var(--glow-primary) / 0.3), 0 0 80px hsla(var(--glow-primary) / 0.1)",
           },
         },
+        "color-cast": {
+          "0%, 100%": { background: "rgba(86, 6, 255, 0.3)" },
+          "40%": { background: "rgba(254, 137, 137, 0.3)" },
+          "70%": { background: "rgba(0, 0, 0, 0.15)" },
+        },
+        "scroll-pulse": {
+          "0%, 100%": { opacity: "0.25" },
+          "50%": { opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -130,6 +139,11 @@ export default {
         shimmer: "shimmer 3s ease-in-out infinite",
         "fade-in": "fade-in 0.5s ease-out",
         "border-glow": "border-glow 3s ease-in-out infinite",
+        "color-cast": "color-cast 8s ease-in-out infinite",
+        "scroll-pulse": "scroll-pulse 1.5s ease-in-out infinite",
+      },
+      fontFamily: {
+        sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
       },
     },
   },
