@@ -16,6 +16,7 @@ interface QRCodeDialogProps {
   onClose: () => void;
   eventSlug: string;
   eventName: string;
+  eventCode: string;
 }
 
 export const QRCodeDialog = ({
@@ -23,6 +24,7 @@ export const QRCodeDialog = ({
   onClose,
   eventSlug,
   eventName,
+  eventCode,
 }: QRCodeDialogProps) => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
 
@@ -48,17 +50,13 @@ export const QRCodeDialog = ({
         if (!isOpen) onClose();
       }}
     >
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-center text-2xl">
-            {TEXT.qrCodeDialog.title}
+          <DialogTitle className="font-display font-black text-2xl tracking-tight leading-none">
+            {eventName}
           </DialogTitle>
         </DialogHeader>
-        <div className="space-y-6 py-4">
-          <p className="text-center text-muted-foreground">
-            {TEXT.qrCodeDialog.description}
-          </p>
-
+        <div className="space-y-6 py-2">
           {open && (
             <div className="flex justify-center">
               <QRCodePreview
@@ -68,6 +66,13 @@ export const QRCodeDialog = ({
               />
             </div>
           )}
+
+          <div className="text-center space-y-1">
+            <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+              {TEXT.qrCodeDialog.title}
+            </p>
+            <p className="font-mono text-3xl tracking-widest">{eventCode}</p>
+          </div>
 
           <Button
             onClick={handleDownload}

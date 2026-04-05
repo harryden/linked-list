@@ -7,24 +7,17 @@ const HowItWorks = () => {
   return (
     <section className="py-20">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
+        <h2 className="font-display font-black text-3xl md:text-5xl tracking-tight leading-none mb-16">
           {t("landing.howItWorks.title")}
         </h2>
-        <div className="space-y-12">
-          {steps.map(({ step, title, description }, index) => (
-            <div
-              key={step}
-              className="flex flex-col md:flex-row gap-6 items-center animate-fade-in"
-              style={{
-                animationDelay: `${0.1 + index * 0.2}s`,
-                animationFillMode: "both",
-              }}
-            >
-              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold shadow-glow-primary">
+        <div className="space-y-0 divide-y divide-border">
+          {steps.map(({ step, title, description }) => (
+            <div key={step} className="flex gap-8 py-8 items-start">
+              <span className="flex-shrink-0 font-mono text-sm text-muted-foreground w-6 pt-1">
                 {step}
-              </div>
+              </span>
               <div>
-                <h3 className="text-xl font-semibold mb-2">{title}</h3>
+                <h3 className="text-lg font-semibold mb-1">{title}</h3>
                 <p className="text-muted-foreground">{description}</p>
               </div>
             </div>

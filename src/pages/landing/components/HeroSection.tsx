@@ -12,47 +12,29 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 md:py-32 text-center">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <section className="py-24 md:py-36">
+      <div className="max-w-4xl space-y-8">
         <Heading level={1}>
           {t("landing.hero.titleLine")}
           <br />
-          <Heading
-            as="span"
-            level={1}
-            gradient
-            className="inline-block animate-fade-in [animation-delay:0.3s] [animation-fill-mode:both]"
-            style={{
-              textShadow:
-                "0 0 30px hsla(var(--glow-primary) / 0.9), 0 0 60px hsla(var(--glow-primary) / 0.7), 0 0 90px hsla(var(--glow-primary) / 0.5)",
-            }}
-          >
-            {t("landing.hero.highlight")}
-          </Heading>
+          <span className="text-primary">{t("landing.hero.highlight")}</span>
         </Heading>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-lg text-muted-foreground max-w-xl">
           {isAuthenticated
             ? t("landing.hero.authenticatedDescription")
             : t("landing.hero.guestDescription")}
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
           {isAuthenticated ? (
             <>
               <Link to="/join-event">
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg"
-                >
+                <Button size="lg" className="px-8">
                   <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.joinButton")}
                 </Button>
               </Link>
               <Link to="/create-event">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
+                <Button size="lg" variant="outline" className="px-8">
                   <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.hostButton")}
                 </Button>
@@ -63,18 +45,14 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
               <Link to="/auth">
                 <Button
                   size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+                  className="px-8 bg-linkedin hover:bg-linkedin-hover text-white"
                 >
                   <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.signInButton")}
                 </Button>
               </Link>
               <Link to="/demo">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
+                <Button size="lg" variant="outline" className="px-8">
                   {t("landing.hero.demoButton")}
                 </Button>
               </Link>

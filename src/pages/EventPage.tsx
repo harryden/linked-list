@@ -30,7 +30,6 @@ import {
 import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
-import linkbackLogo from "@/assets/linkback-logo.png";
 import PageContainer from "@/components/layout/PageContainer";
 import { analytics } from "@/lib/analytics";
 
@@ -256,18 +255,17 @@ const EventPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col">
+    <div className="min-h-screen bg-background flex flex-col">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            to={currentUserId ? "/dashboard" : "/"}
-            className="flex items-center gap-2"
-          >
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <Link to={currentUserId ? "/dashboard" : "/"}>
+            <span className="font-display font-black text-xl tracking-tight">
+              LinkBack
+            </span>
           </Link>
           {!currentUserId && (
             <Link to="/auth">
-              <Button variant="outline" className="rounded-full">
+              <Button variant="outline" size="sm">
                 {TEXT.common.buttons.signIn}
               </Button>
             </Link>
@@ -335,6 +333,7 @@ const EventPage = () => {
         onClose={() => setShowQRDialog(false)}
         eventSlug={event.slug}
         eventName={event.name}
+        eventCode={eventCode}
       />
 
       <EventDeleteDialog

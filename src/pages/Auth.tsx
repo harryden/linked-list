@@ -11,7 +11,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import { getBaseUrl } from "@/lib/urls";
@@ -71,18 +70,20 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
+          <Link to="/" className="inline-block mb-4">
+            <span className="font-display font-black text-2xl tracking-tight">
+              LinkBack
+            </span>
           </Link>
-          <p className="text-xl text-muted-foreground">{TEXT.auth.tagline}</p>
+          <p className="text-lg text-muted-foreground">{TEXT.auth.tagline}</p>
         </div>
 
-        <Card className="border-border shadow-xl">
+        <Card className="border-border">
           <CardHeader className="space-y-2 text-center pb-6">
-            <Heading level={1} className="text-2xl font-bold">
+            <Heading level={1} className="text-2xl">
               {TEXT.auth.card.title}
             </Heading>
             <p className="text-sm text-muted-foreground">
@@ -95,11 +96,11 @@ const Auth = () => {
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
               size="lg"
-              className="w-full rounded-full h-12 text-base font-medium bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+              className="w-full bg-linkedin hover:bg-linkedin-hover text-white"
             >
               {isLoading ? (
                 <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-sm mr-2"></div>
                   {TEXT.auth.card.buttonLoading}
                 </>
               ) : (

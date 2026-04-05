@@ -3,7 +3,6 @@ import { UserAvatar } from "@/components/ui/user-avatar";
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import linkbackLogo from "@/assets/linkback-logo.png";
 import Heading from "@/components/ui/heading";
 
 interface DashboardHeaderProps {
@@ -37,8 +36,10 @@ const DashboardHeader = ({
     <>
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
+          <Link to="/">
+            <span className="font-display font-black text-xl tracking-tight">
+              LinkBack
+            </span>
           </Link>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">

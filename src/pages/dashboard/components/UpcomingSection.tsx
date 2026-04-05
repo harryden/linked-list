@@ -1,13 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { QrCode, Users } from "lucide-react";
+import { QrCode, ArrowRight } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import EmptyState from "./EmptyState";
 
@@ -25,21 +18,14 @@ interface UpcomingSectionProps {
 
 const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
   <section>
-    <h2 className="text-2xl font-semibold mb-4">
+    <h2 className="font-display font-black text-2xl tracking-tight mb-4">
       {TEXT.dashboard.upcoming.title}
     </h2>
 
     {isLoading ? (
-      <Card>
-        <CardContent className="py-12 text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-          </div>
-          <p className="text-muted-foreground">
-            {TEXT.dashboard.upcoming.loading}
-          </p>
-        </CardContent>
-      </Card>
+      <div className="py-8 text-center text-muted-foreground text-sm">
+        {TEXT.dashboard.upcoming.loading}
+      </div>
     ) : events.length === 0 ? (
       <EmptyState
         icon={
@@ -52,32 +38,33 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
         description={TEXT.dashboard.upcoming.emptyDescription}
         actions={
           <Link to="/join-event" state={{ fromDashboard: true }}>
-            <Button className="rounded-full">
-              {TEXT.common.buttons.joinFirstEvent}
-            </Button>
+            <Button>{TEXT.common.buttons.joinFirstEvent}</Button>
           </Link>
         }
       />
     ) : (
-      <div className="grid md:grid-cols-2 gap-4">
+      <div className="divide-y divide-border border-y border-border">
         {events.map((event) => (
-          <Link key={event.id} to={`/event/${event.slug}`}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-              <CardHeader>
-                <CardTitle>{event.name}</CardTitle>
-                <CardDescription>
-                  {event.starts_at
-                    ? new Date(event.starts_at).toLocaleDateString()
-                    : TEXT.common.labels.dateNotSet}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-sm text-primary">
-                  <Users className="h-4 w-4" aria-hidden="true" />
-                  <span>{TEXT.dashboard.upcoming.viewAttendeeList}</span>
-                </div>
-              </CardContent>
-            </Card>
+          <Link
+            key={event.id}
+            to={`/event/${event.slug}`}
+            className="flex items-center justify-between py-3 px-1 hover:bg-accent/30 transition-colors group"
+          >
+            <div className="flex items-center gap-6 min-w-0">
+              <span className="font-mono text-xs text-muted-foreground w-20 shrink-0">
+                {event.starts_at
+                  ? new Date(event.starts_at).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : TEXT.common.labels.dateNotSet}
+              </span>
+              <span className="font-medium truncate">{event.name}</span>
+            </div>
+            <ArrowRight
+              className="h-4 w-4 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity"
+              aria-hidden="true"
+            />
           </Link>
         ))}
       </div>

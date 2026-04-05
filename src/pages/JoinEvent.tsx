@@ -1,15 +1,9 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { ArrowLeft, QrCode, AlertCircle } from "lucide-react";
+import { ArrowLeft, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { logger } from "@/lib/logger";
@@ -117,74 +111,60 @@ const JoinEvent = () => {
         </Link>
       </div>
 
-      <Card className="w-full shadow-lg">
-        <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-glow-primary">
-            <QrCode
-              className="h-8 w-8 text-primary-foreground"
-              aria-hidden="true"
+      <div className="w-full space-y-6">
+        <div className="space-y-1">
+          <Heading level={1}>{TEXT.joinEvent.header.title}</Heading>
+          <p className="text-muted-foreground">
+            {TEXT.joinEvent.header.description}
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {isOwnEvent && (
+            <Alert>
+              <AlertCircle className="h-4 w-4" aria-hidden="true" />
+              <AlertDescription>
+                {TEXT.joinEvent.alert.organizer}
+              </AlertDescription>
+            </Alert>
+          )}
+
+          <div className="space-y-2">
+            <Label htmlFor="eventCode">{TEXT.joinEvent.form.label}</Label>
+            <Input
+              id="eventCode"
+              type="text"
+              placeholder={TEXT.joinEvent.form.placeholder}
+              value={eventCode}
+              onChange={(e) => setEventCode(e.target.value)}
+              className="font-mono text-center text-lg tracking-widest"
+              maxLength={20}
+              disabled={isLoading}
+              aria-required="true"
             />
           </div>
-          <Heading level={1}>{TEXT.joinEvent.header.title}</Heading>
-          <CardDescription className="text-base">
-            {TEXT.joinEvent.header.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {isOwnEvent && (
-              <Alert className="mb-4">
-                <AlertCircle className="h-4 w-4" aria-hidden="true" />
-                <AlertDescription>
-                  {TEXT.joinEvent.alert.organizer}
-                </AlertDescription>
-              </Alert>
-            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="eventCode">{TEXT.joinEvent.form.label}</Label>
-              <Input
-                id="eventCode"
-                type="text"
-                placeholder={TEXT.joinEvent.form.placeholder}
-                value={eventCode}
-                onChange={(e) => setEventCode(e.target.value)}
-                className="text-center text-lg tracking-wider"
-                maxLength={20}
-                disabled={isLoading}
-                aria-required="true"
-              />
-            </div>
-
-            <div className="pt-2">
-              {isOwnEvent && ownEventSlug ? (
-                <Link to={`/event/${ownEventSlug}`}>
-                  <Button
-                    type="button"
-                    className="w-full h-12 text-base font-medium rounded-full"
-                  >
-                    {TEXT.joinEvent.form.goToEvent}
-                  </Button>
-                </Link>
-              ) : (
-                <Button
-                  type="submit"
-                  className="w-full h-12 text-base font-medium rounded-full"
-                  disabled={isLoading}
-                >
-                  {isLoading
-                    ? TEXT.joinEvent.form.submitLoading
-                    : TEXT.joinEvent.form.submitIdle}
+          <div className="pt-2">
+            {isOwnEvent && ownEventSlug ? (
+              <Link to={`/event/${ownEventSlug}`}>
+                <Button type="button" className="w-full">
+                  {TEXT.joinEvent.form.goToEvent}
                 </Button>
-              )}
-            </div>
+              </Link>
+            ) : (
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading
+                  ? TEXT.joinEvent.form.submitLoading
+                  : TEXT.joinEvent.form.submitIdle}
+              </Button>
+            )}
+          </div>
 
-            <p className="text-sm text-muted-foreground text-center">
-              {TEXT.joinEvent.form.helperText}
-            </p>
-          </form>
-        </CardContent>
-      </Card>
+          <p className="text-sm text-muted-foreground text-center">
+            {TEXT.joinEvent.form.helperText}
+          </p>
+        </form>
+      </div>
     </PageContainer>
   );
 };

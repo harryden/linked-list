@@ -6,7 +6,6 @@ import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { TEXT } from "@/constants/text";
-import linkbackLogo from "@/assets/linkback-logo.png";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
 import HowItWorks from "./landing/components/HowItWorks";
@@ -47,21 +46,17 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-background">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <span className="font-display font-black text-xl tracking-tight">
+            LinkBack
+          </span>
           <div className="flex items-center gap-2">
-            <img
-              src={linkbackLogo}
-              alt="LinkBack"
-              className="h-16 sm:h-20 w-auto"
-            />
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Languages className="h-4 w-4" />
+                <Button variant="ghost" size="icon">
+                  <Languages className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -77,17 +72,13 @@ const Landing = () => {
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button
-                    variant="ghost"
-                    className="rounded-full text-sm sm:text-base"
-                  >
+                  <Button variant="ghost" size="sm">
                     {t("common.buttons.myEvents")}
                   </Button>
                 </Link>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
                   onClick={handleSignOut}
                   aria-label={TEXT.common.buttons.signOut}
                 >
@@ -98,7 +89,8 @@ const Landing = () => {
               <Link to="/auth">
                 <Button
                   variant="ghost"
-                  className="rounded-full shadow-glow-linkedin hover:shadow-lg text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
+                  size="sm"
+                  className="text-linkedin hover:bg-linkedin/10"
                 >
                   {t("common.buttons.signInWithLinkedIn")}
                 </Button>
@@ -116,7 +108,7 @@ const Landing = () => {
       </main>
 
       <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
+        <div className="container mx-auto px-4 text-center text-muted-foreground text-sm">
           <p>{t("common.copy.footer")}</p>
         </div>
       </footer>

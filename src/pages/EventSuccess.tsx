@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CalendarCheck, Download } from "lucide-react";
+import { Download } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useEvents";
 import { logger } from "@/lib/logger";
@@ -18,6 +17,9 @@ const EventSuccess = () => {
   const [qrCodeUrl, setQrCodeUrl] = useState<string>("");
   const [eventCode, setEventCode] = useState<string>("");
   const [eventName, setEventName] = useState<string>("");
+  const [timestamp, setTimestamp] = useState(() =>
+    new Date().toLocaleTimeString(),
+  );
 
   const {
     data: event,
@@ -43,6 +45,13 @@ const EventSuccess = () => {
     setEventName(event.name);
     setEventCode(eventCodeFromId(event.id));
   }, [event]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimestamp(new Date().toLocaleTimeString());
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const isLoading = isEventLoading;
 
@@ -75,60 +84,45 @@ const EventSuccess = () => {
   }
 
   return (
-    <PageContainer maxWidth="sm" className="justify-center">
-      <Card className="w-full shadow-2xl">
-        <CardContent className="pt-8 pb-6 px-6 space-y-6">
-          <div className="flex justify-center">
-            <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
-              <CalendarCheck
-                className="h-12 w-12 text-success"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center px-4 py-16">
+      <div className="w-full max-w-sm space-y-8 text-center">
+        <div className="space-y-1">
+          <Heading level={1}>{eventName}</Heading>
+          <p className="font-mono text-sm text-muted-foreground">{timestamp}</p>
+        </div>
 
-          <div className="text-center space-y-2">
-            <Heading level={1}>{TEXT.eventSuccess.title}</Heading>
-            <p className="text-muted-foreground">
-              {TEXT.eventSuccess.description}
-            </p>
-          </div>
+        <QRCodePreview
+          value={`${getEventUrl(event.slug)}?ref=qr`}
+          size={400}
+          onDataUrlChange={setQrCodeUrl}
+        />
 
-          <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
-            <p className="text-sm text-muted-foreground">
-              {TEXT.eventSuccess.codeLabel}
-            </p>
-            <p className="text-4xl font-bold tracking-wider">{eventCode}</p>
-          </div>
+        <div className="space-y-1">
+          <p className="text-xs font-mono text-muted-foreground uppercase tracking-widest">
+            {TEXT.eventSuccess.codeLabel}
+          </p>
+          <p className="font-mono text-4xl tracking-widest">{eventCode}</p>
+        </div>
 
-          <div className="flex justify-center">
-            <QRCodePreview
-              value={`${getEventUrl(event.slug)}?ref=qr`}
-              size={400}
-              onDataUrlChange={setQrCodeUrl}
-            />
-          </div>
+        <div className="space-y-3 pt-4">
+          <Button
+            onClick={handleDownload}
+            variant="outline"
+            className="w-full"
+            disabled={!qrCodeUrl}
+          >
+            <Download className="h-4 w-4 mr-2" aria-hidden="true" />
+            {TEXT.common.buttons.downloadQrCode}
+          </Button>
 
-          <div className="space-y-3">
-            <Button
-              onClick={handleDownload}
-              variant="outline"
-              className="w-full h-12 rounded-full"
-              disabled={!qrCodeUrl}
-            >
-              <Download className="h-4 w-4 mr-2" aria-hidden="true" />
-              {TEXT.common.buttons.downloadQrCode}
+          <Link to={`/event/${slug}`} className="block">
+            <Button className="w-full">
+              {TEXT.common.buttons.viewEventDashboard}
             </Button>
-
-            <Link to={`/event/${slug}`} className="block">
-              <Button className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary">
-                {TEXT.common.buttons.viewEventDashboard}
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
-    </PageContainer>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 
