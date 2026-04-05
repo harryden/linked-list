@@ -22,6 +22,7 @@ export const getEventUrl = (slug: string) => {
  */
 export const getProductionUrl = () => {
   const url =
-    import.meta.env.VITE_PUBLIC_URL || "https://linked-list-nine.vercel.app";
+    import.meta.env.VITE_PUBLIC_URL ||
+    "https://linked-list-harry-denells-projects.vercel.app";
   return url.replace(/\/$/, "");
 };
