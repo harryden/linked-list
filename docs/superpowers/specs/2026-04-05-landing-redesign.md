@@ -78,35 +78,51 @@ As the user scrolls, the phone image translates upward continuously (`translateY
 - `mix-blend-mode: overlay`, `opacity: 0.2`
 - Casts dynamic colored shadows on the hand — purple-tinted when cool, rose-tinted when warm
 
+**Phone position:** The hand+phone PNG sits in the **right half** of the viewport (roughly centered at 65–70% from left). This deliberately leaves the left half open for the ghost headline (Phase A) and the floating CTA (Phase B end).
+
 **Phase B — Phone screen reveals (~400vh of scroll)**
 
-Phone is locked in place. Each scroll threshold reveals the next step of content on the phone screen via a CSS overlay div precisely positioned over the screen area of the PNG:
+Phone is locked in place. Each scroll threshold reveals the next step of content on the phone screen via a CSS overlay div precisely positioned over the blank white screen area of the PNG:
 
-| Step | Scroll progress into Phase B | Phone screen content                                      |
-| ---- | ---------------------------- | --------------------------------------------------------- |
-| 1    | 0% (lock point)              | Screen fades from transparent to dark/app-like background |
-| 2    | 25%                          | QR code scales + fades in                                 |
-| 3    | 50%                          | LinkedIn verified badge slides up                         |
-| 4    | 75%                          | Attendee list preview fades in                            |
-| 5    | 100%                         | CTA button + "See how it works" link appear               |
+| Step | Scroll progress into Phase B | Phone screen content                                                                                                         |
+| ---- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| 1    | 0% (lock point)              | Blank white — screen wakes, clean and empty                                                                                  |
+| 2    | 33%                          | QR code scales + fades in, "Scan to sign in" label, `linkback.app/auth` URL below                                            |
+| 3    | 66%                          | Attendee list view: event name, date, check-in count, 3 attendee rows with gradient avatars + LinkedIn blue badge, "+N more" |
+| 4    | 100%                         | "Host smarter events." headline, one-liner, "Get started free" purple button, "See how it works →" link                      |
 
-Each transition: 400ms ease, previous content fades out, new content fades in.
+Each transition: 400ms ease, previous content fades out, new content fades in. Font inside all steps: `-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue"` — iOS system font for authentic feel.
 
-**QR code is functional:** The QR code rendered at Step 2 encodes the full production sign-in URL (`https://linkback.app/auth`). Scanning it with a real phone camera redirects to sign-in — the QR code is a live CTA, not decoration. Reuse the existing `QRCodePreview` component (`src/components/QRCodePreview.tsx`) with the auth URL as the value. No new logic — the component already handles QR generation.
+**QR code is functional:** The QR code at Step 2 encodes the full production sign-in URL (`https://linkback.app/auth`). Scanning it with a real phone camera redirects to sign-in — live CTA, not decoration. Reuse `QRCodePreview` (`src/components/QRCodePreview.tsx`) with the auth URL. No new logic.
 
-Scroll tracking: Lenis emits a `scroll` event with the current `scroll` value. Progress is computed as `(scroll - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds are derived from this normalized value.
+**Floating CTA (appears left of phone at Step 4)**
 
-**Phone screen status bar (always visible)**
+When scroll reaches 100% of Phase B, a CTA block fades + slides in on the **left half of the viewport**, positioned vertically centered alongside the phone. It does not appear beneath the phone — it floats in the open space to the left.
 
-A thin strip permanently pinned to the top of the phone screen overlay div, visible across all steps. Never animates in or out — it is always present once the phone screen is active.
+Contents:
 
-Contents (left to right):
+- Small eyebrow label: `"LinkBack"`
+- Ghost headline (matching hero style): `"Check in.` / `Stand out."` — solid top line, outlined bottom line
+- One-liner: `"LinkedIn-verified attendance for events that matter."`
+- LinkedIn sign-in button (white pill, LinkedIn blue `in` icon, dark text): `"Sign in with LinkedIn"`
+- Secondary link: `"See how it works →"`
 
-- **Time:** Live clock rendered in a React `useState` + `setInterval` (1 minute interval), reads `new Date()` and formats as `HH:MM`. White text, small font (~10px), medium weight.
-- **WiFi icon:** Simple inline SVG, white
-- **Battery icon:** Simple inline SVG showing ~80% fill, white
+Animation: `opacity 0 → 1`, `translateX(-20px) → 0`, 600ms ease, triggers at step 4.
 
-Styling: `height: ~20px`, white text/icons, `font-size: ~10px`, `padding: 0 8px`. Sits at `z-index` above all step content so it is never obscured.
+Scroll tracking: Lenis emits a `scroll` event. Progress is computed as `(scroll - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds at 0%, 33%, 66%, 100%.
+
+**Phone screen status bar + Dynamic Island (always visible once phone screen is active)**
+
+Replicates iPhone 14/15 status bar layout. Dark text/icons on white background.
+
+```
+[ 9:41 ]     [ ◆◆ pill ]     [ signal ] [ wifi ] [ battery ]
+```
+
+- **Dynamic Island:** centered black pill, `44px × 12px`, `border-radius: 10px`
+- **Time (left):** live clock, `useState` + `setInterval` (1 min), `HH:MM` format, `8px`, `font-weight: 600`, dark (`#111`)
+- **Icons (right):** signal bars, wifi, battery — inline SVGs, `8px`, dark (`#111`)
+- Strip height: `~24px`, `padding: 8px 12px 0`
 
 ---
 
@@ -135,11 +151,13 @@ Begins immediately after the sticky zone exits.
 
 **Hand + phone image** (produced by user before implementation):
 
-- AI-generated: hand holding iPhone, screen showing a QR code
-- Transparent PNG (generate on solid white or green background, remove with remove.bg or Photoshop)
-- Purple (`#5606ff`) rim light from left, pink (`#fe8989`) rim light from right
-- No motion blur on finger edges — clean cutout essential for background removal
+- Stock photo or AI-generated: hand holding iPhone from below, blank white screen, facing camera
+- **Neutral white rim lighting only — no colored gels baked in.** The CSS color cast layer handles all purple/pink tinting dynamically.
+- Transparent PNG: generate/shoot on solid white or green background, remove background via remove.bg or Photoshop
+- Sharp edges on fingers — no motion blur, essential for clean cutout
+- Screen fully clear — no fingers overlapping the screen area (overlay div sits directly over it)
 - Target size: ~800px wide for retina display at intended render width of ~400px
+- File path: `src/assets/phone-hand.png` — added to `.gitignore` until a licensed image is purchased; placeholder used for local development only
 
 ---
 
