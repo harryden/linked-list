@@ -92,6 +92,8 @@ Phone is locked in place. Each scroll threshold reveals the next step of content
 
 Each transition: 400ms ease, previous content fades out, new content fades in.
 
+**QR code is functional:** The QR code rendered at Step 2 encodes the full production sign-in URL (`https://linkback.app/auth`). Scanning it with a real phone camera redirects to sign-in — the QR code is a live CTA, not decoration. Reuse the existing `QRCodePreview` component (`src/components/QRCodePreview.tsx`) with the auth URL as the value. No new logic — the component already handles QR generation.
+
 Scroll tracking: Lenis emits a `scroll` event with the current `scroll` value. Progress is computed as `(scroll - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds are derived from this normalized value.
 
 **Phone screen status bar (always visible)**
