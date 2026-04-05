@@ -118,7 +118,10 @@ const AuthCallback = () => {
     <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
       <div className="text-center space-y-6">
         <div className="flex justify-center">
-          <QrCode className="h-16 w-16 text-primary animate-pulse" />
+          <QrCode
+            className="h-16 w-16 text-primary animate-pulse"
+            aria-hidden="true"
+          />
         </div>
 
         {status === "loading" ? (

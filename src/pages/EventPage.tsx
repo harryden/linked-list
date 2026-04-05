@@ -280,7 +280,7 @@ const EventPage = () => {
           {currentUserId && (
             <Link to="/dashboard">
               <Button variant="ghost">
-                <ArrowLeft className="h-4 w-4 mr-2" />
+                <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
                 {TEXT.common.links.backToDashboard}
               </Button>
             </Link>

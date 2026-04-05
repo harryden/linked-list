@@ -80,12 +80,15 @@ const EventSuccess = () => {
         <CardContent className="pt-8 pb-6 px-6 space-y-6">
           <div className="flex justify-center">
             <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
-              <CalendarCheck className="h-12 w-12 text-success" />
+              <CalendarCheck
+                className="h-12 w-12 text-success"
+                aria-hidden="true"
+              />
             </div>
           </div>
 
           <div className="text-center space-y-2">
-            <Heading level={2}>{TEXT.eventSuccess.title}</Heading>
+            <Heading level={1}>{TEXT.eventSuccess.title}</Heading>
             <p className="text-muted-foreground">
               {TEXT.eventSuccess.description}
             </p>
@@ -113,7 +116,7 @@ const EventSuccess = () => {
               className="w-full h-12 rounded-full"
               disabled={!qrCodeUrl}
             >
-              <Download className="h-4 w-4 mr-2" />
+              <Download className="h-4 w-4 mr-2" aria-hidden="true" />
               {TEXT.common.buttons.downloadQrCode}
             </Button>
 

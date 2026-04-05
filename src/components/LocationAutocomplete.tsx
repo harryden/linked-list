@@ -104,7 +104,10 @@ export const LocationAutocomplete = ({
   return (
     <div ref={wrapperRef} className="relative w-full">
       <div className="relative">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <MapPin
+          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+          aria-hidden="true"
+        />
         <Input
           id={id}
           type="text"
@@ -115,7 +118,16 @@ export const LocationAutocomplete = ({
           className="pl-10"
         />
         {isLoading && (
-          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+          <div
+            className="absolute right-3 top-1/2 -translate-y-1/2"
+            role="status"
+          >
+            <Loader2
+              className="h-4 w-4 animate-spin text-muted-foreground"
+              aria-hidden="true"
+            />
+            <span className="sr-only">Searching for locations...</span>
+          </div>
         )}
       </div>
 
@@ -124,6 +136,7 @@ export const LocationAutocomplete = ({
           {suggestions.map((suggestion) => (
             <button
               key={suggestion.place_id}
+              aria-label={suggestion.display_name}
               type="button"
               onClick={() => handleSelectSuggestion(suggestion)}
               className={cn(
@@ -131,7 +144,10 @@ export const LocationAutocomplete = ({
                 "flex items-start gap-3 border-b last:border-0",
               )}
             >
-              <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+              <MapPin
+                className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0"
+                aria-hidden="true"
+              />
               <span className="text-sm">{suggestion.display_name}</span>
             </button>
           ))}

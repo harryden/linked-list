@@ -29,7 +29,7 @@ const CreateEventForm = ({
 }: CreateEventFormProps) => (
   <Card className="shadow-xl">
     <CardHeader>
-      <CardTitle className="text-3xl">
+      <CardTitle className="text-3xl" as="h1">
         {mode === "edit"
           ? TEXT.createEvent.form.editTitle
           : TEXT.createEvent.form.title}

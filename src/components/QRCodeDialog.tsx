@@ -75,7 +75,7 @@ export const QRCodeDialog = ({
             className="w-full"
             disabled={!qrCodeUrl}
           >
-            <Download className="h-4 w-4 mr-2" />
+            <Download className="h-4 w-4 mr-2" aria-hidden="true" />
             {TEXT.common.buttons.downloadQrCode}
           </Button>
         </div>

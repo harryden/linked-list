@@ -112,7 +112,7 @@ const JoinEvent = () => {
           to={backPath}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="h-4 w-4" aria-hidden="true" />
           {backText}
         </Link>
       </div>
@@ -120,9 +120,12 @@ const JoinEvent = () => {
       <Card className="w-full shadow-lg">
         <CardHeader className="text-center space-y-4">
           <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-glow-primary">
-            <QrCode className="h-8 w-8 text-primary-foreground" />
+            <QrCode
+              className="h-8 w-8 text-primary-foreground"
+              aria-hidden="true"
+            />
           </div>
-          <Heading level={2}>{TEXT.joinEvent.header.title}</Heading>
+          <Heading level={1}>{TEXT.joinEvent.header.title}</Heading>
           <CardDescription className="text-base">
             {TEXT.joinEvent.header.description}
           </CardDescription>
@@ -131,7 +134,7 @@ const JoinEvent = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {isOwnEvent && (
               <Alert className="mb-4">
-                <AlertCircle className="h-4 w-4" />
+                <AlertCircle className="h-4 w-4" aria-hidden="true" />
                 <AlertDescription>
                   {TEXT.joinEvent.alert.organizer}
                 </AlertDescription>
@@ -149,6 +152,7 @@ const JoinEvent = () => {
                 className="text-center text-lg tracking-wider"
                 maxLength={20}
                 disabled={isLoading}
+                aria-required="true"
               />
             </div>
 

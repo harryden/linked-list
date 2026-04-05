@@ -52,8 +52,13 @@ const DashboardHeader = ({
                 )}
               </div>
             </div>
-            <Button variant="outline" size="icon" onClick={onSignOut}>
-              <LogOut className="h-4 w-4" />
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={onSignOut}
+              aria-label={TEXT.common.buttons.signOut}
+            >
+              <LogOut className="h-4 w-4" aria-hidden="true" />
             </Button>
           </div>
         </div>

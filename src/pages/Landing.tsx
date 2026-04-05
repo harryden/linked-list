@@ -89,8 +89,9 @@ const Landing = () => {
                   size="icon"
                   className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
                   onClick={handleSignOut}
+                  aria-label={TEXT.common.buttons.signOut}
                 >
-                  <LogOut className="h-4 w-4" />
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
                 </Button>
               </>
             ) : (

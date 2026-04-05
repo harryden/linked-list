@@ -81,6 +81,8 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
       ? format(selectedDate, "MMMM d, yyyy")
       : "";
 
+    const errorId = id ? `${id}-error` : undefined;
+
     const renderInput = () => {
       switch (type) {
         case "date":
@@ -96,9 +98,15 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
                     !selectedDate && "text-muted-foreground",
                     error && "border-destructive",
                   )}
+                  aria-invalid={!!error}
+                  aria-describedby={error ? errorId : undefined}
+                  aria-required={required}
                 >
                   <span>{formattedDate || placeholder || "Select date"}</span>
-                  <Calendar className="ml-2 h-4 w-4 text-muted-foreground" />
+                  <Calendar
+                    className="ml-2 h-4 w-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="p-0 bg-background" align="start">
@@ -138,9 +146,16 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
                   step={60}
                   className={cn("pr-10", error && "border-destructive")}
                   ref={ref}
+                  aria-invalid={!!error}
+                  aria-describedby={error ? errorId : undefined}
+                  required={required}
+                  aria-required={required}
                   {...props}
                 />
-                <Clock className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
+                <Clock
+                  className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
+                  aria-hidden="true"
+                />
               </div>
             </div>
           );
@@ -157,6 +172,10 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
               placeholder={placeholder}
               className={cn(error && "border-destructive")}
               ref={ref}
+              aria-invalid={!!error}
+              aria-describedby={error ? errorId : undefined}
+              required={required}
+              aria-required={required}
               {...props}
             />
           );
@@ -167,12 +186,23 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
       <div className={cn("space-y-2", className)}>
         {label && (
           <Label htmlFor={id} className={cn(error && "text-destructive")}>
-            {label} {required && <span className="text-destructive">*</span>}
+            {label}{" "}
+            {required && (
+              <span className="text-destructive" aria-hidden="true">
+                *
+              </span>
+            )}
           </Label>
         )}
         {renderInput()}
         {error && (
-          <p className="text-xs text-destructive font-medium">{error}</p>
+          <p
+            id={errorId}
+            className="text-xs text-destructive font-medium"
+            role="alert"
+          >
+            {error}
+          </p>
         )}
       </div>
     );

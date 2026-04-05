@@ -58,7 +58,7 @@ const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
           disabled={!attendee.linkedin_id}
           className="rounded-full"
         >
-          <Linkedin className="h-4 w-4 mr-2" />
+          <Linkedin className="h-4 w-4 mr-2" aria-hidden="true" />
           {isSelf
             ? TEXT.event.header.viewSelfProfile
             : TEXT.event.header.viewProfile}
@@ -99,7 +99,7 @@ const AttendeeList = ({
     <Card className="shadow-xl">
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-muted-foreground" />
+          <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
           <span className="text-lg font-medium">
             {attendeeCount}{" "}
             {attendeeCount === 1

@@ -23,7 +23,7 @@ const CreateEventHeader = ({ backPath, backText }: CreateEventHeaderProps) => (
       <div className="max-w-2xl mx-auto">
         <Link to={backPath}>
           <Button variant="ghost" className="mb-6">
-            <ArrowLeft className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
             {backText}
           </Button>
         </Link>

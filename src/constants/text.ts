@@ -26,6 +26,7 @@ export const TEXT = {
       tryLinkBackNow: "Try LinkBack",
       viewQrCode: "View QR Code",
       cancel: "Cancel",
+      signOut: "Sign out",
     },
     links: {
       backToDashboard: "Back to Dashboard",

@@ -6,7 +6,6 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -16,6 +15,7 @@ import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import { getBaseUrl } from "@/lib/urls";
+import Heading from "@/components/ui/heading";
 
 const Auth = () => {
   const { toast } = useToast();
@@ -82,7 +82,9 @@ const Auth = () => {
 
         <Card className="border-border shadow-xl">
           <CardHeader className="space-y-2 text-center pb-6">
-            <CardTitle className="text-2xl">{TEXT.auth.card.title}</CardTitle>
+            <Heading level={1} className="text-2xl font-bold">
+              {TEXT.auth.card.title}
+            </Heading>
             <p className="text-sm text-muted-foreground">
               {TEXT.auth.card.description}
             </p>
@@ -102,7 +104,7 @@ const Auth = () => {
                 </>
               ) : (
                 <>
-                  <Linkedin className="h-5 w-5 mr-2" />
+                  <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
                   {TEXT.auth.card.buttonIdle}
                 </>
               )}
@@ -119,7 +121,10 @@ const Auth = () => {
 
                   return (
                     <div key={item.title} className="flex items-start gap-3">
-                      <Icon className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                      <Icon
+                        className="h-5 w-5 text-primary flex-shrink-0 mt-0.5"
+                        aria-hidden="true"
+                      />
                       <div>
                         <p className="text-sm font-medium">{item.title}</p>
                         <p className="text-xs text-muted-foreground">
