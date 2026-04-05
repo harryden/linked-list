@@ -31,7 +31,9 @@ describe("URL Helpers", () => {
   describe("getEventUrl", () => {
     it("should return a correctly formatted event URL", () => {
       vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkback.com");
-      expect(getEventUrl("my-event")).toBe("https://app.linkback.com/event/my-event");
+      expect(getEventUrl("my-event")).toBe(
+        "https://app.linkback.com/event/my-event",
+      );
     });
   });
 
