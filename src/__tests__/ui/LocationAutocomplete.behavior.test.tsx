@@ -72,6 +72,29 @@ describe("LocationAutocomplete behavior", () => {
     });
   });
 
+  it("clears stale suggestions when the fetch is aborted", async () => {
+    const user = userEvent.setup();
+    render(<AutocompleteHarness />);
+    const input = screen.getByLabelText(/location/i);
+
+    // Show suggestions first so there is something to clear
+    await user.type(input, "Goth");
+    await screen.findByRole("button", { name: /gothenburg, sweden/i });
+
+    // Next request aborts immediately (simulates the 5 s timeout firing)
+    vi.spyOn(window, "fetch").mockRejectedValueOnce(
+      new DOMException("The operation was aborted", "AbortError"),
+    );
+
+    await user.type(input, "enburg");
+
+    await waitFor(() => {
+      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+    });
+
+    vi.restoreAllMocks();
+  });
+
   it("clears suggestions when the query becomes too short", async () => {
     const user = userEvent.setup();
 

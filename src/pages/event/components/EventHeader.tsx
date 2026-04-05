@@ -315,7 +315,6 @@ const EventHeader = ({
                 className="h-12 w-12"
               />
               <div className="flex-1 min-w-0">
-
                 <p className="text-sm text-muted-foreground mb-0.5">
                   {TEXT.event.header.hostedBy}
                 </p>

@@ -71,7 +71,10 @@ export const LocationAutocomplete = ({
         setShowSuggestions(true);
       }
     } catch (error) {
-      if (error instanceof Error && error.name !== "AbortError") {
+      if (error instanceof Error && error.name === "AbortError") {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      } else if (error instanceof Error) {
         logger.error(error, { category: "UI" });
       }
     } finally {
