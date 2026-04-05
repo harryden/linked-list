@@ -18,16 +18,18 @@
 
 **Palette:** `#5606ff` (purple) · `#fe8989` (pink) · `#000000` (black)
 
-**Background:** Full-page animated ShaderGradient (`shader-gradient` npm package) using the waterPlane shader with the following config:
+**Background:** Full-page auto-animating ShaderGradient (`shader-gradient` npm package) using the waterPlane shader. The gradient runs freely and continuously — it is not scroll-driven. This keeps the background alive at all times, including when the user is paused or reading.
+
+Config:
 
 ```
 color1="#5606ff" color2="#fe8989" color3="#000000"
-type="waterPlane" uSpeed={0.2} uStrength={2.4} uDensity={0.7}
+type="waterPlane" animate="on" uSpeed={0.2} uStrength={2.4} uDensity={0.7}
 cDistance={3.91} cPolarAngle={115} cAzimuthAngle={180}
 rotationZ={235} brightness={1.1}
 ```
 
-The gradient is a persistent full-page canvas — all three acts render on top of it.
+The gradient canvas is `position: fixed`, `inset: 0`, `z-index: 0` — all page content sits above it.
 
 **Typography:** Ghost outline style. Headline uses two layers:
 
@@ -54,41 +56,43 @@ Scale is viewport-relative (roughly `10–14vw`) so the type feels large on all 
 
 ### Act 1 — Hero sticky scroll zone
 
-The hero occupies approximately `500vh` of scroll height. The viewport stays fixed (sticky) while the user scrolls through this zone, giving the appearance that the page is a single animated scene.
+The hero section has two distinct scroll phases and occupies approximately `600vh` of total scroll height. A sticky viewport panel (`position: sticky; top: 0; height: 100vh`) contains all the action — the tall scroll height is what creates the illusion of a slow, cinematic reveal.
 
-**Step 0 — Initial state (page load)**
+**Phase A — Phone slide-up (~200vh of scroll)**
 
-- Ghost headline visible, left-aligned, centered vertically
-- Scroll indicator: thin vertical line pulsing downward, fades out on first scroll
-- Phone not yet visible
+The ghost headline is visible from the start, left-aligned, centered vertically. The ShaderGradient animates freely behind it.
 
-**Step 1 — Phone reveal (scroll begins)**
+On page load, the hand+phone PNG is positioned so only the top ~25% of the phone (the top bezel of the handset) peeks above the bottom edge of the viewport — the rest of the image is below the fold.
 
-- AI-generated hand+phone PNG fades in (opacity 0 → 1, translateY 40px → 0)
-- Phone positioned center-right of the viewport
-- Phone screen overlay div appears, initially empty/dark
+As the user scrolls, the phone image translates upward continuously (`translateY` driven by `scrollY`). The motion is smooth and linear — the full handset appears first, then the hand, then the arm at the bottom of the image.
 
-**Color cast layer (always active once phone is visible)**
+- Scroll indicator: thin vertical line at the bottom center, pulsing downward, fades out on first scroll
+- Phone screen overlay div is present but empty/transparent during this phase — no content yet
+
+**Lock point:** When the bottom of the phone image reaches the bottom of the viewport (full image visible), the image stops translating. The phone is now fully visible and centered in the right half of the viewport. All further scroll is consumed by Phase B.
+
+**Color cast layer (active as soon as phone is partially visible)**
 
 - A `position: absolute` div covers the hand PNG exactly
-- Contains a slow CSS gradient animation echoing `#5606ff` → `#fe8989`
+- Contains a slow CSS gradient animation cycling `#5606ff` → `#fe8989`, tied to the auto-animating ShaderGradient's approximate color cycle (CSS `@keyframes`, ~8s loop)
 - `mix-blend-mode: overlay`, `opacity: 0.2`
-- This casts dynamic colored shadows on the hand as the ShaderGradient shifts beneath it — purple-tinted shadows when gradient is cool, rose-tinted when warm
+- Casts dynamic colored shadows on the hand — purple-tinted when cool, rose-tinted when warm
 
-**Steps 2–5 — Phone screen reveals (scroll-driven)**
+**Phase B — Phone screen reveals (~400vh of scroll)**
 
-A CSS overlay div is positioned precisely over the phone screen area of the PNG. Each scroll threshold triggers a new state on the phone screen:
+Phone is locked in place. Each scroll threshold reveals the next step of content on the phone screen via a CSS overlay div precisely positioned over the screen area of the PNG:
 
-| Step | Scroll position | Phone screen content                        |
-| ---- | --------------- | ------------------------------------------- |
-| 2    | 20% into zone   | QR code animates in (scale + fade)          |
-| 3    | 40% into zone   | LinkedIn verified badge slides up           |
-| 4    | 60% into zone   | Attendee list preview fades in              |
-| 5    | 80% into zone   | CTA button + "See how it works" link appear |
+| Step | Scroll progress into Phase B | Phone screen content                                      |
+| ---- | ---------------------------- | --------------------------------------------------------- |
+| 1    | 0% (lock point)              | Screen fades from transparent to dark/app-like background |
+| 2    | 25%                          | QR code scales + fades in                                 |
+| 3    | 50%                          | LinkedIn verified badge slides up                         |
+| 4    | 75%                          | Attendee list preview fades in                            |
+| 5    | 100%                         | CTA button + "See how it works" link appear               |
 
 Each transition: 400ms ease, previous content fades out, new content fades in.
 
-Scroll tracking: `IntersectionObserver` on sentinel divs stacked in the scroll zone, or `scroll` event with `scrollY` thresholds mapped to the sticky container's `offsetTop`.
+Scroll tracking: `scroll` event listener computing progress as `(scrollY - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds are derived from this normalized value.
 
 ---
 
