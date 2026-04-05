@@ -17,7 +17,7 @@ const HeroSection = () => {
           overflow: "hidden",
         }}
       >
-        <div
+        <h1
           style={{
             position: "absolute",
             left: "5%",
@@ -29,28 +29,33 @@ const HeroSection = () => {
             fontFamily: "var(--font-brand)",
             lineHeight: 0.92,
             letterSpacing: "-0.05em",
+            margin: 0,
+            padding: 0,
           }}
         >
-          <div
+          <span
             style={{
+              display: "block",
               fontSize: "clamp(48px, 8vw, 110px)",
               fontWeight: 900,
               color: "#fff",
             }}
           >
             Check
-          </div>
-          <div
+          </span>
+          <span
             style={{
+              display: "block",
               fontSize: "clamp(48px, 8vw, 110px)",
               fontWeight: 900,
               color: "#fff",
             }}
           >
             in.
-          </div>
-          <div
+          </span>
+          <span
             style={{
+              display: "block",
               fontSize: "clamp(48px, 8vw, 110px)",
               fontWeight: 900,
               color: "transparent",
@@ -58,9 +63,10 @@ const HeroSection = () => {
             }}
           >
             Stand
-          </div>
-          <div
+          </span>
+          <span
             style={{
+              display: "block",
               fontSize: "clamp(48px, 8vw, 110px)",
               fontWeight: 900,
               color: "transparent",
@@ -68,8 +74,8 @@ const HeroSection = () => {
             }}
           >
             out.
-          </div>
-        </div>
+          </span>
+        </h1>
 
         <div
           style={{

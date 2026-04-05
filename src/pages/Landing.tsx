@@ -1,43 +1,24 @@
-import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
-import { LogOut, Languages } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-import { TEXT } from "@/constants/text";
-import linkbackLogo from "@/assets/linkback-logo.png";
+import GradientBackground from "./landing/components/GradientBackground";
+import LandingNav from "./landing/components/LandingNav";
 import HeroSection from "./landing/components/HeroSection";
-import FeaturesGrid from "./landing/components/FeaturesGrid";
 import HowItWorks from "./landing/components/HowItWorks";
 import FooterCTA from "./landing/components/FooterCTA";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
-  const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
-
-  const toggleLanguage = (lng: string) => {
-    i18n.changeLanguage(lng);
-  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
-
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);
     });
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -47,79 +28,40 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <img
-              src={linkbackLogo}
-              alt="LinkBack"
-              className="h-16 sm:h-20 w-auto"
-            />
-          </div>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
-                  <Languages className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={() => toggleLanguage("en")}>
-                  English
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => toggleLanguage("sv")}>
-                  Svenska
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+    <div
+      style={
+        {
+          position: "relative",
+          minHeight: "100vh",
+          "--font-brand": "'Plus Jakarta Sans', system-ui, sans-serif",
+        } as React.CSSProperties
+      }
+    >
+      <GradientBackground />
 
-            {user ? (
-              <>
-                <Link to="/dashboard">
-                  <Button
-                    variant="ghost"
-                    className="rounded-full text-sm sm:text-base"
-                  >
-                    {t("common.buttons.myEvents")}
-                  </Button>
-                </Link>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
-                  onClick={handleSignOut}
-                  aria-label={TEXT.common.buttons.signOut}
-                >
-                  <LogOut className="h-4 w-4" aria-hidden="true" />
-                </Button>
-              </>
-            ) : (
-              <Link to="/auth">
-                <Button
-                  variant="ghost"
-                  className="rounded-full shadow-glow-linkedin hover:shadow-lg text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
-                >
-                  {t("common.buttons.signInWithLinkedIn")}
-                </Button>
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
-
-      <main className="container mx-auto px-4">
-        <HeroSection isAuthenticated={Boolean(user)} />
-        <FeaturesGrid />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <LandingNav user={user} onSignOut={handleSignOut} />
+        <HeroSection />
         <HowItWorks />
         {!user && <FooterCTA />}
-      </main>
-
-      <footer className="border-t border-border py-8">
-        <div className="container mx-auto px-4 text-center text-muted-foreground">
-          <p>{t("common.copy.footer")}</p>
-        </div>
-      </footer>
+        <footer
+          style={{
+            background: "#0a0a0a",
+            padding: "32px 5%",
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              color: "rgba(255,255,255,0.25)",
+              fontSize: 13,
+              fontFamily: "var(--font-brand)",
+            }}
+          >
+            © 2026 LinkBack
+          </p>
+        </footer>
+      </div>
     </div>
   );
 };
