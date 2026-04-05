@@ -1,88 +1,117 @@
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { QrCode, Calendar, Linkedin } from "lucide-react";
-import { useTranslation } from "react-i18next";
-import Heading from "@/components/ui/heading";
+import { useRef } from "react";
+import { useScrollProgress } from "../hooks/useScrollProgress";
+import PhoneReveal from "./PhoneReveal";
+import FloatingCTA from "./FloatingCTA";
 
-interface HeroSectionProps {
-  isAuthenticated: boolean;
-}
-
-const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
-  const { t } = useTranslation();
+const HeroSection = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { phaseA, step, showFloatingCTA } = useScrollProgress(containerRef);
 
   return (
-    <section className="py-20 md:py-32 text-center">
-      <div className="max-w-3xl mx-auto space-y-8">
-        <Heading level={1}>
-          {t("landing.hero.titleLine")}
-          <br />
-          <Heading
-            as="span"
-            level={1}
-            gradient
-            className="inline-block animate-fade-in [animation-delay:0.3s] [animation-fill-mode:both]"
+    <div ref={containerRef} style={{ height: "600vh", position: "relative" }}>
+      <div
+        style={{
+          position: "sticky",
+          top: 0,
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            left: "5%",
+            top: "50%",
+            transform: "translateY(-50%)",
+            opacity: showFloatingCTA ? 0 : 1,
+            transition: "opacity 600ms ease",
+            zIndex: 2,
+            fontFamily: "var(--font-brand)",
+            lineHeight: 0.92,
+            letterSpacing: "-0.05em",
+          }}
+        >
+          <div
             style={{
-              textShadow:
-                "0 0 30px hsla(var(--glow-primary) / 0.9), 0 0 60px hsla(var(--glow-primary) / 0.7), 0 0 90px hsla(var(--glow-primary) / 0.5)",
+              fontSize: "clamp(48px, 8vw, 110px)",
+              fontWeight: 900,
+              color: "#fff",
             }}
           >
-            {t("landing.hero.highlight")}
-          </Heading>
-        </Heading>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          {isAuthenticated
-            ? t("landing.hero.authenticatedDescription")
-            : t("landing.hero.guestDescription")}
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-          {isAuthenticated ? (
-            <>
-              <Link to="/join-event">
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg"
-                >
-                  <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
-                  {t("landing.hero.joinButton")}
-                </Button>
-              </Link>
-              <Link to="/create-event">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
-                  <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
-                  {t("landing.hero.hostButton")}
-                </Button>
-              </Link>
-            </>
-          ) : (
-            <>
-              <Link to="/auth">
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
-                >
-                  <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
-                  {t("landing.hero.signInButton")}
-                </Button>
-              </Link>
-              <Link to="/demo">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
-                  {t("landing.hero.demoButton")}
-                </Button>
-              </Link>
-            </>
-          )}
+            Check
+          </div>
+          <div
+            style={{
+              fontSize: "clamp(48px, 8vw, 110px)",
+              fontWeight: 900,
+              color: "#fff",
+            }}
+          >
+            in.
+          </div>
+          <div
+            style={{
+              fontSize: "clamp(48px, 8vw, 110px)",
+              fontWeight: 900,
+              color: "transparent",
+              WebkitTextStroke: "2px rgba(255,255,255,0.55)",
+            }}
+          >
+            Stand
+          </div>
+          <div
+            style={{
+              fontSize: "clamp(48px, 8vw, 110px)",
+              fontWeight: 900,
+              color: "transparent",
+              WebkitTextStroke: "2px rgba(255,255,255,0.55)",
+            }}
+          >
+            out.
+          </div>
         </div>
+
+        <div
+          style={{
+            position: "absolute",
+            bottom: 32,
+            left: "50%",
+            transform: "translateX(-50%)",
+            opacity: phaseA > 0.05 ? 0 : 1,
+            transition: "opacity 400ms ease",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 6,
+            zIndex: 2,
+          }}
+        >
+          <div
+            className="animate-scroll-pulse"
+            style={{
+              width: 1,
+              height: 40,
+              background:
+                "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5))",
+            }}
+          />
+          <span
+            style={{
+              fontSize: 9,
+              letterSpacing: "0.15em",
+              color: "rgba(255,255,255,0.4)",
+              fontFamily: "var(--font-brand)",
+            }}
+          >
+            SCROLL
+          </span>
+        </div>
+
+        <PhoneReveal phaseA={phaseA} step={step} />
+
+        <FloatingCTA visible={showFloatingCTA} />
       </div>
-    </section>
+    </div>
   );
 };
 
