@@ -112,6 +112,12 @@ describe("parseEventDateParts", () => {
     expect(result.date).toBe("");
     expect(result.time).toBe("");
   });
+
+  it("does not throw for a string that parseISO returns as Invalid Date without throwing", () => {
+    // date-fns parseISO returns Invalid Date (doesn't throw) for partial ISO-like strings
+    expect(() => parseEventDateParts("2025-13-01")).not.toThrow();
+    expect(parseEventDateParts("2025-13-01")).toEqual({ date: "", time: "" });
+  });
 });
 
 describe("combineEventDateAndTime", () => {
