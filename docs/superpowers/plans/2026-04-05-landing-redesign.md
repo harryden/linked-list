@@ -162,19 +162,34 @@ In `tailwind.config.ts`, inside `theme.extend.keyframes`, add:
   "40%":       { background: "rgba(254, 137, 137, 0.3)" },
   "70%":       { background: "rgba(0, 0, 0, 0.15)" },
 },
+"scroll-pulse": {
+  "0%, 100%": { opacity: "0.25" },
+  "50%":       { opacity: "1" },
+},
 ```
 
 In `theme.extend.animation`, add:
 
 ```ts
-"color-cast": "color-cast 8s ease-in-out infinite",
+"color-cast":   "color-cast 8s ease-in-out infinite",
+"scroll-pulse": "scroll-pulse 1.5s ease-in-out infinite",
+```
+
+In `theme.extend`, also add a `fontFamily` block so Plus Jakarta Sans becomes the
+global default sans-serif (picks up in all Tailwind `font-sans` consumers, including
+the globally-mounted `FeedbackDialog` trigger button in `App.tsx`):
+
+```ts
+fontFamily: {
+  sans: ['"Plus Jakarta Sans"', "system-ui", "sans-serif"],
+},
 ```
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add tailwind.config.ts
-git commit -m "Add color-cast keyframe animation for phone hand glow effect"
+git commit -m "Add color-cast, scroll-pulse keyframes and set Plus Jakarta Sans as global font"
 ```
 
 ---
@@ -934,12 +949,12 @@ const PhoneReveal = ({ phaseA, step }: PhoneRevealProps) => {
         {/* Covers the entire image. Blends gradient colors into hand shadows. */}
         {/* The outer wrapper must NOT have transform/opacity/filter for this to work. */}
         <div
+          className="animate-color-cast"
           style={{
             position: "absolute",
             inset: 0,
             borderRadius: "inherit",
             mixBlendMode: "overlay",
-            animation: "color-cast 8s ease-in-out infinite",
             pointerEvents: "none",
           }}
         />
@@ -1354,12 +1369,12 @@ const HeroSection = () => {
           }}
         >
           <div
+            className="animate-scroll-pulse"
             style={{
               width: 1,
               height: 40,
               background:
                 "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5))",
-              animation: "fade-in 1.5s ease-in-out infinite",
             }}
           />
           <span
@@ -1722,7 +1737,7 @@ const Landing = () => {
               fontFamily: "var(--font-brand)",
             }}
           >
-            © 2025 LinkBack
+            © 2026 LinkBack
           </p>
         </footer>
       </div>
