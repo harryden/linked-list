@@ -92,7 +92,19 @@ Phone is locked in place. Each scroll threshold reveals the next step of content
 
 Each transition: 400ms ease, previous content fades out, new content fades in.
 
-Scroll tracking: `scroll` event listener computing progress as `(scrollY - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds are derived from this normalized value.
+Scroll tracking: Lenis emits a `scroll` event with the current `scroll` value. Progress is computed as `(scroll - phaseAEnd) / phaseBHeight`, clamped to `[0, 1]`. Step thresholds are derived from this normalized value.
+
+**Phone screen status bar (always visible)**
+
+A thin strip permanently pinned to the top of the phone screen overlay div, visible across all steps. Never animates in or out — it is always present once the phone screen is active.
+
+Contents (left to right):
+
+- **Time:** Live clock rendered in a React `useState` + `setInterval` (1 minute interval), reads `new Date()` and formats as `HH:MM`. White text, small font (~10px), medium weight.
+- **WiFi icon:** Simple inline SVG, white
+- **Battery icon:** Simple inline SVG showing ~80% fill, white
+
+Styling: `height: ~20px`, white text/icons, `font-size: ~10px`, `padding: 0 8px`. Sits at `z-index` above all step content so it is never obscured.
 
 ---
 
@@ -132,8 +144,8 @@ Begins immediately after the sticky zone exits.
 ## Dependencies
 
 - `shader-gradient` — new npm dependency for the ShaderGradient component
+- `lenis` — smooth scroll library, wraps the app at the root level, provides inertia-based scroll feel and emits scroll events consumed by the phone reveal logic
 - `Plus Jakarta Sans` — loaded via Google Fonts link in `index.html`
-- No other new dependencies
 
 ---
 
