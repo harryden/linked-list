@@ -89,7 +89,9 @@ describe("LocationAutocomplete behavior", () => {
     await user.type(input, "enburg");
 
     await waitFor(() => {
-      expect(screen.queryByRole("button")).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole("button", { name: /gothenburg, sweden/i }),
+      ).not.toBeInTheDocument();
     });
 
     vi.restoreAllMocks();

@@ -22,7 +22,7 @@ const FooterCTA = () => {
               size="lg"
               className="rounded-full px-8 h-12 text-base font-medium shadow-lg hover:scale-105 transition-transform bg-linkedin hover:bg-linkedin-hover text-white"
             >
-              <Linkedin className="h-5 w-5 mr-2" />
+              <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
               {t("common.buttons.signInWithLinkedIn")}
             </Button>
           </Link>

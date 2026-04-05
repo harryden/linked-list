@@ -52,7 +52,9 @@ const AttendButton = ({
       className={buttonClasses}
       disabled={isLoading}
     >
-      {mode === "linkedin" && <Linkedin className="h-5 w-5" />}
+      {mode === "linkedin" && (
+        <Linkedin className="h-5 w-5" aria-hidden="true" />
+      )}
       {buttonLabel}
     </Button>
   );

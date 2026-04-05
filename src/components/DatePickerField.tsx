@@ -57,7 +57,10 @@ const DatePickerField = ({
           )}
         >
           <span>{formatted || placeholder || "Select date"}</span>
-          <Calendar className="ml-2 h-4 w-4 text-muted-foreground" />
+          <Calendar
+            className="ml-2 h-4 w-4 text-muted-foreground"
+            aria-hidden="true"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="p-0 bg-background" align="start">

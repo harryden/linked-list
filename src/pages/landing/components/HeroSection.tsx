@@ -43,7 +43,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                   size="lg"
                   className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg"
                 >
-                  <QrCode className="h-5 w-5 mr-2" />
+                  <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.joinButton")}
                 </Button>
               </Link>
@@ -53,7 +53,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                   variant="outline"
                   className="rounded-full px-8 h-12 text-base font-medium"
                 >
-                  <Calendar className="h-5 w-5 mr-2" />
+                  <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.hostButton")}
                 </Button>
               </Link>
@@ -65,7 +65,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                   size="lg"
                   className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
                 >
-                  <Linkedin className="h-5 w-5 mr-2" />
+                  <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.signInButton")}
                 </Button>
               </Link>

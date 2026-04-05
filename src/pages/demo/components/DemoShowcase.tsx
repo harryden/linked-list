@@ -31,7 +31,7 @@ const DemoShowcase = () => {
           <div className="bg-muted p-6 rounded-xl space-y-3">
             {stepOne.checklist.map((item) => (
               <div key={item} className="flex items-center gap-2">
-                <Check className="h-5 w-5 text-success" />
+                <Check className="h-5 w-5 text-success" aria-hidden="true" />
                 <span>{item}</span>
               </div>
             ))}
@@ -57,7 +57,7 @@ const DemoShowcase = () => {
           <div className="bg-muted p-6 rounded-xl">
             <div className="flex items-center justify-center">
               <div className="bg-white p-6 rounded-xl inline-block shadow-md">
-                <QrCode className="h-32 w-32 text-primary" />
+                <QrCode className="h-32 w-32 text-primary" aria-hidden="true" />
               </div>
             </div>
             <p className="text-center text-sm text-muted-foreground mt-4">
@@ -90,7 +90,7 @@ const DemoShowcase = () => {
               </div>
             </div>
             <div className="flex items-center gap-2 text-success">
-              <Check className="h-5 w-5" />
+              <Check className="h-5 w-5" aria-hidden="true" />
               <span className="font-medium">{stepThree.confirmation}</span>
             </div>
           </div>

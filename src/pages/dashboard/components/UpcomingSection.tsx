@@ -42,7 +42,12 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
       </Card>
     ) : events.length === 0 ? (
       <EmptyState
-        icon={<QrCode className="h-12 w-12 text-muted-foreground" />}
+        icon={
+          <QrCode
+            className="h-12 w-12 text-muted-foreground"
+            aria-hidden="true"
+          />
+        }
         title={TEXT.dashboard.upcoming.emptyTitle}
         description={TEXT.dashboard.upcoming.emptyDescription}
         actions={
@@ -68,7 +73,7 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2 text-sm text-primary">
-                  <Users className="h-4 w-4" />
+                  <Users className="h-4 w-4" aria-hidden="true" />
                   <span>{TEXT.dashboard.upcoming.viewAttendeeList}</span>
                 </div>
               </CardContent>

@@ -43,7 +43,12 @@ const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
         </Card>
       ) : events.length === 0 ? (
         <EmptyState
-          icon={<Calendar className="h-12 w-12 text-muted-foreground" />}
+          icon={
+            <Calendar
+              className="h-12 w-12 text-muted-foreground"
+              aria-hidden="true"
+            />
+          }
           title={TEXT.dashboard.myEvents.emptyTitle}
           description={TEXT.dashboard.myEvents.emptyDescription}
           actions={
@@ -69,7 +74,7 @@ const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-2 text-sm text-primary">
-                    <Users className="h-4 w-4" />
+                    <Users className="h-4 w-4" aria-hidden="true" />
                     <span>{TEXT.dashboard.myEvents.viewAttendees}</span>
                   </div>
                 </CardContent>

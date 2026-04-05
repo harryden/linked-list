@@ -194,25 +194,25 @@ const EventHeader = ({
             )}
             {dateReference && (
               <div className="flex items-center justify-center gap-2">
-                <Calendar className="h-4 w-4" />
+                <Calendar className="h-4 w-4" aria-hidden="true" />
                 <span>{formattedEventDate}</span>
               </div>
             )}
             {(eventStartDate || eventEndDate) && (
               <div className="flex items-center justify-center gap-2">
-                <Clock className="h-4 w-4" />
+                <Clock className="h-4 w-4" aria-hidden="true" />
                 <span>{formattedTimeRange}</span>
               </div>
             )}
             {event.location && (
               <div className="flex items-center justify-center gap-2">
-                <MapPin className="h-4 w-4" />
+                <MapPin className="h-4 w-4" aria-hidden="true" />
                 <span>{event.location}</span>
               </div>
             )}
             {organizer && (
               <div className="flex items-center justify-center gap-2">
-                <Users className="h-4 w-4" />
+                <Users className="h-4 w-4" aria-hidden="true" />
                 <span>
                   {TEXT.event.header.hostedBy} {organizer.name}
                 </span>
@@ -229,6 +229,7 @@ const EventHeader = ({
       <div>
         <div className="grid grid-cols-[1fr_auto_auto] items-start sm:items-center gap-4">
           <CardTitle
+            as="h1"
             className={cn(
               "min-w-0 break-words leading-tight",
               eventTitleMarginClass,
@@ -242,7 +243,7 @@ const EventHeader = ({
           </CardTitle>
           {isAttending && (
             <div className="col-start-2 self-start sm:self-center inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0 translate-x-[0.625rem] sm:translate-x-3">
-              <CheckCircle2 className="h-5 w-5" />
+              <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
               <span className="font-medium">
                 {TEXT.event.header.checkedInShort}
               </span>
@@ -257,13 +258,13 @@ const EventHeader = ({
                   className="col-start-3 self-start sm:self-center rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
                   aria-label={TEXT.event.header.options}
                 >
-                  <MoreVertical className="h-5 w-5" />
+                  <MoreVertical className="h-5 w-5" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-44">
                 {onEdit && (
                   <DropdownMenuItem onSelect={() => onEdit()}>
-                    <Pencil className="mr-2 h-4 w-4" />
+                    <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
                     {TEXT.event.header.edit}
                   </DropdownMenuItem>
                 )}
@@ -272,7 +273,7 @@ const EventHeader = ({
                     onSelect={() => onDelete()}
                     className="text-destructive focus:text-destructive"
                   >
-                    <Trash2 className="mr-2 h-4 w-4" />
+                    <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
                     {TEXT.event.header.delete}
                   </DropdownMenuItem>
                 )}
@@ -283,7 +284,7 @@ const EventHeader = ({
         <div className="flex flex-col gap-2 text-muted-foreground">
           {eventCode && (
             <div className="flex items-center gap-2 mb-1 sm:mb-1.5">
-              <QrCode className="h-4 w-4" />
+              <QrCode className="h-4 w-4" aria-hidden="true" />
               <span className="font-mono font-semibold text-foreground">
                 {TEXT.common.labels.eventCode}: {eventCode}
               </span>
@@ -291,19 +292,19 @@ const EventHeader = ({
           )}
           {dateReference && (
             <div className="flex items-center gap-2">
-              <Calendar className="h-4 w-4" />
+              <Calendar className="h-4 w-4" aria-hidden="true" />
               <span>{formattedEventDate}</span>
             </div>
           )}
           {(eventStartDate || eventEndDate) && (
             <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
+              <Clock className="h-4 w-4" aria-hidden="true" />
               <span>{formattedTimeRange}</span>
             </div>
           )}
           {event.location && (
             <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
+              <MapPin className="h-4 w-4" aria-hidden="true" />
               <span>{event.location}</span>
             </div>
           )}
@@ -343,7 +344,7 @@ const EventHeader = ({
                   }
                 }}
               >
-                <Linkedin className="h-4 w-4" />
+                <Linkedin className="h-4 w-4" aria-hidden="true" />
                 {currentUserId === organizer.id
                   ? TEXT.event.header.viewSelfProfile
                   : TEXT.event.header.viewProfile}
@@ -360,7 +361,7 @@ const EventHeader = ({
           variant="outline"
           className="w-full rounded-full h-12 text-base font-medium"
         >
-          <QrCode className="h-5 w-5 mr-2" />
+          <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
           {TEXT.common.buttons.viewQrCode}
         </Button>
       )}
