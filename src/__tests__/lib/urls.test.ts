@@ -42,5 +42,11 @@ describe("URL Helpers", () => {
       vi.stubEnv("VITE_PUBLIC_URL", "https://prod.linkback.com/");
       expect(getProductionUrl()).toBe("https://prod.linkback.com");
     });
+
+    it("should fall back to the correct production domain when VITE_PUBLIC_URL is unset", () => {
+      expect(getProductionUrl()).toBe(
+        "https://linked-list-harry-denells-projects.vercel.app",
+      );
+    });
   });
 });

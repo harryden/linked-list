@@ -7,7 +7,8 @@ const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const EMAIL_FROM =
   Deno.env.get("EMAIL_FROM") ?? "LinkBack <events@updates.linkback.com>";
 const APP_URL =
-  Deno.env.get("APP_URL") ?? "https://linked-list-nine.vercel.app";
+  Deno.env.get("APP_URL") ??
+  "https://linked-list-harry-denells-projects.vercel.app";
 
 const escapeHtml = (str: string): string =>
   str
