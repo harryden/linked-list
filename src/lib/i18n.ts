@@ -246,7 +246,8 @@ const resources = {
           description: "Ange din eventkod för att checka in",
         },
         alert: {
-          organizer: "Du är värd för detta event. Öppna det för att hantera incheckningar.",
+          organizer:
+            "Du är värd för detta event. Öppna det för att hantera incheckningar.",
         },
         form: {
           label: "Eventkod",
@@ -285,7 +286,8 @@ const resources = {
             },
             {
               title: "Skrivskyddad åtkomst",
-              description: "Vi publicerar eller skickar aldrig meddelanden å dina vägnar",
+              description:
+                "Vi publicerar eller skickar aldrig meddelanden å dina vägnar",
             },
           ],
           consentPrefix:
@@ -338,7 +340,8 @@ const resources = {
           singular: "Deltagare",
           plural: "Deltagare",
           loading: "Laddar deltagare...",
-          organizerEmpty: "Inga deltagare än. Dela din kod för att komma igång.",
+          organizerEmpty:
+            "Inga deltagare än. Dela din kod för att komma igång.",
           attendeeEmpty: "Inga deltagare än. Bli den första att checka in.",
         },
         page: {

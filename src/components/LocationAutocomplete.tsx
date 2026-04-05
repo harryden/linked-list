@@ -52,6 +52,8 @@ export const LocationAutocomplete = ({
     }
 
     setIsLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 5000);
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=5&addressdetails=1`,
@@ -59,6 +61,7 @@ export const LocationAutocomplete = ({
           headers: {
             Accept: "application/json",
           },
+          signal: controller.signal,
         },
       );
 
@@ -68,8 +71,14 @@ export const LocationAutocomplete = ({
         setShowSuggestions(true);
       }
     } catch (error) {
-      logger.error(error, { category: "UI" });
+      if (error instanceof Error && error.name === "AbortError") {
+        setSuggestions([]);
+        setShowSuggestions(false);
+      } else if (error instanceof Error) {
+        logger.error(error, { category: "UI" });
+      }
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };
