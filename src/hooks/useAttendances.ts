@@ -33,11 +33,6 @@ export const attendancesQueryKey = (options: UseAttendancesOptions) => [
   normalizeAttendancesOptions(options),
 ];
 
-export const attendancesEventQueryKey = (eventId: string) => [
-  "attendances",
-  { eventId },
-];
-
 export const fetchAttendances = async (
   options: UseAttendancesOptions,
 ): Promise<AttendanceRecord[]> => {
@@ -107,7 +102,7 @@ export const useRealtimeAttendances = (eventId?: string) => {
         },
         () => {
           queryClient.invalidateQueries({
-            queryKey: attendancesEventQueryKey(eventId),
+            queryKey: ["attendances"],
           });
         },
       )
