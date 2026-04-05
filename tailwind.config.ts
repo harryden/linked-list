@@ -77,6 +77,11 @@ export default {
         "gradient-primary": "var(--gradient-primary)",
         "gradient-accent": "var(--gradient-accent)",
       },
+      fontFamily: {
+        sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+        mono: ["Geist Mono", "ui-monospace", "monospace"],
+        display: ["Cabinet Grotesk", "Geist", "sans-serif"],
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
