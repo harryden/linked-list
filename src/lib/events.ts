@@ -1,4 +1,4 @@
-import { format, parseISO } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { logger } from "@/lib/logger";
 
 export function eventCodeFromId(id: string): string {
@@ -25,6 +25,9 @@ export function parseEventDateParts(input?: string | null) {
 
   try {
     const date = parseISO(input);
+    if (!isValid(date)) {
+      return { date: "", time: "" };
+    }
     return {
       date: format(date, "yyyy-MM-dd"),
       time: format(date, "HH:mm"),

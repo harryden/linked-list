@@ -2,7 +2,12 @@
 CREATE EXTENSION IF NOT EXISTS "net" WITH SCHEMA "extensions";
 
 -- Create the trigger function
--- Requires app.supabase_url and app.settings.service_role_key to be configured:
+-- SECURITY NOTE: This trigger reads app.settings.service_role_key from a database setting
+-- to authenticate calls to the edge function. Any SECURITY DEFINER function or role with
+-- access to current_setting() can read this value. Treat it as a shared secret and rotate
+-- it immediately if the database is ever compromised.
+--
+-- Setup: run these once per environment before deploying:
 --   ALTER DATABASE postgres SET "app.supabase_url" = 'https://<project-ref>.supabase.co';
 --   ALTER DATABASE postgres SET "app.settings.service_role_key" = '<service-role-key>';
 CREATE OR REPLACE FUNCTION public.handle_new_event_email()

@@ -6,8 +6,6 @@ import EventPage from "@/pages/EventPage";
 import { TEXT } from "@/constants/text";
 import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 
-const BANNER_TEXT = "You're in! Here's who else is coming.";
-
 const baseEvent = {
   id: "event-1",
   slug: "launch-day",
@@ -97,7 +95,9 @@ describe("EventPage check-in arrival moment", () => {
 
     await screen.findByText(baseEvent.name);
 
-    expect(screen.queryByText(BANNER_TEXT)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(TEXT.event.page.checkInSuccessBanner),
+    ).not.toBeInTheDocument();
   });
 
   it("shows the welcome banner after a successful check-in", async () => {
@@ -111,7 +111,9 @@ describe("EventPage check-in arrival moment", () => {
     await userEvent.click(checkInButton);
 
     await waitFor(() => {
-      expect(screen.getByText(BANNER_TEXT)).toBeInTheDocument();
+      expect(
+        screen.getByText(TEXT.event.page.checkInSuccessBanner),
+      ).toBeInTheDocument();
     });
   });
 
@@ -130,7 +132,9 @@ describe("EventPage check-in arrival moment", () => {
     await userEvent.click(dismissButton);
 
     await waitFor(() => {
-      expect(screen.queryByText(BANNER_TEXT)).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(TEXT.event.page.checkInSuccessBanner),
+      ).not.toBeInTheDocument();
     });
   });
 
