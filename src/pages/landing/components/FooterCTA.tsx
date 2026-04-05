@@ -1,32 +1,88 @@
 import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Linkedin } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const FooterCTA = () => {
   const { t } = useTranslation();
 
   return (
-    <section className="py-20 pb-32">
-      <div className="max-w-3xl mx-auto text-center bg-gradient-to-br from-primary to-primary rounded-3xl p-12 shadow-xl animate-border-glow relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
-        <div className="relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
-            {t("landing.footerCta.title")}
-          </h2>
-          <p className="text-xl text-primary-foreground/90 mb-8">
-            {t("landing.footerCta.description")}
-          </p>
-          <Link to="/auth">
-            <Button
-              size="lg"
-              className="rounded-full px-8 h-12 text-base font-medium shadow-lg hover:scale-105 transition-transform bg-linkedin hover:bg-linkedin-hover text-white"
+    <section
+      style={{
+        background:
+          "linear-gradient(135deg, #5606ff 0%, #8b35ff 50%, #fe8989 100%)",
+        padding: "120px 5%",
+        textAlign: "center",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 600,
+          margin: "0 auto",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: 20,
+          fontFamily: "var(--font-brand)",
+        }}
+      >
+        <h2
+          style={{
+            fontSize: "clamp(32px, 4vw, 52px)",
+            fontWeight: 900,
+            color: "#fff",
+            letterSpacing: "-0.04em",
+            lineHeight: 1.1,
+          }}
+        >
+          {t("landing.footerCta.title")}
+        </h2>
+        <p
+          style={{
+            fontSize: 18,
+            color: "rgba(255,255,255,0.75)",
+            lineHeight: 1.6,
+            maxWidth: 440,
+          }}
+        >
+          {t("landing.footerCta.description")}
+        </p>
+        <Link to="/auth" style={{ textDecoration: "none" }}>
+          <button
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 10,
+              background: "#fff",
+              color: "#111",
+              fontSize: 16,
+              fontWeight: 700,
+              padding: "14px 28px",
+              borderRadius: 32,
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "var(--font-brand)",
+              letterSpacing: "-0.01em",
+              boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+            }}
+          >
+            <span
+              style={{
+                width: 20,
+                height: 20,
+                background: "#0a66c2",
+                borderRadius: 4,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 11,
+                fontWeight: 900,
+                color: "#fff",
+              }}
             >
-              <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
-              {t("common.buttons.signInWithLinkedIn")}
-            </Button>
-          </Link>
-        </div>
+              in
+            </span>
+            {t("common.buttons.signInWithLinkedIn")}
+          </button>
+        </Link>
       </div>
     </section>
   );
