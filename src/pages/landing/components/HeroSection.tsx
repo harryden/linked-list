@@ -8,7 +8,7 @@ const HeroSection = () => {
   const { phaseA, step, showFloatingCTA } = useScrollProgress(containerRef);
 
   return (
-    <div ref={containerRef} style={{ height: "600vh", position: "relative" }}>
+    <div ref={containerRef} style={{ height: "800vh", position: "relative" }}>
       <div
         style={{
           position: "sticky",
@@ -24,6 +24,7 @@ const HeroSection = () => {
             top: "50%",
             transform: "translateY(-50%)",
             opacity: showFloatingCTA ? 0 : 1,
+            pointerEvents: showFloatingCTA ? "none" : "auto",
             transition: "opacity 600ms ease",
             zIndex: 2,
             fontFamily: "var(--font-brand)",
@@ -98,14 +99,14 @@ const HeroSection = () => {
               width: 1,
               height: 40,
               background:
-                "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5))",
+                "linear-gradient(to bottom, transparent, rgba(0,0,0,0.3))",
             }}
           />
           <span
             style={{
               fontSize: 9,
               letterSpacing: "0.15em",
-              color: "rgba(255,255,255,0.4)",
+              color: "rgba(0,0,0,0.35)",
               fontFamily: "var(--font-brand)",
             }}
           >

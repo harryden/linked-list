@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 interface FloatingCTAProps {
   visible: boolean;
 }
@@ -72,7 +70,7 @@ const FloatingCTA = ({ visible }: FloatingCTAProps) => (
       LinkedIn-verified attendance for events that matter.
     </p>
 
-    <Link to="/auth" style={{ textDecoration: "none" }}>
+    <a href="/auth" style={{ textDecoration: "none" }}>
       <button
         style={{
           display: "inline-flex",
@@ -110,20 +108,21 @@ const FloatingCTA = ({ visible }: FloatingCTAProps) => (
         </span>
         Sign in with LinkedIn
       </button>
-    </Link>
+    </a>
 
-    <Link
-      to="/demo"
+    <a
+      href="#how-it-works"
       style={{
         fontSize: 13,
         color: "rgba(255,255,255,0.35)",
         fontFamily: "var(--font-brand)",
         textDecoration: "underline",
         textUnderlineOffset: 3,
+        cursor: "pointer",
       }}
     >
       See how it works →
-    </Link>
+    </a>
   </div>
 );
 

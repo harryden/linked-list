@@ -17,7 +17,7 @@ if (location.pathname.startsWith("/event/")) {
   import("./pages/EventPage").catch(() => {});
 }
 
-const lenis = new Lenis();
+const lenis = new Lenis({ lerp: 0.06 });
 
 function raf(time: number) {
   lenis.raf(time);

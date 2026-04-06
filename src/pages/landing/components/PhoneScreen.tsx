@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import PhoneStatusBar from "./PhoneStatusBar";
 import QRCodePreview from "@/components/QRCodePreview";
 
@@ -213,79 +214,92 @@ const StepAttendees = () => (
   </div>
 );
 
-const StepCTA = () => (
-  <div
-    style={{
-      flex: 1,
-      background: "#fff",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 10,
-      padding: 16,
-      fontFamily: IOS_FONT,
-    }}
-  >
+const StepCTA = () => {
+  const navigate = useNavigate();
+
+  return (
     <div
       style={{
-        fontSize: 13,
-        fontWeight: 800,
-        color: "#111",
-        textAlign: "center",
-        lineHeight: 1.2,
-        letterSpacing: "-0.03em",
+        flex: 1,
+        background: "#fff",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+        padding: 16,
+        fontFamily: IOS_FONT,
       }}
     >
-      Host smarter
-      <br />
-      events.
+      <div
+        style={{
+          fontSize: 13,
+          fontWeight: 800,
+          color: "#111",
+          textAlign: "center",
+          lineHeight: 1.2,
+          letterSpacing: "-0.03em",
+        }}
+      >
+        Host smarter
+        <br />
+        events.
+      </div>
+      <div
+        style={{
+          fontSize: 8.5,
+          color: "#999",
+          textAlign: "center",
+          lineHeight: 1.5,
+          maxWidth: 110,
+        }}
+      >
+        LinkedIn-verified check-ins. Real profiles. No fake attendees.
+      </div>
+      <div
+        onClick={() => navigate("/auth")}
+        style={{
+          background: "linear-gradient(135deg,#5606ff,#8b35ff)",
+          color: "#fff",
+          fontSize: 9,
+          fontWeight: 700,
+          padding: "8px 18px",
+          borderRadius: 24,
+          letterSpacing: "-0.01em",
+          boxShadow: "0 4px 16px rgba(86,6,255,0.4)",
+          cursor: "pointer",
+        }}
+      >
+        Get started free
+      </div>
+      <div
+        onClick={() =>
+          document
+            .querySelector("#how-it-works")
+            ?.scrollIntoView({ behavior: "smooth" })
+        }
+        style={{
+          fontSize: 8,
+          color: "#bbb",
+          textDecoration: "underline",
+          textUnderlineOffset: 2,
+          cursor: "pointer",
+        }}
+      >
+        See how it works →
+      </div>
     </div>
-    <div
-      style={{
-        fontSize: 8.5,
-        color: "#999",
-        textAlign: "center",
-        lineHeight: 1.5,
-        maxWidth: 110,
-      }}
-    >
-      LinkedIn-verified check-ins. Real profiles. No fake attendees.
-    </div>
-    <div
-      style={{
-        background: "linear-gradient(135deg,#5606ff,#8b35ff)",
-        color: "#fff",
-        fontSize: 9,
-        fontWeight: 700,
-        padding: "8px 18px",
-        borderRadius: 24,
-        letterSpacing: "-0.01em",
-        boxShadow: "0 4px 16px rgba(86,6,255,0.4)",
-      }}
-    >
-      Get started free
-    </div>
-    <div
-      style={{
-        fontSize: 8,
-        color: "#bbb",
-        textDecoration: "underline",
-        textUnderlineOffset: 2,
-      }}
-    >
-      See how it works →
-    </div>
-  </div>
-);
+  );
+};
 
 const STEPS = [StepBlank, StepQR, StepAttendees, StepCTA];
 
 interface PhoneScreenProps {
   step: 0 | 1 | 2 | 3;
+  contentOpacity?: number;
 }
 
-const PhoneScreen = ({ step }: PhoneScreenProps) => {
+const PhoneScreen = ({ step, contentOpacity = 1 }: PhoneScreenProps) => {
   return (
     <div
       style={{
@@ -299,7 +313,15 @@ const PhoneScreen = ({ step }: PhoneScreenProps) => {
       }}
     >
       <PhoneStatusBar />
-      <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
+      <div
+        style={{
+          flex: 1,
+          position: "relative",
+          overflow: "hidden",
+          opacity: contentOpacity,
+          transition: "opacity 300ms ease",
+        }}
+      >
         {STEPS.map((Step, i) => (
           <div
             key={i}
@@ -308,8 +330,10 @@ const PhoneScreen = ({ step }: PhoneScreenProps) => {
               inset: 0,
               display: "flex",
               flexDirection: "column",
-              opacity: i === step ? 1 : 0,
-              transition: "opacity 400ms ease",
+              transform: `translateY(${i < step ? "-100%" : i > step ? "100%" : "0%"})`,
+              opacity: i === step ? 1 : 0.3,
+              transition:
+                "transform 1100ms cubic-bezier(0.4,0,0.2,1), opacity 1100ms ease",
               pointerEvents: i === step ? "auto" : "none",
             }}
           >

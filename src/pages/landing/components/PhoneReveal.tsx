@@ -7,44 +7,34 @@ interface PhoneRevealProps {
 }
 
 const SCREEN_INSET = {
-  top: "12%",
-  left: "18%",
-  width: "64%",
-  height: "72%",
+  top: "11.5%",
+  left: "41.3%",
+  width: "16.27%",
+  height: "62%",
 };
 
 const PhoneReveal = ({ phaseA, step }: PhoneRevealProps) => {
-  const translateY = (1 - phaseA) * 60;
+  const translateY = (1 - phaseA) * 35;
 
   return (
     <div
       style={{
         position: "absolute",
-        right: "5%",
+        right: 0,
         bottom: 0,
-        width: "42vw",
-        maxWidth: 480,
+        height: "90vh",
         transform: `translateY(${translateY}vh)`,
         transition: "none",
+        pointerEvents: "none",
       }}
     >
-      <div style={{ position: "relative" }}>
+      <div style={{ position: "relative", height: "100%" }}>
         <img
           src={phoneHandImg}
           alt=""
           aria-hidden="true"
-          style={{ width: "100%", display: "block" }}
-        />
-
-        <div
           className="animate-color-cast"
-          style={{
-            position: "absolute",
-            inset: 0,
-            borderRadius: "inherit",
-            mixBlendMode: "overlay",
-            pointerEvents: "none",
-          }}
+          style={{ height: "100%", width: "auto", display: "block" }}
         />
 
         <div
@@ -54,13 +44,11 @@ const PhoneReveal = ({ phaseA, step }: PhoneRevealProps) => {
             left: SCREEN_INSET.left,
             width: SCREEN_INSET.width,
             height: SCREEN_INSET.height,
-            opacity: phaseA,
-            transition: "opacity 300ms ease",
             borderRadius: "4% / 2.5%",
             overflow: "hidden",
           }}
         >
-          <PhoneScreen step={step} />
+          <PhoneScreen step={step} contentOpacity={phaseA} />
         </div>
       </div>
     </div>

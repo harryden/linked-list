@@ -84,7 +84,10 @@ const HowItWorks = () => {
   }[];
 
   return (
-    <section style={{ background: "#0a0a0a", padding: "120px 5% 120px" }}>
+    <section
+      id="how-it-works"
+      style={{ background: "#0a0a0a", padding: "120px 5% 120px" }}
+    >
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <h2
           style={{

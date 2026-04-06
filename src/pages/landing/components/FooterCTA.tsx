@@ -83,6 +83,15 @@ const FooterCTA = () => {
             {t("common.buttons.signInWithLinkedIn")}
           </button>
         </Link>
+        <p
+          style={{
+            fontSize: 12,
+            color: "rgba(255,255,255,0.35)",
+            fontFamily: "var(--font-brand)",
+          }}
+        >
+          © 2026 LinkBack
+        </p>
       </div>
     </section>
   );

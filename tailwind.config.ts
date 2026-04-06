@@ -124,9 +124,18 @@ export default {
           },
         },
         "color-cast": {
-          "0%, 100%": { background: "rgba(86, 6, 255, 0.3)" },
-          "40%": { background: "rgba(254, 137, 137, 0.3)" },
-          "70%": { background: "rgba(0, 0, 0, 0.15)" },
+          "0%, 100%": {
+            filter:
+              "drop-shadow(0 0 20px rgba(86,6,255,1)) drop-shadow(0 0 60px rgba(86,6,255,0.8)) drop-shadow(0 0 120px rgba(86,6,255,0.5))",
+          },
+          "40%": {
+            filter:
+              "drop-shadow(0 0 20px rgba(254,137,137,1)) drop-shadow(0 0 60px rgba(254,137,137,0.8)) drop-shadow(0 0 120px rgba(254,137,137,0.5))",
+          },
+          "70%": {
+            filter:
+              "drop-shadow(0 0 10px rgba(30,10,60,0.6)) drop-shadow(0 0 40px rgba(30,10,60,0.3))",
+          },
         },
         "scroll-pulse": {
           "0%, 100%": { opacity: "0.25" },

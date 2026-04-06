@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 
 const WifiIcon = () => (
   <svg
-    width="8"
-    height="8"
+    width="11"
+    height="11"
     viewBox="0 0 24 24"
     fill="none"
     stroke="#111"
@@ -16,8 +16,8 @@ const WifiIcon = () => (
 
 const BatteryIcon = () => (
   <svg
-    width="10"
-    height="8"
+    width="14"
+    height="11"
     viewBox="0 0 24 14"
     fill="none"
     stroke="#111"
@@ -31,7 +31,7 @@ const BatteryIcon = () => (
 );
 
 const SignalIcon = () => (
-  <svg width="8" height="8" viewBox="0 0 24 24" fill="#111">
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="#111">
     <rect x="1" y="14" width="4" height="9" rx="1" />
     <rect x="7" y="10" width="4" height="13" rx="1" />
     <rect x="13" y="6" width="4" height="17" rx="1" />
@@ -88,12 +88,26 @@ const PhoneStatusBar = () => {
           left: "50%",
           transform: "translateX(-50%)",
           top: 6,
-          width: 44,
-          height: 12,
+          width: 56,
+          height: 16,
           background: "#000",
           borderRadius: 10,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          paddingRight: 3,
         }}
-      />
+      >
+        <div
+          style={{
+            width: 10,
+            height: 10,
+            borderRadius: "50%",
+            background: "#1a1a2e",
+            boxShadow: "inset 0 0 3px rgba(30,100,255,0.4)",
+          }}
+        />
+      </div>
 
       <div style={{ display: "flex", gap: 3, alignItems: "center" }}>
         <SignalIcon />

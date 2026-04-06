@@ -44,23 +44,6 @@ const Landing = () => {
         <HeroSection />
         <HowItWorks />
         {!user && <FooterCTA />}
-        <footer
-          style={{
-            background: "#0a0a0a",
-            padding: "32px 5%",
-            textAlign: "center",
-          }}
-        >
-          <p
-            style={{
-              color: "rgba(255,255,255,0.25)",
-              fontSize: 13,
-              fontFamily: "var(--font-brand)",
-            }}
-          >
-            © 2026 LinkBack
-          </p>
-        </footer>
       </div>
     </div>
   );
