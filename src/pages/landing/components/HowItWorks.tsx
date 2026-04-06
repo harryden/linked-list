@@ -86,7 +86,12 @@ const HowItWorks = () => {
   return (
     <section
       id="how-it-works"
-      style={{ background: "#0a0a0a", padding: "120px 5% 120px" }}
+      style={{
+        background: "#0a0a0a",
+        padding: "120px 5%",
+        minHeight: "100vh",
+        boxSizing: "border-box",
+      }}
     >
       <div style={{ maxWidth: 800, margin: "0 auto" }}>
         <h2

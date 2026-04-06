@@ -104,6 +104,12 @@ export const TEXT = {
           description:
             "See who's there in real time. Names, headlines, and LinkedIn profiles included.",
         },
+        {
+          step: "4",
+          title: "Start Connecting",
+          description:
+            "Your check-in is tied to your LinkedIn profile. Attendees can find you, follow up, and build on the conversation — long after the event ends.",
+        },
       ],
     },
     footerCta: {
