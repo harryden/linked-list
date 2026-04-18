@@ -64,6 +64,7 @@ const AuthCallback = () => {
           description: TEXT.authCallback.toast.noSession,
         });
         setStatus("error");
+        subscription.unsubscribe();
         setTimeout(() => navigate("/auth"), 2000);
       }
     });

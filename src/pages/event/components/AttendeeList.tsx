@@ -132,11 +132,11 @@ const AttendeeList = ({
           </p>
         ) : (
           <div className="divide-y divide-border">
-            {attendees.map((record) => {
+            {attendees.map((record, index) => {
               if (!record.profiles) return null;
               return (
                 <AttendeeItem
-                  key={record.id}
+                  key={record.id || index}
                   attendee={record.profiles}
                   currentUserId={currentUserId}
                 />
