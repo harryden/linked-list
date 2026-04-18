@@ -1,10 +1,10 @@
 export const getBaseUrl = () => {
   let url = "";
 
-  if (import.meta.env.VITE_PUBLIC_URL) {
-    url = import.meta.env.VITE_PUBLIC_URL;
-  } else if (typeof window !== "undefined") {
+  if (typeof window !== "undefined") {
     url = window.location.origin;
+  } else if (import.meta.env.VITE_PUBLIC_URL) {
+    url = import.meta.env.VITE_PUBLIC_URL;
   }
 
   // Trim trailing slash to avoid double slashes when joining paths
