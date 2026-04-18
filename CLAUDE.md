@@ -2,6 +2,8 @@
 
 ## Branching
 
+- **NO DIRECT COMMITS TO MAIN:** Under no circumstances should any code be committed directly to the `main` branch. 
+- All changes must originate from a `feature/` or `chore/` branch and be merged via a Pull Request.
 - Branch from latest main: `feature/<descriptive-name>` or `chore/<descriptive-name>`
 - Make focused, atomic commits — one logical change per commit
 - Use fixup commits while iterating; squash with `git rebase -i --autosquash main` before opening a PR
