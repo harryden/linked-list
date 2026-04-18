@@ -342,6 +342,7 @@ export const TEXT = {
         "By checking in, you agree to share your LinkedIn profile with event attendees.",
       signInPrompt: "Sign In",
       backToDashboard: "Back to Dashboard",
+      checkInSuccessBanner: "You're in! Here's who else is coming.",
     },
     toast: {
       loadFailure: "Failed to load event",

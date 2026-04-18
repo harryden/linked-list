@@ -1,7 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { analytics } from "@/lib/analytics";
-import type { SupabaseClient } from "@supabase/supabase-js";
 
 export type FeedbackType = "bug" | "feature" | "other";
 
@@ -19,10 +18,6 @@ interface FeedbackInsert {
   user_agent: string;
 }
 
-const feedbackClient = supabase as unknown as SupabaseClient & {
-  from(table: "feedback"): ReturnType<SupabaseClient["from"]>;
-};
-
 export const useFeedback = () => {
   return useMutation({
     mutationFn: async (payload: FeedbackPayload) => {
@@ -34,7 +29,7 @@ export const useFeedback = () => {
         user_agent: window.navigator.userAgent,
       };
 
-      const { error } = await feedbackClient.from("feedback").insert(insert);
+      const { error } = await supabase.from("feedback").insert(insert);
 
       if (error) throw error;
 

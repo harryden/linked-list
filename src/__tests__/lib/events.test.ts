@@ -112,6 +112,22 @@ describe("parseEventDateParts", () => {
     expect(result.date).toBe("");
     expect(result.time).toBe("");
   });
+
+  it("does not throw for a string that parseISO returns as Invalid Date without throwing", () => {
+    // date-fns parseISO returns Invalid Date (doesn't throw) for partial ISO-like strings
+    expect(() => parseEventDateParts("2025-13-01")).not.toThrow();
+    expect(parseEventDateParts("2025-13-01")).toEqual({ date: "", time: "" });
+  });
+
+  it("returns empty strings for an invalid day", () => {
+    expect(parseEventDateParts("2025-01-32")).toEqual({ date: "", time: "" });
+  });
+
+  it("parses a date-only string without throwing", () => {
+    const result = parseEventDateParts("2025-05-01");
+    expect(result.date).toBe("2025-05-01");
+    expect(result.time).toBe("00:00");
+  });
 });
 
 describe("combineEventDateAndTime", () => {

@@ -1,6 +1,13 @@
 -- Migration to add short_code to events for faster lookups
 -- This mirrors the logic in src/lib/events.ts: eventCodeFromId
 
+-- NOTE: short_code is a 6-digit value derived deterministically from the event UUID.
+-- The space is 1,000,000 slots, so collisions become increasingly likely as the number
+-- of events grows (birthday problem). At ~1,000 events, the chance of at least one
+-- collision is about 39%; the ~50% threshold is closer to ~1,200 events. Collisions
+-- surface as unique constraint violations on INSERT, so monitor for 23505 errors as
+-- production event volume grows.
+
 -- 1. Add the column
 ALTER TABLE public.events ADD COLUMN IF NOT EXISTS short_code text;
 

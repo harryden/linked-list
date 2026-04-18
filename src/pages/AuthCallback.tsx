@@ -49,10 +49,11 @@ const AuthCallback = () => {
       return;
     }
 
-    const handleAuthChange = (event, session, subscription) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if ((event === "SIGNED_IN" || event === "INITIAL_SESSION") && session) {
         setUserId(session.user.id);
-        subscription.unsubscribe();
         return;
       }
 
@@ -66,12 +67,6 @@ const AuthCallback = () => {
         subscription.unsubscribe();
         setTimeout(() => navigate("/auth"), 2000);
       }
-    };
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((event, session) => {
-      handleAuthChange(event, session, subscription);
     });
 
     return () => {

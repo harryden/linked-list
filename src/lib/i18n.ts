@@ -353,6 +353,7 @@ const resources = {
             "Genom att checka in godkänner du att dela din LinkedIn-profil med eventets deltagare.",
           signInPrompt: "Logga in",
           backToDashboard: "Tillbaka till översikt",
+          checkInSuccessBanner: "Du är med! Här är andra som kommer.",
         },
         toast: {
           loadFailure: "Kunde inte ladda event",

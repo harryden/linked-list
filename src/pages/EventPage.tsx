@@ -27,7 +27,7 @@ import {
   useJoinEvent,
   useRealtimeAttendances,
 } from "@/hooks/useAttendances";
-import { useMyProfile, type ProfileRow } from "@/hooks/useProfile";
+import { useMyProfile } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import linkbackLogo from "@/assets/linkback-logo.png";
@@ -120,12 +120,6 @@ const EventPage = () => {
       includeProfiles: true,
       enabled: canViewAttendees,
     });
-
-  const attendees = useMemo(() => {
-    return (attendeeRecords ?? [])
-      .map((record) => record.profiles)
-      .filter(Boolean) as ProfileRow[];
-  }, [attendeeRecords]);
 
   const eventCode = useMemo(() => {
     if (!event?.id) return "";
