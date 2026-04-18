@@ -41,6 +41,8 @@ Always use `.github/pull_request_template.md`. When using `gh pr create`, do not
 
 - Merge commits only (no squash, no rebase merge)
 - 1 approving review required
+- **Wait for Copilot Review:** Do not merge until Copilot has finished its review and all findings are addressed.
+- **No Admin Merge:** Do not use admin privileges to bypass CI or review requirements unless explicitly instructed by the user.
 - All conversations must be resolved
 - All required checks must pass (test, check-fixup)
 
