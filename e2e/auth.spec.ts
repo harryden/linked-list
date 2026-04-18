@@ -7,7 +7,9 @@ test.describe("Auth page", () => {
   });
 
   test("renders the sign-in card title", async ({ page }) => {
-    await expect(page.getByText(TEXT.auth.card.title)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: TEXT.auth.card.title }),
+    ).toBeVisible();
   });
 
   test("shows the LinkedIn sign-in button in its idle state", async ({

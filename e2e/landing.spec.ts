@@ -16,7 +16,9 @@ test.describe("Landing page", () => {
   });
 
   test("shows the 'How It Works' section", async ({ page }) => {
-    await expect(page.getByText(TEXT.landing.howItWorks.title)).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: TEXT.landing.howItWorks.title }),
+    ).toBeVisible();
   });
 
   test("has a link to the auth page for unauthenticated visitors", async ({
