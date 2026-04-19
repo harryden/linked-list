@@ -255,7 +255,8 @@ const EventHeader = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="col-start-3 self-start sm:self-center rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
+                  shape="pill"
+                  className="col-start-3 self-start sm:self-center h-10 w-10 flex-none shrink-0 justify-self-end"
                   aria-label={TEXT.event.header.options}
                 >
                   <MoreVertical className="h-5 w-5" aria-hidden="true" />
@@ -329,7 +330,10 @@ const EventHeader = ({
                 )}
               </div>
               <Button
-                className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
+                variant="outline-linkedin"
+                size="sm"
+                shape="pill"
+                className="flex items-center gap-2"
                 onClick={() => {
                   if (organizer.linkedin_id) {
                     window.open(
@@ -357,9 +361,10 @@ const EventHeader = ({
       {isOrganizer && onShowQr && (
         <Button
           onClick={onShowQr}
-          size="lg"
+          size="xl"
           variant="outline"
-          className="w-full rounded-full h-12 text-base font-medium"
+          shape="pill"
+          className="w-full"
         >
           <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
           {TEXT.common.buttons.viewQrCode}

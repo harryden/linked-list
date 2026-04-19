@@ -1,72 +1,63 @@
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Linkedin } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { TEXT } from "@/constants/text";
+import { Linkedin, CheckCircle2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface AttendButtonProps {
-  currentUserId: string | null;
-  isOrganizer: boolean;
   isAttending: boolean;
-  onCheckIn: () => void;
   isLoading: boolean;
-  mode?: "primary" | "linkedin";
-  className?: string;
-  redirectPath?: string;
+  isAuthenticated: boolean;
+  onAttend: () => void;
+  onAuthRedirect: () => void;
 }
 
 const AttendButton = ({
-  currentUserId,
-  isOrganizer,
   isAttending,
-  onCheckIn,
   isLoading,
-  mode = "primary",
-  className,
-  redirectPath,
+  isAuthenticated,
+  onAttend,
+  onAuthRedirect = () => {},
 }: AttendButtonProps) => {
-  if (isOrganizer || isAttending) {
-    return null;
+  const { t } = useTranslation();
+
+  if (isAttending) {
+    return (
+      <div className="flex items-center justify-center gap-2 text-success py-3 px-6 bg-success/10 rounded-full border border-success/20 animate-fade-in">
+        <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+        <span className="font-semibold text-lg">
+          {t("event.header.checkedIn")}
+        </span>
+      </div>
+    );
   }
 
-  const buttonClasses = cn(
-    "w-full rounded-full h-12 text-base font-medium transition-all hover:shadow-lg",
-    mode === "linkedin"
-      ? "bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin"
-      : "bg-primary text-primary-foreground shadow-glow-primary hover:bg-primary-hover",
-    className,
-  );
+  const handleClick = () => {
+    if (isAuthenticated) {
+      onAttend();
+    } else {
+      onAuthRedirect();
+    }
+  };
 
-  const buttonLabel =
-    mode === "linkedin"
-      ? isLoading
-        ? TEXT.event.attendButton.checkingIn
-        : TEXT.event.attendButton.checkInLinkedIn
-      : isLoading
-        ? TEXT.event.attendButton.checkingIn
-        : TEXT.event.attendButton.checkIn;
-
-  const button = (
+  return (
     <Button
-      onClick={currentUserId ? onCheckIn : undefined}
-      className={buttonClasses}
+      onClick={handleClick}
       disabled={isLoading}
+      variant={isAuthenticated ? "default" : "linkedin"}
+      size="xl"
+      shape="pill"
+      glow={isAuthenticated ? "primary" : "linkedin"}
+      className="w-full"
     >
-      {mode === "linkedin" && (
-        <Linkedin className="h-5 w-5" aria-hidden="true" />
+      {!isAuthenticated && (
+        <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
       )}
-      {buttonLabel}
+      {isLoading
+        ? t("event.attendButton.checkingIn")
+        : isAuthenticated
+          ? t("event.attendButton.checkIn")
+          : t("event.attendButton.checkInLinkedIn")}
     </Button>
   );
-
-  if (!currentUserId) {
-    const safeRedirectPath = redirectPath?.startsWith("/") ? redirectPath : "/";
-    const authLink = `/auth?redirect=${encodeURIComponent(safeRedirectPath)}`;
-
-    return <Link to={authLink}>{button}</Link>;
-  }
-
-  return button;
 };
 
 export default AttendButton;

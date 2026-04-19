@@ -35,7 +35,7 @@ describe("LocationAutocomplete behavior", () => {
     await user.type(screen.getByLabelText(/location/i), "Got");
 
     expect(
-      await screen.findByRole("button", {
+      await screen.findByRole("option", {
         name: /gothenburg, sweden/i,
       }),
     ).toBeInTheDocument();
@@ -51,13 +51,15 @@ describe("LocationAutocomplete behavior", () => {
 
     await user.type(input, "Goth");
 
-    const options = await screen.findAllByRole("button", {
+    // Wait for suggestions to appear
+    await screen.findAllByRole("option", {
       name: /sweden/i,
     });
 
-    await user.tab();
-    expect(document.activeElement).toBe(options[0]);
+    // Use arrow keys to select the first suggestion
+    await user.keyboard("{ArrowDown}");
 
+    // Press Enter to select
     await user.keyboard("{Enter}");
 
     await waitFor(() => {
@@ -67,7 +69,7 @@ describe("LocationAutocomplete behavior", () => {
     expect(onChange).toHaveBeenCalledWith("Gothenburg, Sweden");
     await waitFor(() => {
       expect(
-        screen.queryByRole("button", { name: /gothenburg, sweden/i }),
+        screen.queryByRole("option", { name: /gothenburg, sweden/i }),
       ).not.toBeInTheDocument();
     });
   });
@@ -79,7 +81,7 @@ describe("LocationAutocomplete behavior", () => {
 
     // Show suggestions first so there is something to clear
     await user.type(input, "Goth");
-    await screen.findByRole("button", { name: /gothenburg, sweden/i });
+    await screen.findByRole("option", { name: /gothenburg, sweden/i });
 
     // Next request aborts immediately (simulates the 5 s timeout firing)
     vi.spyOn(window, "fetch").mockRejectedValueOnce(
@@ -90,7 +92,7 @@ describe("LocationAutocomplete behavior", () => {
 
     await waitFor(() => {
       expect(
-        screen.queryByRole("button", { name: /gothenburg, sweden/i }),
+        screen.queryByRole("option", { name: /gothenburg, sweden/i }),
       ).not.toBeInTheDocument();
     });
 
@@ -105,14 +107,14 @@ describe("LocationAutocomplete behavior", () => {
     const input = screen.getByLabelText(/location/i);
 
     await user.type(input, "Goth");
-    await screen.findByRole("button", { name: /gothenburg, sweden/i });
+    await screen.findByRole("option", { name: /gothenburg, sweden/i });
 
     await user.clear(input);
     await user.type(input, "Go");
 
     await waitFor(() => {
       expect(
-        screen.queryByRole("button", { name: /gothenburg, sweden/i }),
+        screen.queryByRole("option", { name: /gothenburg, sweden/i }),
       ).not.toBeInTheDocument();
     });
   });

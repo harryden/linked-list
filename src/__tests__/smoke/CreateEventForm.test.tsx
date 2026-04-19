@@ -12,23 +12,38 @@ vi.mock("@/components/FormField", () => ({
       placeholder?: string;
       id?: string;
       error?: string;
+      children?: React.ReactNode;
     }
   >(
     (
-      { label, value, onChange, type, placeholder, id, error, ...props },
+      {
+        label,
+        value,
+        onChange,
+        type,
+        placeholder,
+        id,
+        error,
+        children,
+        ...props
+      },
       ref,
     ) => (
       <div data-testid={`field-${id}`}>
         {label && <label htmlFor={id}>{label}</label>}
-        <input
-          id={id}
-          type={type === "date" || type === "time" ? type : "text"}
-          value={value ?? ""}
-          placeholder={placeholder}
-          onChange={(e) => onChange(e.target.value)}
-          ref={ref}
-          {...props}
-        />
+        {children ? (
+          children
+        ) : (
+          <input
+            id={id}
+            type={type === "date" || type === "time" ? type : "text"}
+            value={value ?? ""}
+            placeholder={placeholder}
+            onChange={(e) => onChange(e.target.value)}
+            ref={ref}
+            {...props}
+          />
+        )}
         {error && <div role="alert">{error}</div>}
       </div>
     ),
@@ -37,7 +52,7 @@ vi.mock("@/components/FormField", () => ({
 
 import { renderWithProviders } from "@/test-utils/render";
 import { Route, Routes } from "react-router-dom";
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateEvent from "@/pages/CreateEvent";
 import { TEXT } from "@/constants/text";

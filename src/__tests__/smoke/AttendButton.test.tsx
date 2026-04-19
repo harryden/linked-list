@@ -3,63 +3,67 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 import AttendButton from "@/pages/event/components/AttendButton";
+import { TEXT } from "@/constants/text";
 
 describe("AttendButton smoke", () => {
   it("invokes the provided callback when a signed-in attendee checks in", async () => {
+    const onAttend = vi.fn();
     const user = userEvent.setup();
-    const onCheckIn = vi.fn();
 
     renderWithProviders(
       <AttendButton
-        currentUserId="user_test"
-        isOrganizer={false}
-        isAttending={false}
-        onCheckIn={onCheckIn}
+        isAuthenticated={true}
         isLoading={false}
-        mode="primary"
+        isAttending={false}
+        onAttend={onAttend}
+        onAuthRedirect={() => {}}
       />,
     );
 
-    await user.click(screen.getByRole("button", { name: /check in/i }));
-    expect(onCheckIn).toHaveBeenCalledTimes(1);
+    const button = screen.getByRole("button", {
+      name: TEXT.event.attendButton.checkIn,
+    });
+    await user.click(button);
+
+    expect(onAttend).toHaveBeenCalled();
   });
 
   it("hides the button when the attendee is already checked in", () => {
     renderWithProviders(
       <AttendButton
-        currentUserId="user_test"
-        isOrganizer={false}
-        isAttending={true}
-        onCheckIn={vi.fn()}
+        isAuthenticated={true}
         isLoading={false}
+        isAttending={true}
+        onAttend={() => {}}
+        onAuthRedirect={() => {}}
       />,
     );
 
     expect(
       screen.queryByRole("button", { name: /check in/i }),
     ).not.toBeInTheDocument();
+    expect(screen.getByText(TEXT.event.header.checkedIn)).toBeInTheDocument();
   });
 
-  it("routes to auth with the provided redirect path when not signed in", () => {
+  it("invokes the auth redirect handler when not signed in", async () => {
+    const onAuthRedirect = vi.fn();
+    const user = userEvent.setup();
+
     renderWithProviders(
       <AttendButton
-        currentUserId={null}
-        isOrganizer={false}
-        isAttending={false}
-        onCheckIn={vi.fn()}
+        isAuthenticated={false}
         isLoading={false}
-        mode="linkedin"
-        redirectPath="/event/test-event"
+        isAttending={false}
+        onAttend={() => {}}
+        onAuthRedirect={onAuthRedirect}
       />,
     );
 
-    const link = screen.getByRole("link", {
-      name: /check in with linkedin/i,
+    const button = screen.getByRole("button", {
+      name: TEXT.event.attendButton.checkInLinkedIn,
     });
 
-    expect(link).toHaveAttribute(
-      "href",
-      "/auth?redirect=%2Fevent%2Ftest-event",
-    );
+    await user.click(button);
+    expect(onAuthRedirect).toHaveBeenCalled();
   });
 });

@@ -39,20 +39,13 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
           {isAuthenticated ? (
             <>
               <Link to="/join-event">
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg"
-                >
+                <Button size="xl" shape="pill" glow="primary">
                   <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.joinButton")}
                 </Button>
               </Link>
               <Link to="/create-event">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
+                <Button size="xl" variant="outline" shape="pill">
                   <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.hostButton")}
                 </Button>
@@ -62,19 +55,17 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
             <>
               <Link to="/auth">
                 <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+                  size="xl"
+                  variant="linkedin"
+                  shape="pill"
+                  glow="linkedin"
                 >
                   <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.signInButton")}
                 </Button>
               </Link>
               <Link to="/demo">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
-                >
+                <Button size="xl" variant="outline" shape="pill">
                   {t("landing.hero.demoButton")}
                 </Button>
               </Link>

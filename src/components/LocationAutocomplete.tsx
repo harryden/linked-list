@@ -17,6 +17,7 @@ interface LocationAutocompleteProps {
   onChange: (value: string) => void;
   placeholder?: string;
   id?: string;
+  error?: boolean;
 }
 
 export const LocationAutocomplete = ({
@@ -24,12 +25,15 @@ export const LocationAutocomplete = ({
   onChange,
   placeholder = TEXT.locationAutocomplete.placeholder,
   id,
+  error,
 }: LocationAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const debounceTimer = useRef<NodeJS.Timeout>();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const listboxId = id ? `${id}-listbox` : "location-listbox";
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -69,6 +73,7 @@ export const LocationAutocomplete = ({
         const data = await response.json();
         setSuggestions(data);
         setShowSuggestions(true);
+        setActiveIndex(-1);
       }
     } catch (error) {
       if (error instanceof Error && error.name === "AbortError") {
@@ -99,6 +104,39 @@ export const LocationAutocomplete = ({
     onChange(suggestion.display_name);
     setShowSuggestions(false);
     setSuggestions([]);
+    setActiveIndex(-1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSuggestions || suggestions.length === 0) return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        setActiveIndex((prev) =>
+          prev < suggestions.length - 1 ? prev + 1 : 0,
+        );
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        setActiveIndex((prev) =>
+          prev > 0 ? prev - 1 : suggestions.length - 1,
+        );
+        break;
+      case "Enter":
+        if (activeIndex >= 0) {
+          e.preventDefault();
+          handleSelectSuggestion(suggestions[activeIndex]);
+        }
+        break;
+      case "Escape":
+        setShowSuggestions(false);
+        setActiveIndex(-1);
+        break;
+      case "Tab":
+        setShowSuggestions(false);
+        break;
+    }
   };
 
   return (
@@ -111,11 +149,17 @@ export const LocationAutocomplete = ({
         <Input
           id={id}
           type="text"
+          role="combobox"
+          aria-autocomplete="list"
+          aria-expanded={showSuggestions && suggestions.length > 0}
+          aria-haspopup="listbox"
+          aria-controls={listboxId}
           placeholder={placeholder}
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}
+          onKeyDown={handleKeyDown}
           onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-          className="pl-10"
+          className={cn("pl-10", error && "border-destructive")}
         />
         {isLoading && (
           <div
@@ -132,16 +176,23 @@ export const LocationAutocomplete = ({
       </div>
 
       {showSuggestions && suggestions.length > 0 && (
-        <div className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-auto">
-          {suggestions.map((suggestion) => (
+        <div
+          id={listboxId}
+          role="listbox"
+          className="absolute z-50 w-full mt-1 bg-background border border-border rounded-md shadow-lg max-h-60 overflow-auto"
+        >
+          {suggestions.map((suggestion, index) => (
             <button
               key={suggestion.place_id}
+              role="option"
+              aria-selected={index === activeIndex}
               aria-label={suggestion.display_name}
               type="button"
               onClick={() => handleSelectSuggestion(suggestion)}
               className={cn(
-                "w-full text-left px-4 py-3 hover:bg-accent transition-colors",
+                "w-full text-left px-4 py-3 transition-colors",
                 "flex items-start gap-3 border-b last:border-0",
+                index === activeIndex ? "bg-accent" : "hover:bg-accent",
               )}
             >
               <MapPin

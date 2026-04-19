@@ -161,7 +161,9 @@ const JoinEvent = () => {
                 <Link to={`/event/${ownEventSlug}`}>
                   <Button
                     type="button"
-                    className="w-full h-12 text-base font-medium rounded-full"
+                    size="xl"
+                    shape="pill"
+                    className="w-full"
                   >
                     {TEXT.joinEvent.form.goToEvent}
                   </Button>
@@ -169,7 +171,9 @@ const JoinEvent = () => {
               ) : (
                 <Button
                   type="submit"
-                  className="w-full h-12 text-base font-medium rounded-full"
+                  size="xl"
+                  shape="pill"
+                  className="w-full"
                   disabled={isLoading}
                 >
                   {isLoading

@@ -60,7 +60,7 @@ const Landing = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button variant="ghost" size="icon" shape="pill">
                   <Languages className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -77,17 +77,14 @@ const Landing = () => {
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button
-                    variant="ghost"
-                    className="rounded-full text-sm sm:text-base"
-                  >
+                  <Button variant="ghost" shape="pill">
                     {t("common.buttons.myEvents")}
                   </Button>
                 </Link>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
+                  shape="pill"
                   onClick={handleSignOut}
                   aria-label={TEXT.common.buttons.signOut}
                 >
@@ -96,10 +93,7 @@ const Landing = () => {
               </>
             ) : (
               <Link to="/auth">
-                <Button
-                  variant="ghost"
-                  className="rounded-full shadow-glow-linkedin hover:shadow-lg text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
-                >
+                <Button variant="outline-linkedin" shape="pill" glow="linkedin">
                   {t("common.buttons.signInWithLinkedIn")}
                 </Button>
               </Link>

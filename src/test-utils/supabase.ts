@@ -17,6 +17,10 @@ type QueryStub = {
   update: any;
   delete: any;
   eq: any;
+  neq: any;
+  gte: any;
+  lte: any;
+  or: any;
   order: any;
   limit: any;
   range: any;
@@ -42,6 +46,10 @@ export const createQueryStub = (overrides?: QueryOverrides): QueryStub => {
   query.update = vi.fn().mockReturnValue(query);
   query.delete = vi.fn().mockReturnValue(query);
   query.eq = vi.fn().mockReturnValue(query);
+  query.neq = vi.fn().mockReturnValue(query);
+  query.gte = vi.fn().mockReturnValue(query);
+  query.lte = vi.fn().mockReturnValue(query);
+  query.or = vi.fn().mockReturnValue(query);
   query.order = vi.fn().mockReturnValue(query);
   query.limit = vi.fn().mockReturnValue(query);
   query.range = vi.fn().mockReturnValue(query);

@@ -48,37 +48,37 @@ const CreateEventForm = ({
           render={({ field }) => (
             <FormField
               id="name"
-              label={TEXT.createEvent.form.fields.nameLabel}
+              label={TEXT.createEvent.form.fields.nameLabel.replace(" *", "")}
               placeholder={TEXT.createEvent.form.fields.namePlaceholder}
               value={field.value}
               onChange={field.onChange}
               onBlur={field.onBlur}
               ref={field.ref}
               error={errors.name?.message}
+              required
             />
           )}
         />
 
-        <div className="space-y-2">
-          <label
-            htmlFor="location"
-            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-          >
-            {TEXT.createEvent.form.fields.locationLabel}
-          </label>
-          <Controller
-            name="location"
-            control={control}
-            render={({ field }) => (
+        <Controller
+          name="location"
+          control={control}
+          render={({ field }) => (
+            <FormField
+              id="location"
+              label={TEXT.createEvent.form.fields.locationLabel}
+              error={errors.location?.message}
+            >
               <LocationAutocomplete
                 id="location"
                 value={field.value ?? ""}
                 onChange={field.onChange}
                 placeholder={TEXT.createEvent.form.fields.locationPlaceholder}
+                error={!!errors.location}
               />
-            )}
-          />
-        </div>
+            </FormField>
+          )}
+        />
 
         <Controller
           name="eventDate"
@@ -150,7 +150,10 @@ const CreateEventForm = ({
         />
         <Button
           type="submit"
-          className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary"
+          size="xl"
+          shape="pill"
+          glow="primary"
+          className="w-full"
           disabled={isSubmitting}
         >
           {isSubmitting

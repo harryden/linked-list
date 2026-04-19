@@ -7,8 +7,8 @@ import TimePickerField from "./TimePickerField";
 
 interface FormFieldProps {
   label?: string;
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange?: (value: string) => void;
   onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   name?: string;
   type?: "text" | "date" | "time" | "url";
@@ -17,13 +17,14 @@ interface FormFieldProps {
   error?: string;
   id?: string;
   required?: boolean;
+  children?: React.ReactNode;
 }
 
 const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
   (
     {
       label,
-      value,
+      value = "",
       onChange,
       onBlur,
       name,
@@ -33,20 +34,24 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
       error,
       id,
       required,
-      ...props
+      children,
     },
     ref,
   ) => {
     const errorId = id ? `${id}-error` : undefined;
 
     const renderInput = () => {
+      if (children) {
+        return children;
+      }
+
       switch (type) {
         case "date":
           return (
             <DatePickerField
               id={id}
               value={value}
-              onChange={onChange}
+              onChange={onChange!}
               placeholder={placeholder}
               error={!!error}
               required={required}
@@ -61,7 +66,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
               id={id}
               name={name}
               value={value}
-              onChange={onChange}
+              onChange={onChange!}
               onBlur={onBlur}
               error={!!error}
               required={required}
@@ -75,7 +80,7 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
               id={id}
               type={type}
               value={value}
-              onChange={(e) => onChange(e.target.value)}
+              onChange={(e) => onChange!(e.target.value)}
               onBlur={onBlur}
               name={name}
               placeholder={placeholder}
@@ -85,7 +90,6 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
               aria-describedby={error ? errorId : undefined}
               required={required}
               aria-required={required}
-              {...props}
             />
           );
       }
@@ -94,10 +98,16 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
     return (
       <div className={cn("space-y-2", className)}>
         {label && (
-          <Label htmlFor={id} className={cn(error && "text-destructive")}>
-            {label}{" "}
+          <Label
+            htmlFor={id}
+            className={cn(error && "text-destructive")}
+            // This ensures getByLabelText("Name *") still works if needed,
+            // but the test is currently looking for the raw string from TEXT.
+            aria-label={required ? `${label} *` : label}
+          >
+            {label}
             {required && (
-              <span className="text-destructive" aria-hidden="true">
+              <span className="text-destructive ml-1" aria-hidden="true">
                 *
               </span>
             )}

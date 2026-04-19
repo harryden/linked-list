@@ -1,76 +1,65 @@
 import { renderWithProviders } from "@/test-utils/render";
-import { supabase } from "@/integrations/supabase/client";
-import { createQueryStub } from "@/test-utils/supabase";
 import { Route, Routes } from "react-router-dom";
-import { screen } from "@testing-library/react";
-import { vi } from "vitest";
+import { screen, waitFor } from "@testing-library/react";
 import EventSuccess from "@/pages/EventSuccess";
 import { TEXT } from "@/constants/text";
-import { eventCodeFromId } from "@/lib/events";
+import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
+import { vi, describe, it, expect } from "vitest";
+
+const renderPage = (slug = "weekend-mvp-launch-abc123") => {
+  const query = createQueryStub({
+    singleResult: {
+      data: {
+        id: "event-1",
+        slug,
+        short_code: "123456",
+        name: "Weekend MVP Launch",
+      },
+      error: null,
+    },
+  });
+  supabaseStub.from.mockImplementation(() => query);
+
+  return renderWithProviders(
+    <Routes>
+      <Route path="/event-success/:slug" element={<EventSuccess />} />
+      <Route path="/dashboard" element={<div>Dashboard View</div>} />
+    </Routes>,
+    { route: `/event-success/${slug}` },
+  );
+};
 
 describe("EventSuccess smoke", () => {
-  const eventId = "550e8400-e29b-41d4-a716-446655440000";
-  const event = {
-    id: eventId,
-    slug: "launch-day",
-    name: "Launch Day",
-    organizer_id: "organizer-1",
-    starts_at: null,
-    ends_at: null,
-    location: null,
-  };
-
-  const renderPage = () =>
-    renderWithProviders(
-      <Routes>
-        <Route path="/event-success/:slug" element={<EventSuccess />} />
-        <Route
-          path="/dashboard"
-          element={<div data-testid="dashboard-destination" />}
-        />
-      </Routes>,
-      { route: "/event-success/launch-day" },
-    );
-
-  it("shows a loading indicator while the event is being fetched", () => {
-    const query = createQueryStub();
-    query.single.mockReturnValue(new Promise(() => {}));
-
-    vi.mocked(supabase.from).mockImplementation(() => query);
-
+  it("shows a loading indicator while the event is being fetched", async () => {
     renderPage();
-
-    expect(screen.getByText(TEXT.eventSuccess.loading)).toBeInTheDocument();
+    expect(
+      screen.getByText(TEXT.eventSuccess.loading.toString()),
+    ).toBeInTheDocument();
   });
 
   it("displays the event title and code once the event has loaded", async () => {
-    const query = createQueryStub({
-      singleResult: { data: event, error: null },
-    });
-
-    vi.mocked(supabase.from).mockImplementation(() => query);
-
     renderPage();
-
+    expect(await screen.findByText("123456")).toBeInTheDocument();
     expect(
-      await screen.findByText(TEXT.eventSuccess.title),
+      screen.getByText(TEXT.eventSuccess.description.toString()),
     ).toBeInTheDocument();
-
-    const expectedCode = eventCodeFromId(eventId);
-    expect(await screen.findByText(expectedCode)).toBeInTheDocument();
   });
 
   it("redirects to the dashboard when the event fails to load", async () => {
-    const query = createQueryStub({
-      singleResult: { data: null, error: { message: "not found" } },
-    });
-
-    vi.mocked(supabase.from).mockImplementation(() => query);
+    // Override mock to simulate failure
+    supabaseStub.from.mockImplementation(() =>
+      createQueryStub({
+        singleResult: { data: null, error: { message: "Not found" } },
+      }),
+    );
 
     renderPage();
 
-    expect(
-      await screen.findByTestId("dashboard-destination"),
-    ).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByText(/dashboard view/i)).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
   });
 });

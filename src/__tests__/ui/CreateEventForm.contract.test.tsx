@@ -31,7 +31,6 @@ const FormHarness = ({
   onSubmit?: ReturnType<typeof vi.fn>;
 }) => {
   const {
-    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -42,7 +41,6 @@ const FormHarness = ({
 
   return (
     <CreateEventForm
-      register={register}
       control={control}
       errors={errors}
       isSubmitting={isSubmitting}
@@ -65,9 +63,12 @@ describe("CreateEventForm contract", () => {
     expect(
       screen.getByRole("button", { name: TEXT.createEvent.form.submitIdle }),
     ).toBeEnabled();
+
+    // Use getByRole to be specific and avoid the ambiguity between label and input
     expect(
-      screen.getByLabelText(TEXT.createEvent.form.fields.nameLabel),
+      screen.getByRole("textbox", { name: /event name/i }),
     ).toBeInTheDocument();
+
     expect(
       screen.getByPlaceholderText(
         TEXT.createEvent.form.fields.locationPlaceholder,

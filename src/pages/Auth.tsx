@@ -94,8 +94,11 @@ const Auth = () => {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              size="lg"
-              className="w-full rounded-full h-12 text-base font-medium bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+              variant="linkedin"
+              size="xl"
+              shape="pill"
+              glow="linkedin"
+              className="w-full"
             >
               {isLoading ? (
                 <>
