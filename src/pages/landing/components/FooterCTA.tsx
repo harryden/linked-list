@@ -45,43 +45,42 @@ const FooterCTA = () => {
         >
           {t("landing.footerCta.description")}
         </p>
-        <Link to="/auth" style={{ textDecoration: "none" }}>
-          <button
+        <Link
+          to="/auth"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            background: "#fff",
+            color: "#111",
+            fontSize: 16,
+            fontWeight: 700,
+            padding: "14px 28px",
+            borderRadius: 32,
+            textDecoration: "none",
+            cursor: "pointer",
+            fontFamily: "var(--font-brand)",
+            letterSpacing: "-0.01em",
+            boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+          }}
+        >
+          <span
             style={{
+              width: 20,
+              height: 20,
+              background: "#0a66c2",
+              borderRadius: 4,
               display: "inline-flex",
               alignItems: "center",
-              gap: 10,
-              background: "#fff",
-              color: "#111",
-              fontSize: 16,
-              fontWeight: 700,
-              padding: "14px 28px",
-              borderRadius: 32,
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "var(--font-brand)",
-              letterSpacing: "-0.01em",
-              boxShadow: "0 8px 32px rgba(0,0,0,0.25)",
+              justifyContent: "center",
+              fontSize: 11,
+              fontWeight: 900,
+              color: "#fff",
             }}
           >
-            <span
-              style={{
-                width: 20,
-                height: 20,
-                background: "#0a66c2",
-                borderRadius: 4,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 11,
-                fontWeight: 900,
-                color: "#fff",
-              }}
-            >
-              in
-            </span>
-            {t("common.buttons.signInWithLinkedIn")}
-          </button>
+            in
+          </span>
+          {t("common.buttons.signInWithLinkedIn")}
         </Link>
         <p
           style={{
@@ -90,7 +89,7 @@ const FooterCTA = () => {
             fontFamily: "var(--font-brand)",
           }}
         >
-          © 2026 LinkBack
+          {t("common.copy.footer")}
         </p>
       </div>
     </section>
