@@ -8,6 +8,7 @@ export const profileQueryKey = (userId?: string) => ["profile", userId];
 
 export const fetchProfile = async (
   userId: string,
+  retryCount = 0,
 ): Promise<ProfileRow | null> => {
   const { data, error } = await supabase
     .from("profiles")
@@ -17,6 +18,13 @@ export const fetchProfile = async (
 
   if (error) {
     throw error;
+  }
+
+  // If profile doesn't exist yet, retry once after a short delay
+  // This handles the race condition with the Supabase Auth -> Profiles trigger
+  if (!data && retryCount < 1) {
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    return fetchProfile(userId, retryCount + 1);
   }
 
   return data ?? null;
