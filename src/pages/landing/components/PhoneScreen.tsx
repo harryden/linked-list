@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import PhoneStatusBar from "./PhoneStatusBar";
 import QRCodePreview from "@/components/QRCodePreview";
+import { getBaseUrl } from "@/lib/urls";
 
 const IOS_FONT =
   '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif';
@@ -25,54 +27,57 @@ const ATTENDEES = [
 
 const StepBlank = () => <div style={{ flex: 1, background: "#fff" }} />;
 
-const StepQR = () => (
-  <div
-    style={{
-      flex: 1,
-      background: "#fff",
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      justifyContent: "center",
-      gap: 10,
-      padding: "12px 16px",
-      fontFamily: IOS_FONT,
-    }}
-  >
-    <span
-      style={{
-        fontSize: 8,
-        fontWeight: 600,
-        letterSpacing: "0.12em",
-        textTransform: "uppercase",
-        color: "#999",
-        alignSelf: "flex-start",
-      }}
-    >
-      Check in
-    </span>
+const StepQR = () => {
+  const authUrl = `${getBaseUrl()}/auth`;
+
+  return (
     <div
       style={{
+        flex: 1,
         background: "#fff",
-        border: "1px solid #eee",
-        borderRadius: 10,
-        padding: 8,
-        boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+        padding: "12px 16px",
+        fontFamily: IOS_FONT,
       }}
     >
-      <QRCodePreview
-        value="https://linkback.app/auth"
-        size={90}
-        className="!p-0 !shadow-none !rounded-none !bg-transparent"
-        imageClassName="!h-[90px] !w-[90px]"
-      />
+      <span
+        style={{
+          fontSize: 8,
+          fontWeight: 600,
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: "#999",
+          alignSelf: "flex-start",
+        }}
+      >
+        Check in
+      </span>
+      <div
+        style={{
+          background: "#fff",
+          border: "1px solid #eee",
+          borderRadius: 10,
+          padding: 8,
+          boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
+        }}
+      >
+        <QRCodePreview
+          value={authUrl}
+          size={90}
+          className="!p-0 !shadow-none !rounded-none !bg-transparent"
+          imageClassName="!h-[90px] !w-[90px]"
+        />
+      </div>
+      <span style={{ fontSize: 9.5, fontWeight: 700, color: "#111" }}>
+        Scan to sign in
+      </span>
     </div>
-    <span style={{ fontSize: 9.5, fontWeight: 700, color: "#111" }}>
-      Scan to sign in
-    </span>
-    <span style={{ fontSize: 8, color: "#aaa" }}>linkback.app/auth</span>
-  </div>
-);
+  );
+};
 
 const StepAttendees = () => (
   <div
@@ -215,6 +220,7 @@ const StepAttendees = () => (
 );
 
 const StepCTA = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   return (
@@ -241,9 +247,7 @@ const StepCTA = () => {
           letterSpacing: "-0.03em",
         }}
       >
-        Host smarter
-        <br />
-        events.
+        {t("landing.phoneScreen.heading")}
       </div>
       <div
         style={{
@@ -254,9 +258,9 @@ const StepCTA = () => {
           maxWidth: 110,
         }}
       >
-        LinkedIn-verified check-ins. Real profiles. No fake attendees.
+        {t("landing.phoneScreen.subheading")}
       </div>
-      <div
+      <button
         onClick={() => navigate("/auth")}
         style={{
           background: "linear-gradient(135deg,#5606ff,#8b35ff)",
@@ -268,16 +272,13 @@ const StepCTA = () => {
           letterSpacing: "-0.01em",
           boxShadow: "0 4px 16px rgba(86,6,255,0.4)",
           cursor: "pointer",
+          border: "none",
         }}
       >
-        Get started free
-      </div>
-      <div
-        onClick={() =>
-          document
-            .querySelector("#how-it-works")
-            ?.scrollIntoView({ behavior: "smooth" })
-        }
+        {t("landing.phoneScreen.getStarted")}
+      </button>
+      <a
+        href="#how-it-works"
         style={{
           fontSize: 8,
           color: "#bbb",
@@ -286,8 +287,8 @@ const StepCTA = () => {
           cursor: "pointer",
         }}
       >
-        See how it works →
-      </div>
+        {t("landing.phoneScreen.scrollCta")}
+      </a>
     </div>
   );
 };
