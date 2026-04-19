@@ -2,7 +2,7 @@ export const TEXT = {
   common: {
     brand: "LinkBack",
     copy: {
-      footer: "© 2025 LinkBack. Powered by LinkedIn.",
+      footer: "© 2026 LinkBack",
     },
     buttons: {
       signInWithLinkedIn: "Sign in with LinkedIn",
@@ -115,6 +115,19 @@ export const TEXT = {
     footerCta: {
       title: "Ready to simplify your events?",
       description: "Start building verified attendee lists today.",
+    },
+    floatingCta: {
+      headline: "Check in.",
+      headlineOutline: "Stand out.",
+      tagline: "LinkedIn-verified attendance for events that matter.",
+      scrollCta: "See how it works →",
+    },
+    phoneScreen: {
+      heading: "Host smarter events.",
+      subheading:
+        "LinkedIn-verified check-ins. Real profiles. No fake attendees.",
+      getStarted: "Get started free",
+      scrollCta: "See how it works →",
     },
   },
   dashboard: {
