@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-import GradientBackground from "./landing/components/GradientBackground";
+const GradientBackground = lazy(
+  () => import("./landing/components/GradientBackground"),
+);
 import LandingNav from "./landing/components/LandingNav";
 import HeroSection from "./landing/components/HeroSection";
 import HowItWorks from "./landing/components/HowItWorks";
@@ -37,7 +39,9 @@ const Landing = () => {
         } as React.CSSProperties
       }
     >
-      <GradientBackground />
+      <Suspense fallback={null}>
+        <GradientBackground />
+      </Suspense>
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <LandingNav user={user} onSignOut={handleSignOut} />
