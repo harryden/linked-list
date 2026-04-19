@@ -1,5 +1,12 @@
 # Contributing
 
+## Our Team
+
+This project is a collaborative effort by:
+
+- **Harry Denell** (@harryden) - Lead Developer & Architect
+- **Teodor** (@Teodor) - Core Contributor
+
 ## Workflow
 
 1. Branch from latest main: `feature/<descriptive-name>` or `chore/<descriptive-name>`
