@@ -19,6 +19,9 @@ interface DatePickerFieldProps {
   placeholder?: string;
   className?: string;
   id?: string;
+  error?: boolean;
+  required?: boolean;
+  "aria-describedby"?: string;
 }
 
 const DatePickerField = ({
@@ -27,6 +30,9 @@ const DatePickerField = ({
   placeholder,
   className,
   id,
+  error,
+  required,
+  "aria-describedby": ariaDescribedby,
 }: DatePickerFieldProps) => {
   const [open, setOpen] = useState(false);
 
@@ -49,12 +55,17 @@ const DatePickerField = ({
       <PopoverTrigger asChild>
         <Button
           id={id}
+          type="button"
           variant="outline"
           className={cn(
             "w-full justify-between text-left font-normal",
             !selectedDate && "text-muted-foreground",
+            error && "border-destructive",
             className,
           )}
+          aria-invalid={error}
+          aria-describedby={ariaDescribedby}
+          aria-required={required}
         >
           <span>{formatted || placeholder || "Select date"}</span>
           <Calendar
