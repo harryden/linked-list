@@ -107,6 +107,8 @@ const AuthCallback = () => {
     profileError,
     redirectPath,
     userId,
+    toast,
+    _profile?.name,
   ]);
 
   return (
