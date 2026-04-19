@@ -137,6 +137,11 @@ export default {
               "drop-shadow(0 0 10px rgba(30,10,60,0.6)) drop-shadow(0 0 40px rgba(30,10,60,0.3))",
           },
         },
+        "color-cast-overlay": {
+          "0%, 100%": { background: "rgba(86,6,255,0.25)" },
+          "40%": { background: "rgba(254,137,137,0.25)" },
+          "70%": { background: "rgba(20,5,40,0.05)" },
+        },
         "scroll-pulse": {
           "0%, 100%": { opacity: "0.25" },
           "50%": { opacity: "1" },
@@ -149,6 +154,7 @@ export default {
         "fade-in": "fade-in 0.5s ease-out",
         "border-glow": "border-glow 3s ease-in-out infinite",
         "color-cast": "color-cast 8s ease-in-out infinite",
+        "color-cast-overlay": "color-cast-overlay 8s ease-in-out infinite",
         "scroll-pulse": "scroll-pulse 1.5s ease-in-out infinite",
       },
       fontFamily: {

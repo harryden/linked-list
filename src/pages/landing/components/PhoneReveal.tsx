@@ -33,8 +33,23 @@ const PhoneReveal = ({ phaseA, step }: PhoneRevealProps) => {
           src={phoneHandImg}
           alt=""
           aria-hidden="true"
-          className="animate-color-cast"
           style={{ height: "100%", width: "auto", display: "block" }}
+        />
+
+        <div
+          className="animate-color-cast-overlay"
+          style={{
+            position: "absolute",
+            inset: 0,
+            mixBlendMode: "color",
+            pointerEvents: "none",
+            maskImage: `url(${phoneHandImg})`,
+            maskSize: "100% 100%",
+            maskRepeat: "no-repeat",
+            WebkitMaskImage: `url(${phoneHandImg})`,
+            WebkitMaskSize: "100% 100%",
+            WebkitMaskRepeat: "no-repeat",
+          }}
         />
 
         <div
