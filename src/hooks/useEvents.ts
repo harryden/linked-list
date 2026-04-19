@@ -170,11 +170,11 @@ export const useCreateEvent = () => {
 
       return data;
     },
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    onSuccess: async (_data, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ["events"] });
+      await queryClient.invalidateQueries({ queryKey: ["my-events"] });
       if (variables.organizer_id) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ["my-events", variables.organizer_id],
         });
       }
@@ -204,16 +204,16 @@ export const useUpdateEvent = () => {
 
       return data;
     },
-    onSuccess: (updatedEvent) => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      queryClient.invalidateQueries({ queryKey: ["my-events"] });
+    onSuccess: async (updatedEvent) => {
+      await queryClient.invalidateQueries({ queryKey: ["events"] });
+      await queryClient.invalidateQueries({ queryKey: ["my-events"] });
       if (updatedEvent.id) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: eventQueryKey({ id: updatedEvent.id }),
         });
       }
       if (updatedEvent.organizer_id) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ["my-events", updatedEvent.organizer_id],
         });
       }
@@ -239,10 +239,10 @@ export const useDeleteEvent = () => {
 
       return (data ?? null) as DeletedEventRecord | null;
     },
-    onSuccess: (deletedEvent, variables) => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
-      queryClient.invalidateQueries({ queryKey: ["my-events"] });
-      queryClient.invalidateQueries({
+    onSuccess: async (deletedEvent, variables) => {
+      await queryClient.invalidateQueries({ queryKey: ["events"] });
+      await queryClient.invalidateQueries({ queryKey: ["my-events"] });
+      await queryClient.invalidateQueries({
         queryKey: eventQueryKey({ id: variables.eventId }),
       });
       const slugToInvalidate = deletedEvent?.slug ?? variables.eventSlug;
@@ -250,18 +250,18 @@ export const useDeleteEvent = () => {
         deletedEvent?.organizer_id ?? variables.organizerId ?? undefined;
 
       if (slugToInvalidate) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: eventQueryKey({ slug: slugToInvalidate }),
         });
       }
 
       if (organizerId) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: ["my-events", organizerId],
         });
       }
 
-      queryClient.invalidateQueries({ queryKey: ["attendances"] });
+      await queryClient.invalidateQueries({ queryKey: ["attendances"] });
     },
   });
 };
