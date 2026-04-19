@@ -101,7 +101,7 @@ export const useRealtimeAttendances = (eventId?: string) => {
           filter: `event_id=eq.${eventId}`,
         },
         () => {
-          queryClient.invalidateQueries({
+          void queryClient.invalidateQueries({
             queryKey: ["attendances"],
           });
         },
@@ -166,8 +166,8 @@ export const useJoinEvent = () => {
         throw error;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["attendances"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["attendances"] });
     },
   });
 };
@@ -187,8 +187,8 @@ export const useLeaveEvent = () => {
         throw error;
       }
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["attendances"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["attendances"] });
     },
   });
 };
