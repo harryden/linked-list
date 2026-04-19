@@ -1,9 +1,9 @@
 import { createRoot } from "react-dom/client";
-import Lenis from "lenis";
 import App from "./App.tsx";
 import "./index.css";
 import "./lib/i18n";
 import { logger } from "@/lib/logger";
+import { lenis } from "@/lib/lenis";
 
 window.addEventListener("unhandledrejection", (event) => {
   logger.error(event.reason, { category: "GlobalUnhandledRejection" });
@@ -14,10 +14,9 @@ window.addEventListener("error", (event) => {
 });
 
 if (location.pathname.startsWith("/event/")) {
+  // Non-critical preload — ignore failures, the route will load on demand
   import("./pages/EventPage").catch(() => {});
 }
-
-const lenis = new Lenis({ lerp: 0.06 });
 
 function raf(time: number) {
   lenis.raf(time);

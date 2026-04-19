@@ -1,4 +1,5 @@
 import { useState, useEffect, RefObject } from "react";
+import { lenis } from "@/lib/lenis";
 
 interface ScrollProgress {
   phaseA: number;
@@ -19,13 +20,12 @@ export function useScrollProgress(
   });
 
   useEffect(() => {
-    const onScroll = () => {
+    const onScroll = ({ scroll }: { scroll: number }) => {
       const container = containerRef.current;
       if (!container) return;
 
-      const containerTop =
-        container.getBoundingClientRect().top + window.scrollY;
-      const scrolled = window.scrollY - containerTop;
+      const containerTop = container.getBoundingClientRect().top + lenis.scroll;
+      const scrolled = scroll - containerTop;
       const vh = window.innerHeight;
 
       const phaseAHeight = PHASE_A_VH * (vh / 100);
@@ -51,9 +51,9 @@ export function useScrollProgress(
       });
     };
 
-    window.addEventListener("scroll", onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
+    lenis.on("scroll", onScroll);
+    onScroll({ scroll: lenis.scroll });
+    return () => lenis.off("scroll", onScroll);
   }, [containerRef]);
 
   return progress;
