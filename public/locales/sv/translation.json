@@ -2,7 +2,7 @@
   "common": {
     "brand": "LinkBack",
     "copy": {
-      "footer": "© 2025 LinkBack. Drivs av LinkedIn."
+      "footer": "© 2026 LinkBack. Inloggning via LinkedIn."
     },
     "buttons": {
       "signInWithLinkedIn": "Logga in med LinkedIn",
@@ -101,6 +101,18 @@
     "footerCta": {
       "title": "Redo att förenkla dina event?",
       "description": "Börja bygga verifierade deltagarlistor idag."
+    },
+    "floatingCta": {
+      "headline": "Checka in.",
+      "headlineOutline": "Stick ut.",
+      "tagline": "LinkedIn-verifierad närvaro för event som räknas.",
+      "scrollCta": "Se hur det fungerar →"
+    },
+    "phoneScreen": {
+      "heading": "Arrangera smartare event.",
+      "subheading": "LinkedIn-verifierade incheckningar. Riktiga profiler. Inga falska deltagare.",
+      "getStarted": "Kom igång gratis",
+      "scrollCta": "Se hur det fungerar →"
     }
   },
   "dashboard": {
