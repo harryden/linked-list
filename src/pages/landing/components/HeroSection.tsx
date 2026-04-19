@@ -18,6 +18,7 @@ const HeroSection = () => {
         }}
       >
         <h1
+          aria-hidden={showFloatingCTA}
           style={{
             position: "absolute",
             left: "5%",
