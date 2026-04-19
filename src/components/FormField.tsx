@@ -1,24 +1,15 @@
-import { useMemo, useState, useEffect, forwardRef } from "react";
-import { DayPicker } from "react-day-picker";
-import { format, parseISO } from "date-fns";
-import { Calendar, Clock } from "lucide-react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
+import { forwardRef } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
-
-import "@/styles/pickers.css";
+import DatePickerField from "./DatePickerField";
+import TimePickerField from "./TimePickerField";
 
 interface FormFieldProps {
   label?: string;
   value: string;
   onChange: (value: string) => void;
-  onBlur?: (e: React.FocusEvent<any>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void;
   name?: string;
   type?: "text" | "date" | "time" | "url";
   placeholder?: string;
@@ -27,17 +18,6 @@ interface FormFieldProps {
   id?: string;
   required?: boolean;
 }
-
-const normalizeTime = (value: string) => {
-  if (!value) return "";
-  const segments = value.split(":");
-  if (segments.length >= 2) {
-    const hours = segments[0].padStart(2, "0").slice(0, 2);
-    const minutes = segments[1].padStart(2, "0").slice(0, 2);
-    return `${hours}:${minutes}`;
-  }
-  return value;
-};
 
 const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
   (
@@ -57,107 +37,36 @@ const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
     },
     ref,
   ) => {
-    const [open, setOpen] = useState(false);
-    const [internalTime, setInternalTime] = useState(() =>
-      normalizeTime(value),
-    );
-
-    useEffect(() => {
-      if (type === "time") {
-        setInternalTime(normalizeTime(value));
-      }
-    }, [value, type]);
-
-    const selectedDate = useMemo(() => {
-      if (type !== "date" || !value) return undefined;
-      try {
-        return parseISO(value);
-      } catch {
-        return undefined;
-      }
-    }, [value, type]);
-
-    const formattedDate = selectedDate
-      ? format(selectedDate, "MMMM d, yyyy")
-      : "";
-
     const errorId = id ? `${id}-error` : undefined;
 
     const renderInput = () => {
       switch (type) {
         case "date":
           return (
-            <Popover open={open} onOpenChange={setOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  id={id}
-                  type="button"
-                  variant="outline"
-                  className={cn(
-                    "w-full justify-between text-left font-normal",
-                    !selectedDate && "text-muted-foreground",
-                    error && "border-destructive",
-                  )}
-                  aria-invalid={!!error}
-                  aria-describedby={error ? errorId : undefined}
-                  aria-required={required}
-                >
-                  <span>{formattedDate || placeholder || "Select date"}</span>
-                  <Calendar
-                    className="ml-2 h-4 w-4 text-muted-foreground"
-                    aria-hidden="true"
-                  />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 bg-background" align="start">
-                <DayPicker
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={(day) => {
-                    if (day) {
-                      onChange(format(day, "yyyy-MM-dd"));
-                      setOpen(false);
-                    }
-                  }}
-                  defaultMonth={selectedDate}
-                  weekStartsOn={1}
-                  captionLayout="dropdown-buttons"
-                  className="rdp-root"
-                />
-              </PopoverContent>
-            </Popover>
+            <DatePickerField
+              id={id}
+              value={value}
+              onChange={onChange}
+              placeholder={placeholder}
+              error={!!error}
+              required={required}
+              aria-describedby={error ? errorId : undefined}
+            />
           );
 
         case "time":
           return (
-            <div className="relative">
-              <div className="time-input-wrapper">
-                <Input
-                  id={id}
-                  type="time"
-                  value={internalTime}
-                  onChange={(e) => {
-                    const next = normalizeTime(e.target.value);
-                    setInternalTime(next);
-                    if (next.length === 5 || next === "") onChange(next);
-                  }}
-                  onBlur={onBlur}
-                  name={name}
-                  step={60}
-                  className={cn("pr-10", error && "border-destructive")}
-                  ref={ref}
-                  aria-invalid={!!error}
-                  aria-describedby={error ? errorId : undefined}
-                  required={required}
-                  aria-required={required}
-                  {...props}
-                />
-                <Clock
-                  className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
+            <TimePickerField
+              ref={ref}
+              id={id}
+              name={name}
+              value={value}
+              onChange={onChange}
+              onBlur={onBlur}
+              error={!!error}
+              required={required}
+              aria-describedby={error ? errorId : undefined}
+            />
           );
 
         default:
