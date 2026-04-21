@@ -4,7 +4,7 @@ import {
   useMutation,
   useQuery,
   useQueryClient,
-  type UseQueryResult,
+  type,
 } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";

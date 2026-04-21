@@ -33,7 +33,6 @@ const CreateEvent = () => {
   const isEditing = Boolean(editingEventId);
 
   const {
-    register,
     control,
     handleSubmit,
     setValue,
@@ -150,7 +149,7 @@ const CreateEvent = () => {
       } else {
         const slug = generateSlug(values.name);
 
-        const newEvent = await createEvent.mutateAsync({
+        const _newEvent = await createEvent.mutateAsync({
           name: values.name,
           slug,
           location: values.location || null,

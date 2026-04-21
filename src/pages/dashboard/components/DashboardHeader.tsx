@@ -21,7 +21,7 @@ const DashboardHeader = ({
   onSignOut,
   greeting,
 }: DashboardHeaderProps) => {
-  const initials = name
+  const _initials = name
     ?.split(" ")
     .map((part) => part[0])
     .join("")

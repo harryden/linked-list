@@ -12,19 +12,37 @@ type QueryOverrides = {
 };
 
 type QueryStub = {
-  select: any;
-  insert: any;
-  update: any;
-  delete: any;
-  eq: any;
-  order: any;
-  limit: any;
-  range: any;
-  single: any;
-  maybeSingle: any;
-  then: any;
-  catch: any;
-  finally: any;
+  select: (...args: unknown[]) => QueryStub;
+  insert: (...args: unknown[]) => QueryStub;
+  update: (...args: unknown[]) => QueryStub;
+  delete: (...args: unknown[]) => QueryStub;
+  eq: (...args: unknown[]) => QueryStub;
+  order: (...args: unknown[]) => QueryStub;
+  limit: (...args: unknown[]) => QueryStub;
+  range: (...args: unknown[]) => QueryStub;
+  single: () => Promise<SupabaseQueryResult>;
+  maybeSingle: () => Promise<SupabaseQueryResult>;
+  then: (
+    onfulfilled?:
+      | ((
+          value: SupabaseQueryResult,
+        ) => SupabaseQueryResult | PromiseLike<SupabaseQueryResult>)
+      | undefined
+      | null,
+    onrejected?:
+      | ((reason: unknown) => unknown | PromiseLike<unknown>)
+      | undefined
+      | null,
+  ) => Promise<SupabaseQueryResult | unknown>;
+  catch: (
+    onrejected?:
+      | ((reason: unknown) => unknown | PromiseLike<unknown>)
+      | undefined
+      | null,
+  ) => Promise<SupabaseQueryResult | unknown>;
+  finally: (
+    onfinally?: (() => void) | undefined | null,
+  ) => Promise<SupabaseQueryResult>;
 };
 
 export const createQueryStub = (overrides?: QueryOverrides): QueryStub => {

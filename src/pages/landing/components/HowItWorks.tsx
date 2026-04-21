@@ -1,8 +1,16 @@
 import { useTranslation } from "react-i18next";
 
+interface Step {
+  step: string;
+  title: string;
+  description: string;
+}
+
 const HowItWorks = () => {
   const { t } = useTranslation();
-  const steps = t("landing.howItWorks.steps", { returnObjects: true }) as any[];
+  const steps = t("landing.howItWorks.steps", {
+    returnObjects: true,
+  }) as Step[];
 
   return (
     <section className="py-20">

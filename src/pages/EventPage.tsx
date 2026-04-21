@@ -50,7 +50,7 @@ const useSession = (navigate: NavigateFunction) => {
         if (isMounted) {
           setCurrentUserId(session?.user?.id ?? null);
         }
-      } catch (error) {
+      } catch (_error) {
         logger.error(error, { category: "Events" });
       } finally {
         if (isMounted) {
@@ -73,7 +73,7 @@ const EventPage = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUserId, isSessionLoading } = useSession(navigate);
+  const { currentUserId, isSessionLoading } = useSession();
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [justJoined, setJustJoined] = useState(false);
@@ -213,7 +213,7 @@ const EventPage = () => {
         description: TEXT.event.toast.deleteSuccess,
       });
       navigate("/dashboard");
-    } catch (error) {
+    } catch (_error) {
       toast({
         variant: "destructive",
         description: TEXT.event.toast.deleteFailure,

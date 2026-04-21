@@ -6,13 +6,11 @@
  * or any other monitoring tool.
  */
 
-type LogLevel = "info" | "warn" | "error";
-
 interface LogContext {
   category?: string;
   tags?: Record<string, string>;
-  extra?: Record<string, any>;
-  [key: string]: any;
+  extra?: Record<string, unknown>;
+  [key: string]: unknown;
 }
 
 class Logger {

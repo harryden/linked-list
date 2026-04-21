@@ -46,7 +46,7 @@ export const FeedbackDialog = ({
 
       setMessage("");
       setOpen(false);
-    } catch (error) {
+    } catch (_error) {
       toast({
         title: "Error",
         variant: "destructive",
