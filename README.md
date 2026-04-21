@@ -42,7 +42,7 @@ LinkBack is a professional networking and event check-in platform designed to el
 npm run dev
 ```
 
-The development server will start at `http://localhost:5173`.
+The development server will start at `http://localhost:8080`.
 
 ## Contributing
 
