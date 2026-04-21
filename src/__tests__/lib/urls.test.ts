@@ -49,9 +49,13 @@ describe("URL Helpers", () => {
       expect(getProductionUrl()).toBe("https://prod.linkback.com");
     });
 
-    it("should fall back to the correct production domain when VITE_PUBLIC_URL is unset", () => {
-      expect(getProductionUrl()).toBe(
-        "https://linked-list-harry-denells-projects.vercel.app",
+    it("should fall back to localhost in development when VITE_PUBLIC_URL is unset", () => {
+      expect(getProductionUrl(false)).toBe("http://localhost:8080");
+    });
+
+    it("should throw an error in production when VITE_PUBLIC_URL is unset", () => {
+      expect(() => getProductionUrl(true)).toThrow(
+        "VITE_PUBLIC_URL environment variable is required in production",
       );
     });
   });
