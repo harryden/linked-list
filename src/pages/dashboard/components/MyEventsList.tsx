@@ -1,86 +1,130 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Calendar, Users } from "lucide-react";
-import { TEXT } from "@/constants/text";
-import EmptyState from "./EmptyState";
+import { cn } from "@/lib/utils";
 
 interface MinimalEvent {
   id: string;
   name: string;
   slug: string;
   starts_at: string | null;
+  location: string | null;
 }
 
 interface MyEventsListProps {
   events: MinimalEvent[];
   isLoading: boolean;
+  title?: string;
 }
 
-const MyEventsList = ({ events, isLoading }: MyEventsListProps) => {
+type EventStatus = "live" | "upcoming" | "draft";
+
+function getStatus(startsAt: string | null): EventStatus {
+  if (!startsAt) return "draft";
+  const start = new Date(startsAt).getTime();
+  const now = Date.now();
+  if (start <= now && now - start < 8 * 60 * 60 * 1000) return "live";
+  if (start < now) return "past" as any;
+  return "upcoming";
+}
+
+function formatMonoDate(startsAt: string): string {
+  const d = new Date(startsAt);
+  const month = d.toLocaleString("en-US", { month: "short" }).toUpperCase();
+  const day = d.getDate();
+  const hour = String(d.getHours()).padStart(2, "0");
+  const min = String(d.getMinutes()).padStart(2, "0");
+  return `${month} ${day} · ${hour}:${min}`;
+}
+
+function StatusPill({ status }: { status: EventStatus }) {
+  const styles: Record<EventStatus | "past", string> = {
+    live: "bg-state-success-bg text-state-success border-state-success",
+    upcoming: "bg-bg-surface text-text-primary border-border-subtle",
+    draft: "bg-bg-surface-hover text-text-secondary border-border-subtle",
+    past: "bg-bg-surface-hover text-text-secondary border-border-subtle",
+  };
+  return (
+    <span
+      className={cn(
+        "text-[11px] font-medium px-2 py-[3px] rounded-sm border inline-flex items-center gap-1.5 capitalize",
+        styles[status],
+      )}
+    >
+      {status === "live" && (
+        <span className="w-1.5 h-1.5 rounded-full bg-state-success" />
+      )}
+      {status}
+    </span>
+  );
+}
+
+const MyEventsList = ({
+  events,
+  isLoading,
+  title = "My events",
+}: MyEventsListProps) => {
   return (
     <section>
-      <h2 className="text-2xl font-semibold mb-4">
-        {TEXT.dashboard.myEvents.title}
-      </h2>
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-[14px] font-medium">{title}</div>
+        {events.length > 0 && (
+          <div className="text-[12px] text-text-secondary">
+            {events.length} total
+          </div>
+        )}
+      </div>
 
       {isLoading ? (
-        <Card>
-          <CardContent className="py-12 text-center space-y-4">
-            <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
-            </div>
-            <p className="text-muted-foreground">
-              {TEXT.dashboard.myEvents.loading}
-            </p>
-          </CardContent>
-        </Card>
+        <div className="bg-bg-base border border-border-subtle rounded-xl p-8 flex justify-center">
+          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden relative">
+            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+          </div>
+        </div>
       ) : events.length === 0 ? (
-        <EmptyState
-          icon={
-            <Calendar
-              className="h-12 w-12 text-muted-foreground"
-              aria-hidden="true"
-            />
-          }
-          title={TEXT.dashboard.myEvents.emptyTitle}
-          description={TEXT.dashboard.myEvents.emptyDescription}
-          actions={
-            <Link to="/create-event" state={{ fromDashboard: true }}>
-              <Button className="rounded-full">
-                {TEXT.common.buttons.createFirstEvent}
-              </Button>
-            </Link>
-          }
-        />
+        <div className="bg-bg-base border border-border-subtle rounded-xl p-8 text-center">
+          <p className="text-sm text-text-secondary mb-4">No events found.</p>
+          <Link to="/create-event" state={{ fromDashboard: true }}>
+            <Button variant="primary" size="sm">
+              Create event
+            </Button>
+          </Link>
+        </div>
       ) : (
-        <div className="grid md:grid-cols-2 gap-4">
-          {events.map((event) => (
-            <Link key={event.id} to={`/event/${event.slug}`}>
-              <Card className="hover:shadow-lg transition-shadow cursor-pointer">
-                <CardHeader>
-                  <CardTitle>{event.name}</CardTitle>
-                  <CardDescription>
-                    {event.starts_at
-                      ? new Date(event.starts_at).toLocaleDateString()
-                      : TEXT.common.labels.dateNotSet}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-2 text-sm text-primary">
-                    <Users className="h-4 w-4" aria-hidden="true" />
-                    <span>{TEXT.dashboard.myEvents.viewAttendees}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
+        <div className="bg-bg-base border border-border-subtle rounded-xl overflow-hidden">
+          {events.map((event, i) => {
+            const status = getStatus(event.starts_at);
+            return (
+              <Link
+                key={event.id}
+                to="/create-event"
+                state={{
+                  eventId: event.id,
+                  eventSlug: event.slug,
+                  fromDashboard: true,
+                }}
+                className={cn(
+                  "grid gap-4 px-4 py-3.5 items-center hover:bg-bg-surface-hover transition-colors",
+                  "grid-cols-[2fr_1.2fr_120px]",
+                  i < events.length - 1 && "border-b border-border-subtle",
+                )}
+              >
+                <div>
+                  <div className="text-[14px] font-medium">{event.name}</div>
+                  {event.location && (
+                    <div className="text-[12px] text-text-secondary mt-0.5">
+                      {event.location}
+                    </div>
+                  )}
+                </div>
+                <div className="text-[12px] font-mono text-text-secondary tracking-[0.5px]">
+                  {event.starts_at ? formatMonoDate(event.starts_at) : "—"}
+                </div>
+                <div className="flex justify-end">
+                  <StatusPill status={status} />
+                </div>
+              </Link>
+            );
+          })}
         </div>
       )}
     </section>

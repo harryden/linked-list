@@ -76,9 +76,9 @@ describe("AttendeeList", () => {
     it("uses the singular label for exactly one attendee", () => {
       renderList({ attendees: [makeAttendee()] });
       expect(
-        screen.getByText(`1 ${TEXT.event.attendeeList.singular}`, {
-          exact: false,
-        }),
+        screen.getByText((content) =>
+          content.includes(`1 ${TEXT.event.attendeeList.singular}`),
+        ),
       ).toBeInTheDocument();
     });
 
@@ -90,18 +90,18 @@ describe("AttendeeList", () => {
         ],
       });
       expect(
-        screen.getByText(`2 ${TEXT.event.attendeeList.plural}`, {
-          exact: false,
-        }),
+        screen.getByText((content) =>
+          content.includes(`2 ${TEXT.event.attendeeList.plural}`),
+        ),
       ).toBeInTheDocument();
     });
 
     it("uses the plural label for zero attendees", () => {
       renderList({ attendees: [] });
       expect(
-        screen.getByText(`0 ${TEXT.event.attendeeList.plural}`, {
-          exact: false,
-        }),
+        screen.getByText((content) =>
+          content.includes(`0 ${TEXT.event.attendeeList.plural}`),
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -125,14 +125,14 @@ describe("AttendeeList", () => {
     it("shows 'View Your Profile' label for the current user", () => {
       renderList({ attendees, currentUserId: "user-1" });
       expect(
-        screen.getByText(TEXT.event.header.viewSelfProfile),
+        screen.getByRole("button", { name: TEXT.event.header.viewSelfProfile }),
       ).toBeInTheDocument();
     });
 
     it("shows 'View Profile' label for other attendees", () => {
       renderList({ attendees, currentUserId: "other-user" });
       expect(
-        screen.getByText(TEXT.event.header.viewProfile),
+        screen.getByRole("button", { name: TEXT.event.header.viewProfile }),
       ).toBeInTheDocument();
     });
 
@@ -149,7 +149,9 @@ describe("AttendeeList", () => {
 
       renderList({ attendees, currentUserId: "other-user" });
 
-      await user.click(screen.getByText(TEXT.event.header.viewProfile));
+      await user.click(
+        screen.getByRole("button", { name: TEXT.event.header.viewProfile }),
+      );
 
       expect(openSpy).toHaveBeenCalledWith(
         "https://www.linkedin.com/in/alicesmith",

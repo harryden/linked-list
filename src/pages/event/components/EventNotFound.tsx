@@ -12,7 +12,7 @@ import PageContainer from "@/components/layout/PageContainer";
 
 const EventNotFound = () => (
   <PageContainer className="items-center justify-center">
-    <Card className="max-w-md w-full shadow-lg">
+    <Card className="max-w-md w-full">
       <CardHeader>
         <CardTitle>{TEXT.event.page.notFoundTitle}</CardTitle>
         <CardDescription>{TEXT.event.page.notFoundDescription}</CardDescription>

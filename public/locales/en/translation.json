@@ -2,13 +2,12 @@
   "common": {
     "brand": "LinkBack",
     "copy": {
-      "footer": "© 2025 LinkBack. Powered by LinkedIn."
+      "footer": "© 2025 LinkBack."
     },
     "buttons": {
       "signInWithLinkedIn": "Sign in with LinkedIn",
       "joinEvent": "Join Event",
       "hostEvent": "Host Event",
-      "howItWorks": "How It Works",
       "myEvents": "My Events",
       "getStarted": "Get Started",
       "signIn": "Sign In",
@@ -57,11 +56,10 @@
     "hero": {
       "titleLine": "Event Check-In.",
       "highlight": "Simplified.",
-      "authenticatedDescription": "LinkedIn-verified check-in for your events. One QR code, instant attendee lists, real professional connections.",
+      "authenticatedDescription": "LinkedIn-verified check-in for your events. One QR code, instant attendee rosters, and verified professional profiles.",
       "guestDescription": "Generate a QR code. Attendees scan and check in with LinkedIn. Build verified attendee lists in real time.",
       "joinButton": "Join Event",
       "hostButton": "Host Event",
-      "demoButton": "How It Works",
       "signInButton": "Sign in with LinkedIn"
     },
     "features": {
@@ -77,44 +75,20 @@
         "title": "Instant Lists",
         "description": "Live attendee list with names, headlines, and LinkedIn profiles."
       }
-    },
-    "howItWorks": {
-      "title": "How It Works",
-      "steps": [
-        {
-          "step": "1",
-          "title": "Create Your Event",
-          "description": "Sign in and create your event. Get your unique QR code instantly."
-        },
-        {
-          "step": "2",
-          "title": "Attendees Check In",
-          "description": "Attendees scan the code and sign in with LinkedIn. Attendance recorded automatically."
-        },
-        {
-          "step": "3",
-          "title": "View Your List",
-          "description": "See who's there in real time. Names, headlines, and LinkedIn profiles included."
-        }
-      ]
-    },
-    "footerCta": {
-      "title": "Ready to simplify your events?",
-      "description": "Start building verified attendee lists today."
     }
   },
   "dashboard": {
     "header": {
       "welcomePrefix": "Welcome back,",
-      "tagline": "Host events, check in, and connect with attendees.",
+      "tagline": "Manage your event check-ins and attendee rosters.",
       "signOutSuccess": "Signed out successfully"
     },
     "loading": "Loading dashboard...",
     "myEvents": {
       "title": "Your Events",
       "loading": "Loading events...",
-      "emptyTitle": "Host your first event in 10 seconds.",
-      "emptyDescription": "Create a QR code and start connecting.",
+      "emptyTitle": "Host your first event.",
+      "emptyDescription": "Create a QR code to start checking in attendees.",
       "viewAttendees": "View attendees →"
     },
     "upcoming": {
@@ -125,63 +99,10 @@
       "viewAttendeeList": "View attendee list →"
     },
     "greetings": {
-      "newJoiner": "Hey, glad to have you here! Ready to start connecting?",
-      "firstCheckIn": "Nice, you got your first check in!",
-      "firstHost": "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!",
+      "newJoiner": "Welcome! Ready to host your first event?",
+      "firstCheckIn": "You've completed your first check-in.",
+      "firstHost": "You're hosting your first event. Share your code or QR to begin.",
       "welcomeBack": "Welcome back, {name}!"
-    }
-  },
-  "demo": {
-    "header": {
-      "title": "See It in Action",
-      "subtitle": "How LinkBack works from start to finish"
-    },
-    "showcase": {
-      "steps": [
-        {
-          "title": "Create an Event",
-          "description": "Sign in, create your event, and get your QR code",
-          "checklist": [
-            "Name your event: \"Tech Meetup 2025\"",
-            "Set date and time (optional)",
-            "Add LinkedIn event URL (optional)",
-            "Receive unique QR code instantly"
-          ]
-        },
-        {
-          "title": "Display the QR Code",
-          "description": "Print or display your code at the event entrance",
-          "note": "Every event gets a unique code"
-        },
-        {
-          "title": "Attendees Check In",
-          "description": "Attendees scan and sign in with LinkedIn",
-          "privacyNotice": "⚠️ Privacy Notice:",
-          "privacyCopy": "\"Your LinkedIn name and headline will be visible to other attendees.\"",
-          "confirmation": "Check-in recorded automatically"
-        },
-        {
-          "title": "View Attendee List",
-          "description": "Everyone can see who's at the event",
-          "attendees": [
-            {
-              "name": "Sarah Johnson",
-              "title": "Senior Product Manager at Tech Corp"
-            },
-            {
-              "name": "Michael Chen",
-              "title": "Software Engineer at StartupXYZ"
-            },
-            {
-              "name": "Emma Davis",
-              "title": "UX Designer at Creative Studio"
-            }
-          ]
-        }
-      ]
-    },
-    "notes": {
-      "helper": "No payment required. Sign in and start connecting."
     }
   },
   "createEvent": {
@@ -197,9 +118,9 @@
       "editDescription": "Update event details",
       "fields": {
         "nameLabel": "Event Name *",
-        "namePlaceholder": "Summer Tech Meetup 2025",
+        "namePlaceholder": "Annual Conference 2025",
         "locationLabel": "Location",
-        "locationPlaceholder": "TechHub Conference Center, San Francisco",
+        "locationPlaceholder": "City Center, Main Hall",
         "dateLabel": "Event Date",
         "datePlaceholder": "Select date",
         "startTimeLabel": "Start Time",
@@ -246,7 +167,7 @@
   },
   "auth": {
     "brand": "LinkBack",
-    "tagline": "LinkedIn-verified event networking",
+    "tagline": "LinkedIn-verified event rosters",
     "card": {
       "title": "Sign in with LinkedIn",
       "description": "Authenticate with your LinkedIn account",
@@ -258,11 +179,11 @@
       "items": [
         {
           "title": "Name and profile picture",
-          "description": "To identify you at events"
+          "description": "To identify you on the event roster"
         },
         {
           "title": "Headline and email",
-          "description": "For networking purposes"
+          "description": "For professional networking"
         },
         {
           "title": "Read-only access",
@@ -329,7 +250,7 @@
       "guestNotice": "By checking in, you agree to share your LinkedIn profile with event attendees.",
       "signInPrompt": "Sign In",
       "backToDashboard": "Back to Dashboard",
-      "checkInSuccessBanner": "You're in! Here's who else is coming."
+      "checkInSuccessBanner": "You're in! The roster is visible below."
     },
     "toast": {
       "loadFailure": "Failed to load event",

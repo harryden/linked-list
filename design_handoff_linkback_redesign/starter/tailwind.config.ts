@@ -1,6 +1,17 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 
+/**
+ * LinkBack — Precision Utility
+ *
+ * Ships the monochrome token system. Semantic names (bg-surface, text-primary,
+ * border-subtle…) are the preferred API. shadcn-legacy names (primary,
+ * secondary, muted…) remain wired up via the `--*` compatibility layer in
+ * src/index.css so existing Radix/shadcn components re-skin in place.
+ *
+ * Gradients, glow shadows, shimmer, and border-glow animations intentionally
+ * removed — they were part of the old aesthetic.
+ */
 export default {
   darkMode: ["class"], // dark mode deferred to v2; tokens are inversion-ready
   content: [
@@ -81,8 +92,25 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Geist", "Inter", "sans-serif"],
-        mono: ["Geist Mono", "monospace"],
+        sans: [
+          "Geist",
+          "Inter",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+        ],
+        mono: [
+          "Geist Mono",
+          "JetBrains Mono",
+          "ui-monospace",
+          "SFMono-Regular",
+          "Menlo",
+          "Consolas",
+          "monospace",
+        ],
       },
       fontSize: {
         /* [size, { lineHeight, letterSpacing, fontWeight }] */
@@ -122,7 +150,6 @@ export default {
         2: "8px",
         3: "12px",
         4: "16px",
-        5: "20px",
         6: "24px",
         8: "32px",
         12: "48px",
@@ -167,17 +194,12 @@ export default {
           "0%, 100%": { opacity: "1" },
           "50%": { opacity: "0.5" },
         },
-        "loader-slide": {
-          "0%": { transform: "translateX(-100%)" },
-          "100%": { transform: "translateX(100%)" },
-        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 150ms var(--ease-spring)",
         "pulse-subtle": "pulse-subtle 1.5s ease-in-out infinite",
-        "loader-slide": "loader-slide 1s infinite linear",
       },
     },
   },

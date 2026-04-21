@@ -62,7 +62,7 @@ export const FeedbackDialog = ({
           <Button
             variant="outline"
             size="sm"
-            className="fixed bottom-4 right-4 rounded-full shadow-lg bg-background/80 backdrop-blur-sm border-primary/20 hover:border-primary/50 transition-all z-50"
+            className="fixed bottom-4 right-4 rounded bg-background/80 backdrop-blur-sm border-border-subtle hover:border-border-strong transition-all z-50"
           >
             <MessageSquarePlus className="h-4 w-4 mr-2" />
             Feedback
@@ -118,7 +118,7 @@ export const FeedbackDialog = ({
           <DialogFooter>
             <Button
               type="submit"
-              className="w-full rounded-full"
+              className="w-full rounded"
               disabled={submitFeedback.isPending || !message.trim()}
             >
               {submitFeedback.isPending ? "Sending..." : "Send Feedback"}

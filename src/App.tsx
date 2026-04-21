@@ -19,7 +19,6 @@ const Dashboard = lazy(() => import("./pages/Dashboard"));
 const CreateEvent = lazy(() => import("./pages/CreateEvent"));
 const EventPage = lazy(() => import("./pages/EventPage"));
 const EventSuccess = lazy(() => import("./pages/EventSuccess"));
-const Demo = lazy(() => import("./pages/Demo"));
 const JoinEvent = lazy(() => import("./pages/JoinEvent"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -45,8 +44,10 @@ const queryClient = new QueryClient({
 const PageSkeleton = () => (
   <div className="min-h-screen flex items-center justify-center">
     <div className="text-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-      <p className="text-muted-foreground">Loading...</p>
+      <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
+        <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+      </div>
+      <p className="text-[13px] text-text-secondary">Loading...</p>
     </div>
   </div>
 );
@@ -123,14 +124,6 @@ const App = () => (
               element={
                 <Suspense fallback={<PageSkeleton />}>
                   <EventSuccess />
-                </Suspense>
-              }
-            />
-            <Route
-              path="/demo"
-              element={
-                <Suspense fallback={<PageSkeleton />}>
-                  <Demo />
                 </Suspense>
               }
             />

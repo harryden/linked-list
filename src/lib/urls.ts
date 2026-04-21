@@ -1,11 +1,9 @@
 export const getBaseUrl = () => {
-  let url = "";
-
-  if (typeof window !== "undefined") {
-    url = window.location.origin;
-  } else if (import.meta.env.VITE_PUBLIC_URL) {
-    url = import.meta.env.VITE_PUBLIC_URL;
-  }
+  // Fallback to environment variable if window is not defined, otherwise use current origin
+  const url =
+    (typeof window !== "undefined" ? window.location.origin : "") ||
+    import.meta.env.VITE_PUBLIC_URL ||
+    "";
 
   // Trim trailing slash to avoid double slashes when joining paths
   return url.replace(/\/$/, "");

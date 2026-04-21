@@ -117,9 +117,9 @@ const JoinEvent = () => {
         </Link>
       </div>
 
-      <Card className="w-full shadow-lg">
+      <Card className="w-full">
         <CardHeader className="text-center space-y-4">
-          <div className="mx-auto w-16 h-16 bg-primary rounded-2xl flex items-center justify-center shadow-glow-primary">
+          <div className="mx-auto w-16 h-16 bg-brand-accent rounded border border-border-strong flex items-center justify-center">
             <QrCode
               className="h-8 w-8 text-primary-foreground"
               aria-hidden="true"
@@ -161,7 +161,7 @@ const JoinEvent = () => {
                 <Link to={`/event/${ownEventSlug}`}>
                   <Button
                     type="button"
-                    className="w-full h-12 text-base font-medium rounded-full"
+                    className="w-full h-12 text-base font-medium rounded"
                   >
                     {TEXT.joinEvent.form.goToEvent}
                   </Button>
@@ -169,7 +169,7 @@ const JoinEvent = () => {
               ) : (
                 <Button
                   type="submit"
-                  className="w-full h-12 text-base font-medium rounded-full"
+                  className="w-full h-12 text-base font-medium rounded"
                   disabled={isLoading}
                 >
                   {isLoading

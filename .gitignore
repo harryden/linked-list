@@ -145,3 +145,4 @@ vite.config.ts.timestamp-*
 .claude/skills/
 .claude/settings.local.json
 .gstack/
+.vercel/

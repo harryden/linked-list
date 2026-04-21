@@ -7,8 +7,8 @@ interface CheckInSuccessProps {
 }
 
 const CheckInSuccess = ({ onDismiss }: CheckInSuccessProps) => (
-  <Alert className="mb-4">
-    <CheckCircle className="h-4 w-4" aria-hidden="true" />
+  <Alert className="mb-4 bg-state-success-bg border-state-success">
+    <CheckCircle className="h-4 w-4 text-state-success" aria-hidden="true" />
     <AlertDescription className="flex items-center justify-between">
       <span>{TEXT.event.page.checkInSuccessBanner}</span>
       <button

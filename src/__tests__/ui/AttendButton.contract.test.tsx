@@ -30,7 +30,7 @@ describe("AttendButton contract", () => {
   it("renders the LinkedIn variant with the expected accessible label and icon", () => {
     renderWithRouter(
       <AttendButton
-        currentUserId="user_test"
+        currentUserId={null}
         isOrganizer={false}
         isAttending={false}
         onCheckIn={vi.fn()}

@@ -26,7 +26,7 @@
 }
 
 .rdp-root .rdp-day {
-  border-radius: 9999px;
+  border-radius: 4px;
   width: 2.5rem;
   height: 2.5rem;
   line-height: 2.5rem;
@@ -35,8 +35,15 @@
 .rdp-root .rdp-day_selected,
 .rdp-root .rdp-day_selected:focus-visible,
 .rdp-root .rdp-day_selected:hover {
-  background-color: hsl(var(--primary)) !important;
-  color: hsl(var(--primary-foreground)) !important;
+  background-color: hsl(var(--brand-accent)) !important;
+  color: #fff !important;
+  border-radius: 4px !important;
+  opacity: 1 !important;
+}
+
+.rdp-root .rdp-day:hover:not(.rdp-day_selected) {
+  background-color: hsl(var(--bg-surface-hover)) !important;
+  border-radius: 4px !important;
 }
 
 .rdp-root .rdp-button:focus-visible {

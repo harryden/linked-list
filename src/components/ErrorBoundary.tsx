@@ -54,16 +54,12 @@ class ErrorBoundary extends Component<Props, State> {
                 onClick={this.handleReload}
                 variant="default"
                 size="lg"
-                className="w-full rounded-full"
+                className="w-full rounded"
               >
                 Reload page
               </Button>
               <FeedbackDialog>
-                <Button
-                  variant="outline"
-                  size="lg"
-                  className="w-full rounded-full"
-                >
+                <Button variant="outline" size="lg" className="w-full rounded">
                   <MessageSquare className="h-4 w-4 mr-2" />
                   Report what happened
                 </Button>

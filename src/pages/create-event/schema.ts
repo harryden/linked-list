@@ -9,6 +9,7 @@ export const createEventSchema = z
     startTime: z.string().min(1, TEXT.createEvent.toast.missingDateTime),
     endTime: z.string().min(1, TEXT.createEvent.toast.missingEndTime),
     linkedinUrl: z.string().url().or(z.literal("")).optional().default(""),
+    checkInMethod: z.enum(["qr", "link"]).default("qr"),
   })
   .refine(
     (data) => {

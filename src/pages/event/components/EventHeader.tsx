@@ -242,7 +242,7 @@ const EventHeader = ({
             {event.name}
           </CardTitle>
           {isAttending && (
-            <div className="col-start-2 self-start sm:self-center inline-flex items-center gap-2 text-success bg-success/10 px-4 py-2 rounded-full flex-none shrink-0 translate-x-[0.625rem] sm:translate-x-3">
+            <div className="col-start-2 self-start sm:self-center inline-flex items-center gap-2 text-state-success bg-state-success-bg border border-state-success px-3 py-1 rounded-md flex-none shrink-0 translate-x-[0.625rem] sm:translate-x-3">
               <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
               <span className="font-medium">
                 {TEXT.event.header.checkedInShort}
@@ -255,7 +255,7 @@ const EventHeader = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="col-start-3 self-start sm:self-center rounded-full h-10 w-10 flex-none shrink-0 justify-self-end"
+                  className="col-start-3 self-start sm:self-center h-8 w-8 flex-none shrink-0 justify-self-end"
                   aria-label={TEXT.event.header.options}
                 >
                   <MoreVertical className="h-5 w-5" aria-hidden="true" />
@@ -329,7 +329,7 @@ const EventHeader = ({
                 )}
               </div>
               <Button
-                className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-2 px-4 rounded-full text-xs font-medium transition-all hover:shadow-md"
+                className="flex items-center gap-2 bg-linkedin hover:bg-linkedin-hover text-white py-1.5 px-3 rounded text-xs font-medium transition-colors"
                 onClick={() => {
                   if (organizer.linkedin_id) {
                     window.open(
@@ -359,7 +359,7 @@ const EventHeader = ({
           onClick={onShowQr}
           size="lg"
           variant="outline"
-          className="w-full rounded-full h-12 text-base font-medium"
+          className="w-full h-10 text-base font-medium"
         >
           <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
           {TEXT.common.buttons.viewQrCode}
