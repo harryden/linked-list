@@ -63,7 +63,7 @@ const EventSuccess = () => {
     return (
       <PageContainer className="items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary mx-auto mb-4"></div>
           <p className="text-muted-foreground">{TEXT.eventSuccess.loading}</p>
         </div>
       </PageContainer>
@@ -76,10 +76,10 @@ const EventSuccess = () => {
 
   return (
     <PageContainer maxWidth="sm" className="justify-center">
-      <Card className="w-full shadow-2xl">
+      <Card className="w-full">
         <CardContent className="pt-8 pb-6 px-6 space-y-6">
           <div className="flex justify-center">
-            <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
+            <div className="bg-state-success-bg p-4 rounded-full border border-state-success">
               <CalendarCheck
                 className="h-12 w-12 text-success"
                 aria-hidden="true"
@@ -94,7 +94,7 @@ const EventSuccess = () => {
             </p>
           </div>
 
-          <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
+          <div className="bg-bg-surface border border-border-subtle rounded-lg p-4 text-center space-y-1">
             <p className="text-sm text-muted-foreground">
               {TEXT.eventSuccess.codeLabel}
             </p>
@@ -113,7 +113,7 @@ const EventSuccess = () => {
             <Button
               onClick={handleDownload}
               variant="outline"
-              className="w-full h-12 rounded-full"
+              className="w-full h-12 rounded"
               disabled={!qrCodeUrl}
             >
               <Download className="h-4 w-4 mr-2" aria-hidden="true" />
@@ -121,7 +121,7 @@ const EventSuccess = () => {
             </Button>
 
             <Link to={`/event/${slug}`} className="block">
-              <Button className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary">
+              <Button className="w-full rounded h-12 text-base font-medium">
                 {TEXT.common.buttons.viewEventDashboard}
               </Button>
             </Link>

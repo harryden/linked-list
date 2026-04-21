@@ -14,13 +14,16 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-subtle">
+    <div className="flex min-h-screen items-center justify-center bg-bg-base">
       <div className="text-center">
         <h1 className="mb-4 text-4xl font-bold">{TEXT.notFound.title}</h1>
         <p className="mb-4 text-xl text-muted-foreground">
           {TEXT.notFound.subtitle}
         </p>
-        <Link to="/" className="text-primary underline hover:text-primary/80">
+        <Link
+          to="/"
+          className="text-text-primary underline hover:text-text-secondary"
+        >
           {TEXT.notFound.link}
         </Link>
       </div>

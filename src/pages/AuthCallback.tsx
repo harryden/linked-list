@@ -112,11 +112,11 @@ const AuthCallback = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg-surface flex items-center justify-center p-4">
       <div className="text-center space-y-6">
         <div className="flex justify-center">
           <QrCode
-            className="h-16 w-16 text-primary animate-pulse"
+            className="h-16 w-16 text-text-secondary animate-pulse"
             aria-hidden="true"
           />
         </div>
@@ -130,7 +130,7 @@ const AuthCallback = () => {
               {TEXT.authCallback.loadingDescription}
             </p>
             <div className="flex justify-center">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary"></div>
             </div>
           </>
         ) : (
