@@ -45,7 +45,7 @@ Always use `.github/pull_request_template.md`. When using `gh pr create`, do not
 - 1 approving review required
 - **Wait for Copilot Review:** Do not merge until Copilot has finished its review.
   - Address all findings and reply to **every individual comment thread** directly.
-  - Do not use top-level summary comments.
+  - Do not use top-level summary comments as a substitute for threaded replies.
 - **No Admin Merge:** Do not use admin privileges to bypass CI or review requirements unless explicitly instructed by the user.
 - All conversations must be resolved
 - All required checks must pass (test, check-fixup)
