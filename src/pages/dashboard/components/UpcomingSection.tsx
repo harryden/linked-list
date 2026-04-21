@@ -33,7 +33,7 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
       <Card>
         <CardContent className="py-12 text-center space-y-4">
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary" />
           </div>
           <p className="text-muted-foreground">
             {TEXT.dashboard.upcoming.loading}
@@ -52,9 +52,7 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
         description={TEXT.dashboard.upcoming.emptyDescription}
         actions={
           <Link to="/join-event" state={{ fromDashboard: true }}>
-            <Button className="rounded-full">
-              {TEXT.common.buttons.joinFirstEvent}
-            </Button>
+            <Button>{TEXT.common.buttons.joinFirstEvent}</Button>
           </Link>
         }
       />
@@ -62,7 +60,7 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
       <div className="grid md:grid-cols-2 gap-4">
         {events.map((event) => (
           <Link key={event.id} to={`/event/${event.slug}`}>
-            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+            <Card className="hover:bg-bg-surface transition-colors cursor-pointer">
               <CardHeader>
                 <CardTitle>{event.name}</CardTitle>
                 <CardDescription>
@@ -72,7 +70,7 @@ const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center gap-2 text-sm text-primary">
+                <div className="flex items-center gap-2 text-sm text-text-secondary">
                   <Users className="h-4 w-4" aria-hidden="true" />
                   <span>{TEXT.dashboard.upcoming.viewAttendeeList}</span>
                 </div>

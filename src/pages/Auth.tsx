@@ -66,7 +66,7 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex items-center justify-center p-4">
+    <div className="min-h-screen bg-bg-surface flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <Link to="/" className="inline-flex items-center gap-2 mb-4">
@@ -75,7 +75,7 @@ const Auth = () => {
           <p className="text-xl text-muted-foreground">{TEXT.auth.tagline}</p>
         </div>
 
-        <Card className="border-border shadow-xl">
+        <Card className="border-border-subtle">
           <CardHeader className="space-y-2 text-center pb-6">
             <Heading level={1} className="text-2xl font-bold">
               {TEXT.auth.card.title}
@@ -90,7 +90,7 @@ const Auth = () => {
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
               size="lg"
-              className="w-full rounded-full h-12 text-base font-medium bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+              className="w-full h-10 font-medium bg-linkedin hover:bg-linkedin-hover text-white"
             >
               {isLoading ? (
                 <>
@@ -117,7 +117,7 @@ const Auth = () => {
                   return (
                     <div key={item.title} className="flex items-start gap-3">
                       <Icon
-                        className="h-5 w-5 text-primary flex-shrink-0 mt-0.5"
+                        className="h-5 w-5 text-text-secondary flex-shrink-0 mt-0.5"
                         aria-hidden="true"
                       />
                       <div>
