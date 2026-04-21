@@ -6,9 +6,7 @@ const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const EMAIL_FROM =
   Deno.env.get("EMAIL_FROM") ?? "LinkBack <events@updates.linkback.com>";
-const APP_URL =
-  Deno.env.get("APP_URL") ??
-  "https://linked-list-harry-denells-projects.vercel.app";
+const APP_URL = Deno.env.get("APP_URL")?.replace(/\/+$/, "");
 
 const escapeHtml = (str: string): string =>
   str
@@ -40,6 +38,13 @@ serve(async (req) => {
   if (!SUPABASE_URL) {
     return new Response(
       JSON.stringify({ error: "SUPABASE_URL is not configured" }),
+      { headers: { "Content-Type": "application/json" }, status: 500 },
+    );
+  }
+
+  if (!APP_URL) {
+    return new Response(
+      JSON.stringify({ error: "APP_URL is not configured" }),
       { headers: { "Content-Type": "application/json" }, status: 500 },
     );
   }

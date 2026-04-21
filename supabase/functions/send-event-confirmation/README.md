@@ -5,9 +5,11 @@ This Edge Function sends a confirmation email to the event organizer whenever a 
 ## Setup
 
 1. **Get a Resend API Key:** Sign up at [resend.com](https://resend.com).
-2. **Add Secret to Supabase:**
+2. **Add Secrets to Supabase:**
    ```bash
    supabase secrets set RESEND_API_KEY=your_key_here
+   supabase secrets set APP_URL=https://your-production-app.com
+   supabase secrets set EMAIL_FROM="Your App <events@updates.your-app.com>"
    ```
 3. **Configure database settings** (run once per environment in the Supabase SQL editor):
    ```sql

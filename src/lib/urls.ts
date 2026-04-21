@@ -20,9 +20,17 @@ export const getEventUrl = (slug: string) => {
  * Returns the stable production URL.
  * Used for OAuth redirects since LinkedIn requires a pre-registered stable domain.
  */
-export const getProductionUrl = () => {
-  const url =
-    import.meta.env.VITE_PUBLIC_URL ||
-    "https://linked-list-harry-denells-projects.vercel.app";
+export const getProductionUrl = (isProd = import.meta.env.PROD) => {
+  const url = import.meta.env.VITE_PUBLIC_URL;
+
+  if (!url) {
+    if (isProd) {
+      throw new Error(
+        "VITE_PUBLIC_URL environment variable is required in production",
+      );
+    }
+    return "http://localhost:8080";
+  }
+
   return url.replace(/\/$/, "");
 };

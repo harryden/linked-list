@@ -1,9 +1,25 @@
 class Analytics {
-  identify(_userId: string, _traits?: Record<string, unknown>) {}
+  private isProduction = import.meta.env.PROD;
 
-  track(_eventName: string, _properties?: Record<string, unknown>) {}
+  identify(userId: string, traits?: Record<string, unknown>) {
+    if (!this.isProduction) {
+      console.log(`[Analytics] Identify User: ${userId}`, traits || "");
+    }
+    // TODO: mixpanel.identify(userId) or posthog.identify(userId)
+  }
 
-  page(_pageName: string, _properties?: Record<string, unknown>) {}
+  track(eventName: string, properties?: Record<string, unknown>) {
+    if (!this.isProduction) {
+      console.log(`[Analytics] Track Event: ${eventName}`, properties || "");
+    }
+    // TODO: mixpanel.track(eventName, properties) or posthog.capture(eventName, properties)
+  }
+
+  page(pageName: string, properties?: Record<string, unknown>) {
+    if (!this.isProduction) {
+      console.log(`[Analytics] Page View: ${pageName}`, properties || "");
+    }
+  }
 }
 
 export const analytics = new Analytics();
