@@ -28,7 +28,7 @@ const HowItWorks = () => {
                 animationFillMode: "both",
               }}
             >
-              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold shadow-glow-primary">
+              <div className="flex-shrink-0 w-10 h-10 rounded border border-border-subtle flex items-center justify-center text-xs font-mono text-text-secondary">
                 {step}
               </div>
               <div>

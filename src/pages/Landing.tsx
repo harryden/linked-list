@@ -46,7 +46,7 @@ const Landing = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-subtle">
+    <div className="min-h-screen bg-bg-base">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-3 sm:py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -59,7 +59,7 @@ const Landing = () => {
           <div className="flex items-center gap-2 sm:gap-3">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="rounded-full">
+                <Button variant="ghost" size="icon">
                   <Languages className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -76,17 +76,14 @@ const Landing = () => {
             {user ? (
               <>
                 <Link to="/dashboard">
-                  <Button
-                    variant="ghost"
-                    className="rounded-full text-sm sm:text-base"
-                  >
+                  <Button variant="ghost" className="text-sm sm:text-base">
                     {t("common.buttons.myEvents")}
                   </Button>
                 </Link>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full h-9 w-9 sm:h-10 sm:w-10"
+                  className="h-9 w-9 sm:h-10 sm:w-10"
                   onClick={handleSignOut}
                   aria-label={TEXT.common.buttons.signOut}
                 >
@@ -97,7 +94,7 @@ const Landing = () => {
               <Link to="/auth">
                 <Button
                   variant="ghost"
-                  className="rounded-full shadow-glow-linkedin hover:shadow-lg text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
+                  className="text-linkedin hover:bg-linkedin/10 text-sm sm:text-base"
                 >
                   {t("common.buttons.signInWithLinkedIn")}
                 </Button>

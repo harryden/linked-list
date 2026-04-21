@@ -20,12 +20,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
           <Heading
             as="span"
             level={1}
-            gradient
             className="inline-block animate-fade-in [animation-delay:0.3s] [animation-fill-mode:both]"
-            style={{
-              textShadow:
-                "0 0 30px hsla(var(--glow-primary) / 0.9), 0 0 60px hsla(var(--glow-primary) / 0.7), 0 0 90px hsla(var(--glow-primary) / 0.5)",
-            }}
           >
             {t("landing.hero.highlight")}
           </Heading>
@@ -39,10 +34,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
           {isAuthenticated ? (
             <>
               <Link to="/join-event">
-                <Button
-                  size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all hover:shadow-lg"
-                >
+                <Button size="lg" className="px-6 font-medium">
                   <QrCode className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.joinButton")}
                 </Button>
@@ -51,7 +43,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
+                  className="px-6 font-medium"
                 >
                   <Calendar className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.hostButton")}
@@ -63,7 +55,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
               <Link to="/auth">
                 <Button
                   size="lg"
-                  className="rounded-full px-8 h-12 text-base font-medium transition-all bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin hover:shadow-lg"
+                  className="px-6 font-medium bg-linkedin hover:bg-linkedin-hover text-white"
                 >
                   <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
                   {t("landing.hero.signInButton")}
@@ -73,7 +65,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="rounded-full px-8 h-12 text-base font-medium"
+                  className="px-6 font-medium"
                 >
                   {t("landing.hero.demoButton")}
                 </Button>
