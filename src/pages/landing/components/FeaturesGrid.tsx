@@ -1,53 +1,38 @@
-import { QrCode, Shield, Users } from "lucide-react";
-import { useTranslation } from "react-i18next";
+const FEATURES = [
+  {
+    n: "01",
+    t: "Scan, check in, connect.",
+    d: "Guests tap a QR at the door. Their LinkedIn imports in one step. No app required.",
+  },
+  {
+    n: "02",
+    t: "A real-time attendee graph.",
+    d: "See who else is in the room, what they do, and who you already know in common.",
+  },
+  {
+    n: "03",
+    t: "Portable follow-up.",
+    d: "Attendees leave with a roster they own. Organizers keep a clean CRM-ready export.",
+  },
+];
 
 const FeaturesGrid = () => {
-  const { t } = useTranslation();
-
   return (
-    <section className="py-20">
-      <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-        <div className="bg-bg-base rounded-xl p-8 border border-border-subtle">
-          <div className="mb-4">
-            <QrCode
-              className="h-6 w-6 text-text-secondary"
-              aria-hidden="true"
-            />
+    <section className="px-16 pt-24 pb-16 max-md:px-4 max-md:pt-16">
+      <div className="grid grid-cols-3 gap-8 max-md:grid-cols-1">
+        {FEATURES.map((f) => (
+          <div key={f.n}>
+            <div className="text-[11px] font-mono text-text-secondary tracking-[1px]">
+              {f.n}
+            </div>
+            <div className="text-lg font-medium mt-2.5 tracking-[-0.2px]">
+              {f.t}
+            </div>
+            <div className="text-sm text-text-secondary mt-2 leading-relaxed">
+              {f.d}
+            </div>
           </div>
-          <h3 className="text-xl font-semibold mb-2">
-            {t("landing.features.oneQrCode.title")}
-          </h3>
-          <p className="text-muted-foreground">
-            {t("landing.features.oneQrCode.description")}
-          </p>
-        </div>
-
-        <div className="bg-bg-base rounded-xl p-8 border border-border-subtle">
-          <div className="mb-4">
-            <Shield
-              className="h-6 w-6 text-text-secondary"
-              aria-hidden="true"
-            />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">
-            {t("landing.features.linkedinVerified.title")}
-          </h3>
-          <p className="text-muted-foreground">
-            {t("landing.features.linkedinVerified.description")}
-          </p>
-        </div>
-
-        <div className="bg-bg-base rounded-xl p-8 border border-border-subtle">
-          <div className="mb-4">
-            <Users className="h-6 w-6 text-text-secondary" aria-hidden="true" />
-          </div>
-          <h3 className="text-xl font-semibold mb-2">
-            {t("landing.features.instantLists.title")}
-          </h3>
-          <p className="text-muted-foreground">
-            {t("landing.features.instantLists.description")}
-          </p>
-        </div>
+        ))}
       </div>
     </section>
   );

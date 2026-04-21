@@ -1,12 +1,10 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { UserAvatar } from "@/components/ui/user-avatar";
-import { Linkedin, Users, Download } from "lucide-react";
-import type { ProfileRow } from "@/hooks/useProfile";
+import { Download } from "lucide-react";
 import type { AttendanceRecord } from "@/hooks/useAttendances";
 import { TEXT } from "@/constants/text";
 import { useToast } from "@/hooks/use-toast";
 import { exportAttendeesToCSV } from "@/lib/export";
+import { cn } from "@/lib/utils";
 
 interface AttendeeListProps {
   attendees: AttendanceRecord[];
@@ -15,58 +13,6 @@ interface AttendeeListProps {
   isLoading: boolean;
   eventName?: string;
 }
-
-interface AttendeeItemProps {
-  attendee: ProfileRow;
-  currentUserId: string | null;
-}
-
-const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
-  const isSelf = currentUserId === attendee.id;
-
-  const handleLinkedInClick = () => {
-    if (attendee.linkedin_id) {
-      window.open(
-        `https://www.linkedin.com/in/${attendee.linkedin_id}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
-    }
-  };
-
-  return (
-    <div className="flex items-center gap-4 py-4 border-b last:border-0">
-      <UserAvatar
-        src={attendee.avatar_url}
-        name={attendee.name}
-        className="h-14 w-14"
-        fallbackClassName="text-lg"
-      />
-      <div className="flex-1 min-w-0">
-        <p className="font-semibold text-foreground">{attendee.name}</p>
-        {attendee.headline && (
-          <p className="text-sm text-muted-foreground truncate">
-            {attendee.headline}
-          </p>
-        )}
-      </div>
-      <div className="flex flex-col gap-2">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={handleLinkedInClick}
-          disabled={!attendee.linkedin_id}
-          className=""
-        >
-          <Linkedin className="h-4 w-4 mr-2" aria-hidden="true" />
-          {isSelf
-            ? TEXT.event.header.viewSelfProfile
-            : TEXT.event.header.viewProfile}
-        </Button>
-      </div>
-    </div>
-  );
-};
 
 const AttendeeList = ({
   attendees,
@@ -96,56 +42,107 @@ const AttendeeList = ({
   };
 
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+    <div>
+      {/* Section header */}
+      <div className="flex items-baseline justify-between mb-1">
+        <span className="text-[14px] font-medium">In the room</span>
         <div className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
-          <span className="text-lg font-medium">
-            {attendeeCount}{" "}
-            {attendeeCount === 1
-              ? TEXT.event.attendeeList.singular
-              : TEXT.event.attendeeList.plural}
+          {isOrganizer && attendeeCount > 0 && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleExport}
+              className="h-auto py-0 px-1 text-[12px] text-text-secondary gap-1"
+            >
+              <Download className="h-3 w-3" aria-hidden="true" />
+              {TEXT.event.attendeeList.exportCsv}
+            </Button>
+          )}
+          <span className="text-[12px] text-text-secondary font-mono">
+            {attendeeCount} · LIVE
           </span>
         </div>
-        {isOrganizer && attendeeCount > 0 && (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExport}
-            className="gap-2"
-          >
-            <Download className="h-4 w-4" />
-            {TEXT.event.attendeeList.exportCsv}
-          </Button>
-        )}
-      </CardHeader>
-      <CardContent>
-        {isLoading ? (
-          <p className="text-center text-muted-foreground py-8">
-            {TEXT.event.attendeeList.loading}
-          </p>
-        ) : attendeeCount === 0 ? (
-          <p className="text-center text-muted-foreground py-8 italic">
-            {isOrganizer
-              ? TEXT.event.attendeeList.organizerEmpty
-              : TEXT.event.attendeeList.attendeeEmpty}
-          </p>
-        ) : (
-          <div className="divide-y divide-border">
-            {attendees.map((record, index) => {
-              if (!record.profiles) return null;
-              return (
-                <AttendeeItem
-                  key={record.id || index}
-                  attendee={record.profiles}
-                  currentUserId={currentUserId}
-                />
-              );
-            })}
-          </div>
-        )}
-      </CardContent>
-    </Card>
+      </div>
+      <p className="text-[12px] text-text-secondary mb-3">
+        Updates as people check in.
+      </p>
+
+      {isLoading ? (
+        <p className="text-[13px] text-text-secondary py-6 text-center">
+          {TEXT.event.attendeeList.loading}
+        </p>
+      ) : attendeeCount === 0 ? (
+        <p className="text-[13px] text-text-secondary py-6 text-center">
+          {isOrganizer
+            ? TEXT.event.attendeeList.organizerEmpty
+            : TEXT.event.attendeeList.attendeeEmpty}
+        </p>
+      ) : (
+        <div>
+          {attendees.map((record, i) => {
+            const profile = record.profiles;
+            const name = profile?.name ?? "Unknown";
+            const headline = profile?.headline ?? "";
+            const initials = name
+              .split(" ")
+              .map((p) => p[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase();
+            const joinTime = record.created_at
+              ? new Date(record.created_at).toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: false,
+                })
+              : "";
+            const isSelf = currentUserId === profile?.id;
+
+            return (
+              <div
+                key={record.id ?? i}
+                className={cn(
+                  "flex items-center gap-3 py-3",
+                  i < attendees.length - 1 && "border-b border-border-subtle",
+                )}
+              >
+                <div className="w-8 h-8 rounded-full bg-bg-surface-hover border border-border-subtle flex items-center justify-center text-[11px] font-medium text-text-secondary flex-shrink-0 overflow-hidden">
+                  {profile?.avatar_url ? (
+                    <img
+                      src={profile.avatar_url}
+                      className="w-full h-full object-cover"
+                      alt={name}
+                    />
+                  ) : (
+                    initials
+                  )}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="text-[13px] font-medium">
+                    {name}
+                    {isSelf && (
+                      <span className="ml-1.5 text-[11px] font-normal text-text-secondary">
+                        (you)
+                      </span>
+                    )}
+                  </div>
+                  {headline && (
+                    <div className="text-[12px] text-text-secondary truncate">
+                      {headline}
+                    </div>
+                  )}
+                </div>
+                {joinTime && (
+                  <div className="text-[11px] text-text-secondary font-mono flex-shrink-0">
+                    {joinTime}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 };
 

@@ -1,24 +1,19 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { LogoMark } from "@/components/LogoMark";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Linkedin, Shield, Users, Lock } from "lucide-react";
 import { TEXT } from "@/constants/text";
-import linkbackLogo from "@/assets/linkback-logo.png";
 import { isSafeRedirect } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import { getBaseUrl } from "@/lib/urls";
-import Heading from "@/components/ui/heading";
 
 const Auth = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const infoItems = TEXT.auth.info.items;
-  const infoIcons = [Users, Shield, Lock];
 
   const redirectPath = useMemo(() => {
     const params = new URLSearchParams(location.search);
@@ -66,96 +61,85 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-bg-surface flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <Link to="/" className="inline-flex items-center gap-2 mb-4">
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
-          </Link>
-          <p className="text-xl text-muted-foreground">{TEXT.auth.tagline}</p>
-        </div>
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      {/* Top bar */}
+      <div className="px-5 pt-5 flex items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <LogoMark size={22} />
+          <span className="text-[13px] font-semibold tracking-[-0.3px]">
+            LinkBack
+          </span>
+        </Link>
+        <Link to="/">
+          <Button variant="ghost" size="sm" className="text-text-secondary">
+            Close
+          </Button>
+        </Link>
+      </div>
 
-        <Card className="border-border-subtle">
-          <CardHeader className="space-y-2 text-center pb-6">
-            <Heading level={1} className="text-2xl font-bold">
-              {TEXT.auth.card.title}
-            </Heading>
-            <p className="text-sm text-muted-foreground">
-              {TEXT.auth.card.description}
-            </p>
-          </CardHeader>
+      {/* Form area */}
+      <div className="flex-1 flex flex-col items-center justify-center px-5">
+        <div className="w-full max-w-[400px]">
+          <div className="text-[11px] font-mono text-text-secondary tracking-[1px]">
+            SIGN IN
+          </div>
+          <h2 className="text-[28px] font-semibold tracking-[-0.5px] leading-[1.15] mt-3">
+            Pick up where you left off.
+          </h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-3">
+            LinkBack uses your LinkedIn profile so you always arrive with the
+            right name tag.
+          </p>
 
-          <CardContent className="space-y-6 px-6 pb-6">
+          <div className="mt-8">
             <Button
+              variant="linkedin"
+              size="xl"
+              className="w-full gap-2"
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              size="lg"
-              className="w-full h-10 font-medium bg-linkedin hover:bg-linkedin-hover text-white"
             >
               {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  {TEXT.auth.card.buttonLoading}
-                </>
+                <div className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
               ) : (
-                <>
-                  <Linkedin className="h-5 w-5 mr-2" aria-hidden="true" />
-                  {TEXT.auth.card.buttonIdle}
-                </>
-              )}
-            </Button>
-
-            <div className="space-y-4 pt-4 border-t border-border">
-              <p className="text-sm font-medium text-center text-foreground">
-                {TEXT.auth.info.title}
-              </p>
-
-              <div className="space-y-3">
-                {infoItems.map((item, index) => {
-                  const Icon = infoIcons[index] ?? Users;
-
-                  return (
-                    <div key={item.title} className="flex items-start gap-3">
-                      <Icon
-                        className="h-5 w-5 text-text-secondary flex-shrink-0 mt-0.5"
-                        aria-hidden="true"
-                      />
-                      <div>
-                        <p className="text-sm font-medium">{item.title}</p>
-                        <p className="text-xs text-muted-foreground">
-                          {item.description}
-                        </p>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <p className="text-xs text-center text-muted-foreground leading-relaxed">
-                {TEXT.auth.info.consentPrefix}{" "}
-                <a
-                  href="https://www.linkedin.com/mypreferences/d/apps"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline font-medium text-linkedin"
+                <svg
+                  width="18"
+                  height="18"
+                  viewBox="0 0 24 24"
+                  fill="white"
+                  aria-hidden="true"
                 >
-                  {TEXT.auth.info.linkedInSettings}
-                </a>
-              </p>
-            </div>
-          </CardContent>
-        </Card>
+                  <path d="M20.5 2h-17A1.5 1.5 0 0 0 2 3.5v17A1.5 1.5 0 0 0 3.5 22h17a1.5 1.5 0 0 0 1.5-1.5v-17A1.5 1.5 0 0 0 20.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 1 1 8.3 6.5a1.78 1.78 0 0 1-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0 0 13 14.19a.66.66 0 0 0 0 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 0 1 2.7-1.4c1.55 0 3.36.86 3.36 3.66z" />
+                </svg>
+              )}
+              Continue with LinkedIn
+            </Button>
+          </div>
 
-        <div className="mt-6 text-center">
-          <Link
-            to="/"
-            className="text-sm text-muted-foreground hover:text-foreground"
-          >
-            {TEXT.auth.navigation.backToHome}
+          <div className="flex items-center gap-3 my-6">
+            <div className="flex-1 h-px bg-border-subtle" />
+            <span className="text-[11px] font-mono text-text-secondary">
+              OR
+            </span>
+            <div className="flex-1 h-px bg-border-subtle" />
+          </div>
+
+          <Link to="/join-event">
+            <Button variant="outline" size="lg" className="w-full">
+              Enter event code
+            </Button>
           </Link>
+
+          <p className="text-xs text-text-secondary leading-relaxed mt-8 text-center">
+            By continuing you agree to the Terms and Privacy Policy.
+          </p>
         </div>
+      </div>
+
+      {/* Footer */}
+      <div className="px-5 py-5 border-t border-border-subtle flex justify-between font-mono text-[11px] text-text-secondary">
+        <span>v2.4.0</span>
+        <span>linkback.app</span>
       </div>
     </div>
   );

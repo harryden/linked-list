@@ -1,15 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { QrCode, Users } from "lucide-react";
-import { TEXT } from "@/constants/text";
-import EmptyState from "./EmptyState";
+import { cn } from "@/lib/utils";
 
 interface MinimalEvent {
   id: string;
@@ -23,64 +14,69 @@ interface UpcomingSectionProps {
   isLoading: boolean;
 }
 
-const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => (
-  <section>
-    <h2 className="text-2xl font-semibold mb-4">
-      {TEXT.dashboard.upcoming.title}
-    </h2>
+function formatShortDate(startsAt: string): string {
+  const d = new Date(startsAt);
+  return d
+    .toLocaleString("en-US", { month: "short", day: "numeric" })
+    .toUpperCase();
+}
 
-    {isLoading ? (
-      <Card>
-        <CardContent className="py-12 text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary" />
+const UpcomingSection = ({ events, isLoading }: UpcomingSectionProps) => {
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-[14px] font-medium">Attending</div>
+        {events.length > 0 && (
+          <div className="text-[12px] text-text-secondary">
+            {events.length} upcoming
           </div>
-          <p className="text-muted-foreground">
-            {TEXT.dashboard.upcoming.loading}
-          </p>
-        </CardContent>
-      </Card>
-    ) : events.length === 0 ? (
-      <EmptyState
-        icon={
-          <QrCode
-            className="h-12 w-12 text-muted-foreground"
-            aria-hidden="true"
-          />
-        }
-        title={TEXT.dashboard.upcoming.emptyTitle}
-        description={TEXT.dashboard.upcoming.emptyDescription}
-        actions={
-          <Link to="/join-event" state={{ fromDashboard: true }}>
-            <Button>{TEXT.common.buttons.joinFirstEvent}</Button>
-          </Link>
-        }
-      />
-    ) : (
-      <div className="grid md:grid-cols-2 gap-4">
-        {events.map((event) => (
-          <Link key={event.id} to={`/event/${event.slug}`}>
-            <Card className="hover:bg-bg-surface transition-colors cursor-pointer">
-              <CardHeader>
-                <CardTitle>{event.name}</CardTitle>
-                <CardDescription>
-                  {event.starts_at
-                    ? new Date(event.starts_at).toLocaleDateString()
-                    : TEXT.common.labels.dateNotSet}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex items-center gap-2 text-sm text-text-secondary">
-                  <Users className="h-4 w-4" aria-hidden="true" />
-                  <span>{TEXT.dashboard.upcoming.viewAttendeeList}</span>
-                </div>
-              </CardContent>
-            </Card>
-          </Link>
-        ))}
+        )}
       </div>
-    )}
-  </section>
-);
+
+      {isLoading ? (
+        <div className="bg-bg-base border border-border-subtle rounded-xl p-8 text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-text-primary mx-auto" />
+        </div>
+      ) : events.length === 0 ? (
+        <div className="bg-bg-base border border-border-subtle rounded-xl p-8 text-center">
+          <p className="text-sm text-text-secondary mb-4">
+            No upcoming events.
+          </p>
+          <Link to="/join-event">
+            <Button variant="primary" size="sm">
+              Join with code
+            </Button>
+          </Link>
+        </div>
+      ) : (
+        <div className="bg-bg-base border border-border-subtle rounded-xl overflow-hidden">
+          {events.map((event, i) => (
+            <div
+              key={event.id}
+              className={cn(
+                "flex items-center gap-4 px-4 py-3.5",
+                i < events.length - 1 && "border-b border-border-subtle",
+              )}
+            >
+              <div className="flex-1 min-w-0">
+                <div className="text-[14px] font-medium">{event.name}</div>
+              </div>
+              {event.starts_at && (
+                <div className="text-[12px] font-mono text-text-secondary tracking-[0.5px] flex-shrink-0">
+                  {formatShortDate(event.starts_at)}
+                </div>
+              )}
+              <Link to={`/event/${event.slug}`} className="flex-shrink-0">
+                <Button variant="outline" size="sm">
+                  View
+                </Button>
+              </Link>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
+  );
+};
 
 export default UpcomingSection;

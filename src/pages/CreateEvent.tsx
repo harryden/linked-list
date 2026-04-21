@@ -11,7 +11,6 @@ import {
 } from "@/lib/events";
 import CreateEventHeader from "./create-event/components/CreateEventHeader";
 import CreateEventForm from "./create-event/components/CreateEventForm";
-import PageContainer from "@/components/layout/PageContainer";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createEventSchema, CreateEventValues } from "./create-event/schema";
@@ -55,18 +54,12 @@ const CreateEvent = () => {
     error: eventError,
   } = useEvent(isEditing ? { id: editingEventId } : undefined);
 
-  // Check if coming from dashboard, default to home
   const fromDashboard = routerLocation.state?.fromDashboard;
   const backPath = fromDashboard
     ? "/dashboard"
     : eventSlugFromState
       ? `/event/${eventSlugFromState}`
       : "/";
-  const backText = fromDashboard
-    ? TEXT.createEvent.header.backToDashboard
-    : eventSlugFromState
-      ? TEXT.createEvent.header.backToEvent
-      : TEXT.createEvent.header.backToHome;
 
   useEffect(() => {
     if (eventError) {
@@ -159,7 +152,6 @@ const CreateEvent = () => {
           organizer_id: session.user.id,
         });
 
-        // The hook might return the new event, but if not we can track slug
         analytics.track("event_created", { slug });
 
         toast({
@@ -180,29 +172,45 @@ const CreateEvent = () => {
 
   if (isEditing && isEventLoading) {
     return (
-      <PageContainer className="items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary mx-auto"></div>
-          <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
+      <div className="min-h-screen bg-bg-surface flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary mx-auto mb-4" />
+          <p className="text-text-secondary">{TEXT.event.page.loading}</p>
         </div>
-      </PageContainer>
+      </div>
     );
   }
 
   return (
-    <PageContainer maxWidth="md" className="pt-0 pb-8">
-      <CreateEventHeader backPath={backPath} backText={backText} />
+    <div className="min-h-screen bg-bg-surface flex flex-col">
+      <CreateEventHeader backPath={backPath} />
 
-      <div className="mt-8">
-        <CreateEventForm
-          control={control}
-          errors={errors}
-          isSubmitting={isSubmitting || (isEditing && isEventLoading)}
-          mode={isEditing ? "edit" : "create"}
-          onSubmit={handleSubmit(onSubmit)}
-        />
+      <div className="flex-1 overflow-y-auto flex justify-center px-6 py-12">
+        <div className="w-full max-w-[640px]">
+          <div className="text-[11px] font-mono text-text-secondary tracking-[1px]">
+            {isEditing ? "EDIT EVENT" : "CREATE EVENT · STEP 1 OF 2"}
+          </div>
+          <h1 className="text-[32px] font-semibold tracking-[-0.8px] mt-2">
+            Set the details.
+          </h1>
+          <p className="text-sm text-text-secondary mt-2 max-w-[420px]">
+            Name it, pick the time, drop the address. You can adjust anything up
+            until the event starts.
+          </p>
+
+          <div className="mt-8">
+            <CreateEventForm
+              control={control}
+              errors={errors}
+              isSubmitting={isSubmitting || (isEditing && isEventLoading)}
+              mode={isEditing ? "edit" : "create"}
+              onSubmit={handleSubmit(onSubmit)}
+              onCancel={() => navigate(backPath)}
+            />
+          </div>
+        </div>
       </div>
-    </PageContainer>
+    </div>
   );
 };
 
