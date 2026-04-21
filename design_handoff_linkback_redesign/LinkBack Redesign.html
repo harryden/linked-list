@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>LinkBack — Precision Utility</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"/>
+<style>
+  html, body { margin: 0; padding: 0; background: #f0eee9; }
+  body { font-family: 'Geist','Inter',system-ui,-apple-system,sans-serif; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="screens.jsx"></script>
+
+<script type="text/babel">
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="foundations" title="Foundations" subtitle="Tokens, type, components">
+        <DCArtboard id="system" label="Design system · Precision Utility" width={900} height={1120}>
+          <ComponentsSpec />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="marketing" title="Marketing" subtitle="Entry point — B2B organizers">
+        <DCArtboard id="landing" label="Landing · /" width={1024} height={1200}>
+          <LandingScreen />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="auth" title="Auth" subtitle="Single LinkedIn SSO, flat layout">
+        <DCArtboard id="signin" label="Auth · /auth" width={390} height={780}>
+          <AuthScreen />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="organizer" title="Organizer surfaces" subtitle="Dashboard & event creation">
+        <DCArtboard id="dash" label="Dashboard · /dashboard" width={1024} height={860}>
+          <DashboardScreen />
+        </DCArtboard>
+        <DCArtboard id="create" label="Create event · /create-event" width={1024} height={860}>
+          <CreateEventScreen />
+        </DCArtboard>
+      </DCSection>
+
+      <DCSection id="attendee" title="Attendee flow" subtitle="The check-in — core moment of the product">
+        <DCArtboard id="event-out" label="Event · pre-check-in" width={390} height={780}>
+          <EventPageScreen checkedIn={false} />
+        </DCArtboard>
+        <DCArtboard id="event-in" label="Event · checked in" width={390} height={780}>
+          <EventPageScreen checkedIn={true} />
+        </DCArtboard>
+        <DCArtboard id="success" label="Event success · /event-success" width={390} height={780}>
+          <EventSuccessScreen />
+        </DCArtboard>
+        <DCArtboard id="qr" label="QR modal · signature moment" width={390} height={780}>
+          <QRModalScreen />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
