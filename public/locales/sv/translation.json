@@ -2,7 +2,7 @@
   "common": {
     "brand": "LinkBack",
     "copy": {
-      "footer": "© 2026 LinkBack. Inloggning via LinkedIn."
+      "footer": "© 2026 LinkBack"
     },
     "buttons": {
       "signInWithLinkedIn": "Logga in med LinkedIn",
@@ -50,7 +50,8 @@
       "paginationPreviousLabel": "Gå till föregående sida",
       "paginationNextLabel": "Gå till nästa sida",
       "close": "Stäng",
-      "toggleSidebar": "Växla sidofält"
+      "toggleSidebar": "Växla sidofält",
+      "switchLanguage": "Byt språk"
     }
   },
   "landing": {
@@ -112,7 +113,12 @@
       "heading": "Arrangera smartare event.",
       "subheading": "LinkedIn-verifierade incheckningar. Riktiga profiler. Inga falska deltagare.",
       "getStarted": "Kom igång gratis",
-      "scrollCta": "Se hur det fungerar →"
+      "scrollCta": "Se hur det fungerar →",
+      "checkInLabel": "Checka in",
+      "scanPrompt": "Skanna för att logga in",
+      "checkedIn": "incheckad",
+      "attendeesHeader": "Deltagare",
+      "moreAttendees": "+21 fler deltagare"
     }
   },
   "dashboard": {

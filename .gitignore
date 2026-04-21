@@ -146,6 +146,3 @@ vite.config.ts.timestamp-*
 .claude/settings.local.json
 .gstack/
 .superpowers/
-
-# Placeholder asset — replace with licensed image before publishing
-src/assets/phone-hand.png

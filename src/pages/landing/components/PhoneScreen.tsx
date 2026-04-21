@@ -28,6 +28,7 @@ const ATTENDEES = [
 const StepBlank = () => <div style={{ flex: 1, background: "#fff" }} />;
 
 const StepQR = () => {
+  const { t } = useTranslation();
   const authUrl = `${getBaseUrl()}/auth`;
 
   return (
@@ -54,7 +55,7 @@ const StepQR = () => {
           alignSelf: "flex-start",
         }}
       >
-        Check in
+        {t("landing.phoneScreen.checkInLabel")}
       </span>
       <div
         style={{
@@ -73,151 +74,152 @@ const StepQR = () => {
         />
       </div>
       <span style={{ fontSize: 9.5, fontWeight: 700, color: "#111" }}>
-        Scan to sign in
+        {t("landing.phoneScreen.scanPrompt")}
       </span>
     </div>
   );
 };
 
-const StepAttendees = () => (
-  <div
-    style={{
-      flex: 1,
-      background: "#f7f7f8",
-      display: "flex",
-      flexDirection: "column",
-      fontFamily: IOS_FONT,
-      overflowY: "hidden",
-    }}
-  >
+const StepAttendees = () => {
+  const { t } = useTranslation();
+  return (
     <div
       style={{
-        background: "#fff",
-        padding: "8px 12px 6px",
-        borderBottom: "1px solid #f0f0f0",
-      }}
-    >
-      <div
-        style={{
-          fontSize: 9.5,
-          fontWeight: 800,
-          color: "#111",
-          letterSpacing: "-0.02em",
-        }}
-      >
-        Stockholm Tech Meetup
-      </div>
-      <div style={{ fontSize: 7.5, color: "#999" }}>
-        Tue 6 May · Stureplan 4
-      </div>
-    </div>
-    <div
-      style={{
+        flex: 1,
+        background: "#f7f7f8",
         display: "flex",
-        alignItems: "center",
-        gap: 6,
-        padding: "6px 12px",
+        flexDirection: "column",
+        fontFamily: IOS_FONT,
+        overflowY: "hidden",
       }}
     >
-      <span
+      <div
         style={{
-          fontSize: 16,
-          fontWeight: 800,
-          color: "#111",
-          letterSpacing: "-0.03em",
-          lineHeight: 1,
+          background: "#fff",
+          padding: "8px 12px 6px",
+          borderBottom: "1px solid #f0f0f0",
         }}
       >
-        24
-      </span>
-      <span style={{ fontSize: 8, color: "#aaa", lineHeight: 1.2 }}>
-        checked
-        <br />
-        in
-      </span>
-    </div>
-    <div
-      style={{
-        fontSize: 7.5,
-        fontWeight: 700,
-        letterSpacing: "0.1em",
-        textTransform: "uppercase",
-        color: "#aaa",
-        padding: "0 12px 4px",
-      }}
-    >
-      Attendees
-    </div>
-    {ATTENDEES.map(({ name, role, color }) => (
+        <div
+          style={{
+            fontSize: 9.5,
+            fontWeight: 800,
+            color: "#111",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          Stockholm Tech Meetup
+        </div>
+        <div style={{ fontSize: 7.5, color: "#999" }}>
+          Tue 6 May · Stureplan 4
+        </div>
+      </div>
       <div
-        key={name}
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 8,
-          padding: "5px 12px",
-          background: "#fff",
-          borderBottom: "1px solid #f5f5f5",
+          gap: 6,
+          padding: "6px 12px",
         }}
       >
-        <div
+        <span
           style={{
-            width: 22,
-            height: 22,
-            borderRadius: "50%",
-            background: color,
-            flexShrink: 0,
-          }}
-        />
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div
-            style={{
-              fontSize: 8.5,
-              fontWeight: 700,
-              color: "#111",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {name}
-          </div>
-          <div
-            style={{
-              fontSize: 7,
-              color: "#aaa",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
-            {role}
-          </div>
-        </div>
-        <div
-          style={{
-            width: 14,
-            height: 14,
-            background: "#0a66c2",
-            borderRadius: 3,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 6,
-            fontWeight: 900,
-            color: "#fff",
-            flexShrink: 0,
+            fontSize: 16,
+            fontWeight: 800,
+            color: "#111",
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
           }}
         >
-          in
-        </div>
+          24
+        </span>
+        <span style={{ fontSize: 8, color: "#aaa", lineHeight: 1.2 }}>
+          {t("landing.phoneScreen.checkedIn")}
+        </span>
       </div>
-    ))}
-    <div style={{ padding: "5px 12px", fontSize: 7.5, color: "#ccc" }}>
-      +21 more attendees
+      <div
+        style={{
+          fontSize: 7.5,
+          fontWeight: 700,
+          letterSpacing: "0.1em",
+          textTransform: "uppercase",
+          color: "#aaa",
+          padding: "0 12px 4px",
+        }}
+      >
+        {t("landing.phoneScreen.attendeesHeader")}
+      </div>
+      {ATTENDEES.map(({ name, role, color }) => (
+        <div
+          key={name}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "5px 12px",
+            background: "#fff",
+            borderBottom: "1px solid #f5f5f5",
+          }}
+        >
+          <div
+            style={{
+              width: 22,
+              height: 22,
+              borderRadius: "50%",
+              background: color,
+              flexShrink: 0,
+            }}
+          />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div
+              style={{
+                fontSize: 8.5,
+                fontWeight: 700,
+                color: "#111",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {name}
+            </div>
+            <div
+              style={{
+                fontSize: 7,
+                color: "#aaa",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {role}
+            </div>
+          </div>
+          <div
+            style={{
+              width: 14,
+              height: 14,
+              background: "#0a66c2",
+              borderRadius: 3,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: 6,
+              fontWeight: 900,
+              color: "#fff",
+              flexShrink: 0,
+            }}
+          >
+            in
+          </div>
+        </div>
+      ))}
+      <div style={{ padding: "5px 12px", fontSize: 7.5, color: "#ccc" }}>
+        {t("landing.phoneScreen.moreAttendees")}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const StepCTA = () => {
   const { t } = useTranslation();

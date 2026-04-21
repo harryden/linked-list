@@ -1,9 +1,11 @@
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { useScrollProgress } from "../hooks/useScrollProgress";
 import PhoneReveal from "./PhoneReveal";
 import FloatingCTA from "./FloatingCTA";
 
 const HeroSection = () => {
+  const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
   const { phaseA, step, showFloatingCTA } = useScrollProgress(containerRef);
 
@@ -35,48 +37,37 @@ const HeroSection = () => {
             padding: 0,
           }}
         >
-          <span
-            style={{
-              display: "block",
-              fontSize: "clamp(48px, 8vw, 110px)",
-              fontWeight: 900,
-              color: "#fff",
-            }}
-          >
-            Check
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "clamp(48px, 8vw, 110px)",
-              fontWeight: 900,
-              color: "#fff",
-            }}
-          >
-            in.
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "clamp(48px, 8vw, 110px)",
-              fontWeight: 900,
-              color: "transparent",
-              WebkitTextStroke: "2px rgba(255,255,255,0.55)",
-            }}
-          >
-            Stand
-          </span>
-          <span
-            style={{
-              display: "block",
-              fontSize: "clamp(48px, 8vw, 110px)",
-              fontWeight: 900,
-              color: "transparent",
-              WebkitTextStroke: "2px rgba(255,255,255,0.55)",
-            }}
-          >
-            out.
-          </span>
+          {t("landing.floatingCta.headline")
+            .split(" ")
+            .map((word) => (
+              <span
+                key={word}
+                style={{
+                  display: "block",
+                  fontSize: "clamp(48px, 8vw, 110px)",
+                  fontWeight: 900,
+                  color: "#fff",
+                }}
+              >
+                {word}
+              </span>
+            ))}
+          {t("landing.floatingCta.headlineOutline")
+            .split(" ")
+            .map((word) => (
+              <span
+                key={word}
+                style={{
+                  display: "block",
+                  fontSize: "clamp(48px, 8vw, 110px)",
+                  fontWeight: 900,
+                  color: "transparent",
+                  WebkitTextStroke: "2px rgba(255,255,255,0.55)",
+                }}
+              >
+                {word}
+              </span>
+            ))}
         </h1>
 
         <div
@@ -100,14 +91,14 @@ const HeroSection = () => {
               width: 1,
               height: 40,
               background:
-                "linear-gradient(to bottom, transparent, rgba(0,0,0,0.3))",
+                "linear-gradient(to bottom, transparent, rgba(255,255,255,0.5))",
             }}
           />
           <span
             style={{
               fontSize: 9,
               letterSpacing: "0.15em",
-              color: "rgba(0,0,0,0.35)",
+              color: "rgba(255,255,255,0.6)",
               fontFamily: "var(--font-brand)",
             }}
           >

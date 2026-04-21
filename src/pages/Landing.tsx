@@ -1,13 +1,14 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/supabase-js";
-const GradientBackground = lazy(
-  () => import("./landing/components/GradientBackground"),
-);
 import LandingNav from "./landing/components/LandingNav";
 import HeroSection from "./landing/components/HeroSection";
 import HowItWorks from "./landing/components/HowItWorks";
 import FooterCTA from "./landing/components/FooterCTA";
+
+const GradientBackground = lazy(
+  () => import("./landing/components/GradientBackground"),
+);
 
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);

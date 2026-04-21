@@ -50,7 +50,8 @@
       "paginationPreviousLabel": "Go to previous page",
       "paginationNextLabel": "Go to next page",
       "close": "Close",
-      "toggleSidebar": "Toggle Sidebar"
+      "toggleSidebar": "Toggle Sidebar",
+      "switchLanguage": "Switch language"
     }
   },
   "landing": {
@@ -112,7 +113,12 @@
       "heading": "Host smarter events.",
       "subheading": "LinkedIn-verified check-ins. Real profiles. No fake attendees.",
       "getStarted": "Get started free",
-      "scrollCta": "See how it works →"
+      "scrollCta": "See how it works →",
+      "checkInLabel": "Check in",
+      "scanPrompt": "Scan to sign in",
+      "checkedIn": "checked\nin",
+      "attendeesHeader": "Attendees",
+      "moreAttendees": "+21 more attendees"
     }
   },
   "dashboard": {

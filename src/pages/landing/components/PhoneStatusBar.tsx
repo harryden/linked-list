@@ -52,8 +52,20 @@ const PhoneStatusBar = () => {
         `${now.getHours().toString().padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`,
       );
     };
-    const id = setInterval(tick, 60_000);
-    return () => clearInterval(id);
+
+    const now = new Date();
+    const delayToNextMinute =
+      (60 - now.getSeconds()) * 1000 - now.getMilliseconds();
+    let intervalId: ReturnType<typeof setInterval> | undefined;
+    const timeoutId = setTimeout(() => {
+      tick();
+      intervalId = setInterval(tick, 60_000);
+    }, delayToNextMinute);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId !== undefined) clearInterval(intervalId);
+    };
   }, []);
 
   return (

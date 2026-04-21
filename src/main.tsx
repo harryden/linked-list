@@ -18,10 +18,32 @@ if (location.pathname.startsWith("/event/")) {
   import("./pages/EventPage").catch(() => {});
 }
 
+const reducedMotionQuery = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+);
+let rafId: number | null = null;
+
 function raf(time: number) {
   lenis.raf(time);
-  requestAnimationFrame(raf);
+  rafId = requestAnimationFrame(raf);
 }
-requestAnimationFrame(raf);
+
+function startRaf() {
+  if (rafId === null) rafId = requestAnimationFrame(raf);
+}
+
+function stopRaf() {
+  if (rafId !== null) {
+    cancelAnimationFrame(rafId);
+    rafId = null;
+  }
+}
+
+function updateLenisMotion() {
+  reducedMotionQuery.matches ? stopRaf() : startRaf();
+}
+
+reducedMotionQuery.addEventListener("change", updateLenisMotion);
+updateLenisMotion();
 
 createRoot(document.getElementById("root")!).render(<App />);

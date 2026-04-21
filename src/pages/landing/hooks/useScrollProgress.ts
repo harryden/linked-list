@@ -40,14 +40,21 @@ export function useScrollProgress(
       );
 
       let step: 0 | 1 | 2 | 3 = 0;
-      if (phaseBProgress >= 0.66) step = 3;
-      else if (phaseBProgress >= 0.33) step = 2;
-      else if (phaseBProgress > 0) step = 1;
+      if (phaseBProgress >= 1) step = 3;
+      else if (phaseBProgress >= 0.66) step = 2;
+      else if (phaseBProgress >= 0.33) step = 1;
 
-      setProgress({
-        phaseA,
-        step,
-        showFloatingCTA: step === 3,
+      const showFloatingCTA = step === 3;
+
+      setProgress((prev) => {
+        if (
+          prev.phaseA === phaseA &&
+          prev.step === step &&
+          prev.showFloatingCTA === showFloatingCTA
+        ) {
+          return prev;
+        }
+        return { phaseA, step, showFloatingCTA };
       });
     };
 

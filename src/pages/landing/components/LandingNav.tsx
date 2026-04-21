@@ -50,7 +50,7 @@ const LandingNav = ({ user, onSignOut }: LandingNavProps) => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              aria-label="Switch language"
+              aria-label={t("common.ui.switchLanguage")}
               style={{
                 background: "rgba(255,255,255,0.08)",
                 backdropFilter: "blur(12px)",
