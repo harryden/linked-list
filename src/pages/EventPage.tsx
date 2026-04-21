@@ -250,7 +250,7 @@ const EventPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col">
+    <div className="min-h-screen bg-bg-base flex flex-col">
       <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Link
@@ -261,9 +261,7 @@ const EventPage = () => {
           </Link>
           {!currentUserId && (
             <Link to="/auth">
-              <Button variant="outline" className="rounded-full">
-                {TEXT.common.buttons.signIn}
-              </Button>
+              <Button variant="outline">{TEXT.common.buttons.signIn}</Button>
             </Link>
           )}
         </div>
@@ -280,7 +278,7 @@ const EventPage = () => {
             </Link>
           )}
 
-          <Card className="shadow-xl">
+          <Card>
             <CardHeader className="space-y-4">
               <EventHeader
                 event={event}

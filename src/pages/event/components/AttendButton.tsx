@@ -30,10 +30,10 @@ const AttendButton = ({
   }
 
   const buttonClasses = cn(
-    "w-full rounded-full h-12 text-base font-medium transition-all hover:shadow-lg",
+    "w-full h-12 text-base font-medium transition-colors",
     mode === "linkedin"
-      ? "bg-linkedin hover:bg-linkedin-hover text-white shadow-glow-linkedin"
-      : "bg-primary text-primary-foreground shadow-glow-primary hover:bg-primary-hover",
+      ? "bg-linkedin hover:bg-linkedin-hover text-white"
+      : "bg-primary text-primary-foreground hover:bg-brand-hover",
     className,
   );
 

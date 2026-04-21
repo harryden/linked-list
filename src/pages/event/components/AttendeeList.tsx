@@ -56,7 +56,7 @@ const AttendeeItem = ({ attendee, currentUserId }: AttendeeItemProps) => {
           size="sm"
           onClick={handleLinkedInClick}
           disabled={!attendee.linkedin_id}
-          className="rounded-full"
+          className=""
         >
           <Linkedin className="h-4 w-4 mr-2" aria-hidden="true" />
           {isSelf
@@ -96,7 +96,7 @@ const AttendeeList = ({
   };
 
   return (
-    <Card className="shadow-xl">
+    <Card>
       <CardHeader className="flex flex-row items-center justify-between space-y-0">
         <div className="flex items-center gap-2">
           <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
@@ -112,7 +112,7 @@ const AttendeeList = ({
             variant="outline"
             size="sm"
             onClick={handleExport}
-            className="rounded-full gap-2"
+            className="gap-2"
           >
             <Download className="h-4 w-4" />
             {TEXT.event.attendeeList.exportCsv}
