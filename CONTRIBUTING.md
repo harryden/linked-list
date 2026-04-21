@@ -21,6 +21,17 @@ This project is a collaborative effort by:
 - CI is green (lint / typecheck / tests / build)
 - Docs updated if behavior changes
 
+## AI Review & Feedback Loop
+
+This project utilizes AI-powered code reviews (e.g., GitHub Copilot) to maintain high code quality and consistency.
+
+1. **Wait for AI Review:** After opening a PR, wait for the AI reviewer to post its initial feedback.
+2. **Review & Take a Stance:** Thoroughly evaluate every comment. Do not blindly apply changes, but do not ignore them without a technical rationale.
+3. **Reply & Close the Loop:** For every comment thread:
+   - If you apply the change: Reply explaining that it has been fixed.
+   - If you disagree or the suggestion is incorrect: Reply with a technical explanation of why the current implementation is preferred.
+4. **Iterative Refinement:** If feedback requires code changes during review, push follow-up commits as needed. If you need to clean up the PR branch history, do so with amend/autosquash before requesting final approval. This refers to rewriting the PR branch history, not using GitHub's squash-merge.
+
 ## Review & merge policy
 
 - At least 1 approving review required
