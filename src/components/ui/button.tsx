@@ -20,7 +20,7 @@ const buttonVariants = cva(
         ghost:
           "text-text-secondary hover:bg-bg-surface-hover hover:text-text-primary",
         link: "text-text-primary underline-offset-4 hover:underline",
-        linkedin: "bg-brand-linkedin text-white hover:opacity-90",
+        linkedin: "bg-linkedin text-white hover:bg-linkedin-hover",
         success: "bg-state-success text-white hover:opacity-90",
       },
       size: {
