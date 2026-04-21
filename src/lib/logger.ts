@@ -1,11 +1,3 @@
-/**
- * Structured Logger Abstraction
- *
- * This centralizes all error reporting. Currently, it logs to the console
- * in a structured way, but it is designed to be easily swapped for Sentry
- * or any other monitoring tool.
- */
-
 interface LogContext {
   category?: string;
   tags?: Record<string, string>;
@@ -16,9 +8,6 @@ interface LogContext {
 class Logger {
   private isProduction = import.meta.env.PROD;
 
-  /**
-   * Report an error to the monitoring service
-   */
   error(error: unknown, context: LogContext = {}) {
     const message = error instanceof Error ? error.message : String(error);
     const stack = error instanceof Error ? error.stack : undefined;
@@ -30,13 +19,8 @@ class Logger {
       if (context.extra) console.dir(context.extra);
       console.groupEnd();
     }
-
-    // TODO: Sentry.captureException(error, { extra: context });
   }
 
-  /**
-   * Log a warning
-   */
   warn(message: string, context: LogContext = {}) {
     if (!this.isProduction) {
       console.warn(
@@ -44,19 +28,14 @@ class Logger {
         context.extra || "",
       );
     }
-    // TODO: Sentry.captureMessage(message, "warning");
   }
 
-  /**
-   * Log info or a breadcrumb
-   */
   info(message: string, context: LogContext = {}) {
     if (!this.isProduction) {
       console.info(
         `[INFO] ${context.category ? `${context.category}: ` : ""}${message}`,
       );
     }
-    // TODO: Sentry.addBreadcrumb({ message, category: context.category });
   }
 }
 
