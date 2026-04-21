@@ -182,7 +182,7 @@ const CreateEvent = () => {
     return (
       <PageContainer className="items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-primary mx-auto"></div>
           <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
         </div>
       </PageContainer>

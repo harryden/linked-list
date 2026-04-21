@@ -27,7 +27,7 @@ const CreateEventForm = ({
   mode = "create",
   onSubmit,
 }: CreateEventFormProps) => (
-  <Card className="shadow-xl">
+  <Card>
     <CardHeader>
       <CardTitle className="text-3xl" as="h1">
         {mode === "edit"
@@ -150,7 +150,7 @@ const CreateEventForm = ({
         />
         <Button
           type="submit"
-          className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary"
+          className="w-full h-12 text-base font-medium"
           disabled={isSubmitting}
         >
           {isSubmitting
