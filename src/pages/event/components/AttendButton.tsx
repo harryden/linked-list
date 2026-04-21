@@ -1,6 +1,8 @@
+import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
 
@@ -59,14 +61,28 @@ const AttendButton = ({
     </Button>
   );
 
+  const prefersReduced = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  const motionWrapper = (children: React.ReactNode) => (
+    <motion.div
+      whileTap={prefersReduced ? undefined : { scale: 0.96 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+      style={{ display: "contents" }}
+    >
+      {children}
+    </motion.div>
+  );
+
   if (!currentUserId) {
     const safeRedirectPath = redirectPath?.startsWith("/") ? redirectPath : "/";
     const authLink = `/auth?redirect=${encodeURIComponent(safeRedirectPath)}`;
 
-    return <Link to={authLink}>{button}</Link>;
+    return motionWrapper(<Link to={authLink}>{button}</Link>);
   }
 
-  return button;
+  return motionWrapper(button);
 };
 
 export default AttendButton;
