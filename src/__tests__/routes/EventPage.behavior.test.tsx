@@ -23,7 +23,7 @@ type OrganizerProfile = {
 };
 
 type LocationMocksOptions = {
-  event: any;
+  event: typeof baseEvent;
   currentUserId: string | null;
   userAttendance?: unknown[];
   attendeeProfiles?: OrganizerProfile[];
@@ -92,16 +92,23 @@ const setupEventPageMocks = ({
   deleteQuery.eq.mockReturnValue(deleteQuery);
   deleteQuery.select.mockReturnValue(deleteQuery);
 
-  let eventCallCount = 0;
   let attendanceCallCount = 0;
 
   supabaseStub.from.mockImplementation((table) => {
     if (table === "events") {
-      if (eventCallCount === 0) {
-        eventCallCount += 1;
-        return eventQuery;
-      }
-      return deleteQuery;
+      // Return a query that can handle both selects and deletes
+      const eventsProxy = {
+        select: vi.fn().mockImplementation((_cols) => {
+          // If we are selecting all columns, it's likely the fetchEvent query
+          if (!_cols || _cols === "*") return eventQuery;
+          // If selecting specific columns, it's likely the delete query's returning clause
+          return deleteQuery;
+        }),
+        delete: vi.fn().mockReturnValue(deleteQuery),
+        update: vi.fn().mockReturnValue(createQueryStub()),
+        insert: vi.fn().mockReturnValue(createQueryStub()),
+      };
+      return eventsProxy as any;
     }
 
     if (table === "attendances") {

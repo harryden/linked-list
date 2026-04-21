@@ -35,7 +35,7 @@ const useSession = (navigate: NavigateFunction) => {
       setIsSessionLoading(false);
     };
 
-    loadSession();
+    void loadSession();
     return () => {
       isMounted = false;
     };

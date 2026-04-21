@@ -71,7 +71,8 @@ describe("supabase hooks", () => {
       name: "Launch Day",
       slug: "launch-day",
       organizer_id: "organizer-1",
-    } as any);
+      ends_at: new Date().toISOString(),
+    } as unknown);
 
     await waitFor(() => {
       expect(invalidateSpy).toHaveBeenCalledWith({ queryKey: ["events"] });

@@ -1,12 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Linkedin, Shield, Users, Lock } from "lucide-react";

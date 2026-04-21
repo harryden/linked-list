@@ -143,7 +143,7 @@ const EventHeader = ({
       : TEXT.common.labels.timeNotSet;
   }, [eventStartDate, eventEndDate, timeZoneAbbreviation]);
 
-  const hostInitials = useMemo(() => {
+  const _hostInitials = useMemo(() => {
     if (!organizer?.name) {
       return "";
     }

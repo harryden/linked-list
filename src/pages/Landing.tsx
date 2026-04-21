@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { LogOut, Languages } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,14 +21,13 @@ import {
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
 
   const toggleLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
   };
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    void supabase.auth.getSession().then(({ data: { session } }) => {
       setUser(session?.user ?? null);
     });
 

@@ -1,30 +1,28 @@
-# Linked List
+# LinkBack: Verified Professional Networking
 
-This project is a web application that allows users to create and manage events. Users can create events, and other users can join them.
-
-## Team
-
-- **Harry Denell** (@harryden) - Lead Developer & Architect
-- **Teodor** (@Teodor) - Core Contributor
+LinkBack is a professional networking and event check-in platform designed to eliminate the friction of event registration through verified LinkedIn identities and real-time attendee synchronization.
 
 ## Features
 
-*   User authentication
-*   Create, view, and join events
-*   Dashboard to manage your events
+- **Frictionless Entry:** One-tap LinkedIn OAuth check-in.
+- **Verified Identity:** Attendee data pulled directly from LinkedIn.
+- **Real-time Networking:** Live attendee lists that grow dynamically.
+- **Organizer Insights:** One-click CSV exports of verified contacts.
+- **Short Codes:** 6-digit codes for fast manual entry.
 
 ## Tech Stack
 
-*   **Frontend:** React, Vite, TypeScript, shadcn/ui
-*   **Backend:** Supabase
-*   **Testing:** Vitest, React Testing Library
+- **Frontend:** React, Vite, TypeScript, Tailwind CSS, Radix UI.
+- **Backend:** Supabase (PostgreSQL, Realtime, Edge Functions).
+- **Email:** Resend.
+- **Testing:** Vitest, Playwright.
 
 ## Getting Started
 
 ### Prerequisites
 
-*   Node.js (v18 or later)
-*   npm
+- Node.js (v18 or later)
+- npm
 
 ### Installation
 
@@ -36,11 +34,7 @@ This project is a web application that allows users to create and manage events.
     ```bash
     npm install
     ```
-3.  Create a `.env` file in the root of the project and add your Supabase URL and anonymous key:
-    ```
-    VITE_PUBLIC_SUPABASE_URL=your-supabase-url
-    VITE_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
-    ```
+3.  Create a `.env` file in the root of the project (see `.env.example`).
 
 ### Running the application
 
@@ -48,8 +42,8 @@ This project is a web application that allows users to create and manage events.
 npm run dev
 ```
 
-This will start the development server at `http://localhost:5173`.
+The development server will start at `http://localhost:5173`.
 
 ## Contributing
 
-Contributions are welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get started.
+Please read our [Contributing Guidelines](CONTRIBUTING.md) before submitting a PR.

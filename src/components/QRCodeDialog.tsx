@@ -15,7 +15,7 @@ interface QRCodeDialogProps {
   open: boolean;
   onClose: () => void;
   eventSlug: string;
-  eventName: string;
+  _eventName: string;
 }
 
 export const QRCodeDialog = ({

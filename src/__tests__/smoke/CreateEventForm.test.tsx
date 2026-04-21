@@ -37,7 +37,7 @@ vi.mock("@/components/FormField", () => ({
 
 import { renderWithProviders } from "@/test-utils/render";
 import { Route, Routes } from "react-router-dom";
-import { screen, waitFor } from "@testing-library/react";
+import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateEvent from "@/pages/CreateEvent";
 import { TEXT } from "@/constants/text";

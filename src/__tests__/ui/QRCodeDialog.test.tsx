@@ -5,8 +5,8 @@ import userEvent from "@testing-library/user-event";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
 import { TEXT } from "@/constants/text";
 
-vi.mock("@/components/QRCodePreview", () => ({
-  default: ({
+vi.mock("@/components/QRCodePreview", () => {
+  const QRCodePreviewMock = ({
     onDataUrlChange,
   }: {
     onDataUrlChange?: (url: string) => void;
@@ -22,8 +22,13 @@ vi.mock("@/components/QRCodePreview", () => ({
         data-testid="mock-qr"
       />
     );
-  },
-}));
+  };
+
+  return {
+    __esModule: true,
+    default: QRCodePreviewMock,
+  };
+});
 
 const DialogHarness = () => {
   const triggerRef = useRef<HTMLButtonElement | null>(null);

@@ -13,7 +13,7 @@ globalThis.import = {
       VITE_PUBLIC_SUPABASE_ANON_KEY: "anon-key",
     },
   },
-} as any;
+} as unknown;
 
 beforeEach(() => {
   resetSupabaseStub();

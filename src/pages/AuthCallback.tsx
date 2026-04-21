@@ -72,7 +72,7 @@ const AuthCallback = () => {
     return () => {
       subscription.unsubscribe();
     };
-  }, [location.search, navigate]);
+  }, [location.search, navigate, toast]);
 
   useEffect(() => {
     if (!userId || isProfileLoading || hasHandledProfile) {
