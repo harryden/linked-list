@@ -2,6 +2,11 @@
 
 This project is a web application that allows users to create and manage events. Users can create events, and other users can join them.
 
+## Team
+
+- **Harry Denell** (@harryden) - Lead Developer & Architect
+- **Teodor** (@Teodor) - Core Contributor
+
 ## Features
 
 *   User authentication
