@@ -20,15 +20,15 @@ DECLARE
   v_supabase_url text;
   v_webhook_secret text;
 BEGIN
-  -- Attempt to get settings with explicit fallbacks to prevent silent failures
-  BEGIN
-    v_supabase_url := current_setting('app.supabase_url');
-    v_webhook_secret := current_setting('app.settings.webhook_secret');
-  EXCEPTION WHEN OTHERS THEN
-    -- If settings are not configured for this database/environment, log and skip to prevent INSERT failure
+  -- Read settings without masking unexpected runtime errors
+  v_supabase_url := current_setting('app.supabase_url', true);
+  v_webhook_secret := current_setting('app.settings.webhook_secret', true);
+
+  IF v_supabase_url IS NULL OR v_webhook_secret IS NULL THEN
+    -- If settings are missing (e.g. after restart), log and skip to prevent INSERT failure
     RAISE WARNING 'Email trigger skipped: Supabase settings (app.supabase_url or app.settings.webhook_secret) are not configured.';
     RETURN NEW;
-  END;
+  END IF;
 
   PERFORM
     net.http_post(

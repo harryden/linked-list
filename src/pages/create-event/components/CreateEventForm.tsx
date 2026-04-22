@@ -79,37 +79,39 @@ const CreateEventForm = ({
       )}
     />
 
-    <Controller
-      name="startTime"
-      control={control}
-      render={({ field }) => (
-        <FormField
-          id="startTime"
-          type="time"
-          label={TEXT.createEvent.form.fields.startTimeLabel}
-          value={field.value}
-          onChange={field.onChange}
-          ref={field.ref}
-          error={errors.startTime?.message}
-        />
-      )}
-    />
+    <div className="grid grid-cols-2 gap-4">
+      <Controller
+        name="startTime"
+        control={control}
+        render={({ field }) => (
+          <FormField
+            id="startTime"
+            type="time"
+            label={TEXT.createEvent.form.fields.startTimeLabel}
+            value={field.value}
+            onChange={field.onChange}
+            ref={field.ref}
+            error={errors.startTime?.message}
+          />
+        )}
+      />
 
-    <Controller
-      name="endTime"
-      control={control}
-      render={({ field }) => (
-        <FormField
-          id="endTime"
-          type="time"
-          label={TEXT.createEvent.form.fields.endTimeLabel}
-          value={field.value}
-          onChange={field.onChange}
-          ref={field.ref}
-          error={errors.endTime?.message}
-        />
-      )}
-    />
+      <Controller
+        name="endTime"
+        control={control}
+        render={({ field }) => (
+          <FormField
+            id="endTime"
+            type="time"
+            label={TEXT.createEvent.form.fields.endTimeLabel}
+            value={field.value}
+            onChange={field.onChange}
+            ref={field.ref}
+            error={errors.endTime?.message}
+          />
+        )}
+      />
+    </div>
 
     <div className="flex flex-col gap-1.5">
       <label
