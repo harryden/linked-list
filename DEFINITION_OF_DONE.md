@@ -6,7 +6,7 @@ This document defines the requirements that must be met before any feature or bu
 - [ ] Code follows project conventions (no comments, self-documentary).
 - [ ] No `console.log` or debug statements remain.
 - [ ] Types are explicit; no `any` used.
-- [ ] Rebased on latest `main` with a single atomic commit.
+- [ ] Rebased on latest `main`; ideally squashed into a single atomic commit.
 
 ## 2. Testing & Validation
 - [ ] **Unit/Smoke Tests:** All existing tests pass (`npm test`).

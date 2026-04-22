@@ -18,12 +18,12 @@ This checklist tracks the core use cases to prevent regressions. Perform these c
 ### 3. Event Page
 - [ ] **Visibility:** Public can see the event details.
 - [ ] **Check-in:** Attendees can join/unattend.
-- [ ] **Real-time:** Attendee list updates instantly when someone joins (CDC).
+- [ ] **Real-time:** Attendee list updates instantly when someone joins.
 - [ ] **Feedback:** Feedback dialog opens and submits successfully.
 
 ### 4. Organizer Tools
 - [ ] **Export:** Clicking export downloads a valid CSV/spreadsheet.
-- [ ] **Management:** (If implemented) Delete or edit event works.
+- [ ] **Management:** (If implemented) Deleting or editing an event works.
 
 ## Edge Cases
 - [ ] **404 Handling:** Visiting a non-existent event slug shows the custom 404 page.

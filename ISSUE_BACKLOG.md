@@ -1,6 +1,6 @@
 # Issue Backlog
 
-This document consolidates findings from multiple QA reviews (including AI analysis of user flows and UI state). The goal is to track these as atomic units of work, eventually migrating them to GitHub Issues to be tackled one PR at a time.
+This document consolidates findings from multiple QA reviews (including AI analysis of user flows and UI state). These items are tracked as atomic units of work in GitHub Issues; this document serves as a snapshot/index to help organize them for tackling one PR at a time.
 
 ## 🔴 Critical Bugs & Logic Flaws (Blockers)
 
