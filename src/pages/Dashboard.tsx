@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, NavigateFunction } from "react-router-dom";
-import { LayoutDashboard, Calendar, Plus } from "lucide-react";
+import { LayoutDashboard, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
@@ -187,7 +187,7 @@ const Dashboard = () => {
         <Link to="/" className="flex items-center gap-2.5 px-2 pb-5 pt-2">
           <LogoMark size={22} />
           <span className="text-[13px] font-semibold tracking-[-0.3px]">
-            LinkBack
+            Linked List
           </span>
         </Link>
 
@@ -303,6 +303,10 @@ const Dashboard = () => {
             {
               l: "Total attendees",
               v: "—",
+            },
+            {
+              l: "CRM-ready export",
+              v: "CSV",
             },
           ].map((s) => (
             <div key={s.l}>

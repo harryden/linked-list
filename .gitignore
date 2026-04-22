@@ -146,3 +146,4 @@ vite.config.ts.timestamp-*
 .claude/settings.local.json
 .gstack/
 .vercel/
+test-results/

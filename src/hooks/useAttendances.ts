@@ -109,7 +109,7 @@ export const useRealtimeAttendances = (eventId?: string) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      void supabase.removeChannel(channel);
     };
   }, [eventId, queryClient]);
 };

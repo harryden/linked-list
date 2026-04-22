@@ -6,9 +6,9 @@ import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
 import { vi } from "vitest";
 
 vi.mock("@/lib/events", async (importOriginal) => {
-  const actual = await importOriginal<any>();
+  const actual = await importOriginal<unknown>();
   return {
-    ...actual,
+    ...(actual as object),
     getDashboardGreeting: vi.fn().mockReturnValue("Welcome back, Dash User!"),
   };
 });

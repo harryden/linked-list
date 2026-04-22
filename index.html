@@ -2,20 +2,25 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="dns-prefetch" href="%VITE_PUBLIC_SUPABASE_URL%" />
+    <link rel="preconnect" href="%VITE_PUBLIC_SUPABASE_URL%" crossorigin />
     <title>Linked List — Event Roster & Check-In</title>
     <meta
       name="description"
       content="Precision event check-in and live attendee rosters. Connect instantly with verified LinkedIn profiles."
     />
     <meta name="author" content="Linked List" />
+
     <meta property="og:title" content="Linked List — Event Roster & Check-In" />
     <meta
       property="og:description"
       content="Precision event check-in and live attendee rosters. Connect instantly with verified LinkedIn profiles."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://linkedlist.app" />
+    <meta property="og:image" content="/og-image.png" />
+
     <meta name="twitter:card" content="summary_large_image" />
     <meta
       name="twitter:title"
@@ -25,6 +30,9 @@
       name="twitter:description"
       content="Precision event check-in and live attendee rosters. Connect instantly with verified LinkedIn profiles."
     />
+    <meta name="twitter:image" content="/og-image.png" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
   </head>
   <body>
     <div id="root"></div>

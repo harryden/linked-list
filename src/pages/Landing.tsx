@@ -98,6 +98,25 @@ const Landing = () => {
       <main className="relative z-10">
         <HeroSection isAuthenticated={Boolean(user)} />
         <FeaturesGrid />
+
+        <section className="px-16 py-32 flex flex-col items-center text-center max-md:px-4">
+          <div className="max-w-[480px]">
+            <h2 className="text-[40px] font-semibold tracking-[-1px] leading-[1.05]">
+              Ready to simplify your check-ins?
+            </h2>
+            <p className="text-text-secondary mt-5 text-lg leading-relaxed">
+              Join dozens of organizers already using Linked List for their
+              professional community events.
+            </p>
+            <div className="mt-10 flex gap-3 justify-center max-md:flex-col">
+              <Link to={user ? "/create-event" : "/auth"}>
+                <Button variant="primary" size="lg" className="px-10 h-12">
+                  {user ? "Create your first event" : "Sign in with LinkedIn"}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
       </main>
 
       <footer className="relative z-10 pt-24 border-t border-border-subtle">
