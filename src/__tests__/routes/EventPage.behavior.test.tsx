@@ -112,7 +112,7 @@ const setupEventPageMocks = ({
         update: vi.fn().mockReturnValue(createQueryStub()),
         insert: vi.fn().mockReturnValue(createQueryStub()),
       };
-      return eventsProxy as unknown as any;
+      return eventsProxy as unknown;
     }
 
     if (table === "attendances") {

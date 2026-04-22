@@ -73,7 +73,8 @@ serve(async (req) => {
     }
 
     const email = userData.user.email;
-    const eventName = escapeHtml(String(record.name ?? ""));
+    const rawEventName = String(record.name ?? "");
+    const eventName = escapeHtml(rawEventName);
     const shortCode = escapeHtml(String(record.short_code ?? ""));
     const eventSlug = encodeURIComponent(String(record.slug ?? ""));
     const dashboardUrl = `${APP_URL}/event/${eventSlug}`;
@@ -87,7 +88,7 @@ serve(async (req) => {
       body: JSON.stringify({
         from: EMAIL_FROM,
         to: [email],
-        subject: `Event Live: ${eventName}`,
+        subject: `Event Live: ${rawEventName}`,
         html: `
           <div style="font-family: ui-sans-serif, system-ui, sans-serif; max-width: 500px; margin: 0 auto; padding: 40px 20px; color: #111;">
             <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px;">Event Created</h1>
