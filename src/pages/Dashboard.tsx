@@ -286,7 +286,11 @@ const Dashboard = () => {
                   : "text-text-secondary hover:text-text-primary",
               )}
             >
-              <tab.icon className="h-3.5 w-3.5" />
+              <tab.icon
+                className="h-3.5 w-3.5"
+                aria-hidden="true"
+                focusable="false"
+              />
               {tab.label}
               {activeTab === tab.id && (
                 <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-brand-accent" />
