@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useProfile";
 import { useToast } from "@/hooks/use-toast";
-import { QrCode } from "lucide-react";
 import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
 import { analytics } from "@/lib/analytics";
@@ -24,9 +23,9 @@ const AuthCallback = () => {
   })();
 
   const {
-    data: _profile,
     isLoading: isProfileLoading,
     error: profileError,
+    data: _profile,
   } = useMyProfile(userId ?? undefined);
 
   useEffect(() => {
@@ -112,35 +111,26 @@ const AuthCallback = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-bg-surface flex items-center justify-center p-4">
-      <div className="text-center space-y-6">
-        <div className="flex justify-center">
-          <QrCode
-            className="h-16 w-16 text-text-secondary animate-pulse"
-            aria-hidden="true"
-          />
-        </div>
-
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
+      <div className="text-center w-full max-w-[320px]">
         {status === "loading" ? (
           <>
-            <h1 className="text-2xl font-bold">
+            <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-6 relative">
+              <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+            </div>
+            <h1 className="text-[20px] font-semibold tracking-[-0.4px]">
               {TEXT.authCallback.loadingTitle}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-[13px] text-text-secondary mt-2">
               {TEXT.authCallback.loadingDescription}
             </p>
-            <div className="flex justify-center">
-              <div className="w-12 h-[2px] bg-border-subtle overflow-hidden">
-                <div className="w-full h-full bg-text-primary animate-loader-slide"></div>
-              </div>
-            </div>
           </>
         ) : (
           <>
-            <h1 className="text-2xl font-bold text-destructive">
+            <h1 className="text-[20px] font-semibold tracking-[-0.4px] text-state-error">
               {TEXT.authCallback.errorTitle}
             </h1>
-            <p className="text-muted-foreground">
+            <p className="text-[13px] text-text-secondary mt-2">
               {TEXT.authCallback.errorDescription}
             </p>
           </>
