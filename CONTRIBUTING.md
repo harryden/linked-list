@@ -15,6 +15,7 @@
 
 - Imperative mood: "Add X", "Fix Y"
 - No type prefixes (`fix:`, `feat:`)
+- **Ideally exactly one commit per PR.**
 - Squash fixups before opening PR
 
 ## Before PR
