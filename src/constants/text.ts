@@ -281,7 +281,7 @@ export const TEXT = {
     },
     page: {
       loading: "Loading event...",
-      notFoundTitle: "Event Not Found",
+      notFoundTitle: "Event expired or missing.",
       notFoundDescription: "This event doesn't exist.",
       homeButton: "Go Home",
       guestNotice:
