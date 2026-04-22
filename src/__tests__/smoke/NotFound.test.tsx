@@ -10,7 +10,9 @@ describe("NotFound smoke", () => {
         <NotFound />
       </MemoryRouter>,
     );
-    expect(screen.getByText(/404/i)).toBeInTheDocument();
+    expect(screen.getByText("PAGE NOT FOUND")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: /404/i })).toBeInTheDocument();
+    expect(screen.getByText(/lost in the grid/i)).toBeInTheDocument();
   });
 
   it("renders the subtitle", () => {
