@@ -496,6 +496,8 @@ const EventPage = () => {
             isOrganizer={isOrganizer}
             isLoading={isAttendeesLoading}
             eventName={event.name}
+            startsAt={event.starts_at}
+            endsAt={event.ends_at}
           />
         </div>
       </div>
