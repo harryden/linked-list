@@ -19,7 +19,10 @@ interface MyEventsListProps {
 
 type EventStatus = "live" | "upcoming" | "draft" | "past";
 
-function getStatus(startsAt: string | null, endsAt: string | null): EventStatus {
+function getStatus(
+  startsAt: string | null,
+  endsAt: string | null,
+): EventStatus {
   if (!startsAt) return "draft";
   const start = new Date(startsAt).getTime();
   const end = endsAt ? new Date(endsAt).getTime() : start + 8 * 60 * 60 * 1000;

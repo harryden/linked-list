@@ -11,7 +11,13 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { MessageSquarePlus, Bug, Lightbulb, MessageSquare, LogIn } from "lucide-react";
+import {
+  MessageSquarePlus,
+  Bug,
+  Lightbulb,
+  MessageSquare,
+  LogIn,
+} from "lucide-react";
 import { useFeedback, FeedbackType } from "@/hooks/useFeedback";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -72,7 +78,8 @@ export const FeedbackDialog = ({
             ? String((error as { message: unknown }).message)
             : "";
 
-      const isAuthError = errorMessage === "Authentication required to submit feedback";
+      const isAuthError =
+        errorMessage === "Authentication required to submit feedback";
 
       toast({
         title: isAuthError ? "Sign in required" : "Error",
@@ -111,7 +118,10 @@ export const FeedbackDialog = ({
         {isAuthenticated === false ? (
           <div className="pt-4">
             <Link to={`/auth?next=${encodeURIComponent(location.pathname)}`}>
-              <Button className="w-full gap-2 py-6 text-base" variant="linkedin">
+              <Button
+                className="w-full gap-2 py-6 text-base"
+                variant="linkedin"
+              >
                 <LogIn className="h-5 w-5" />
                 Sign in to send feedback
               </Button>

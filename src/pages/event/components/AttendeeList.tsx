@@ -30,7 +30,9 @@ const AttendeeList = ({
   const isLive = useMemo(() => {
     if (!startsAt) return false;
     const start = new Date(startsAt).getTime();
-    const end = endsAt ? new Date(endsAt).getTime() : start + 8 * 60 * 60 * 1000;
+    const end = endsAt
+      ? new Date(endsAt).getTime()
+      : start + 8 * 60 * 60 * 1000;
     const now = Date.now();
     return now >= start && now <= end;
   }, [startsAt, endsAt]);

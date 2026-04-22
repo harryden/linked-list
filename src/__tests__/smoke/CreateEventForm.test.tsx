@@ -134,4 +134,46 @@ describe("CreateEvent smoke", () => {
       await screen.findByText(TEXT.createEvent.toast.success),
     ).toBeInTheDocument();
   });
+
+  it("does not submit the form if no changes were made (Pristine Form)", async () => {
+    const user = userEvent.setup();
+
+    // Re-render with mocked update mutation to track calls
+    vi.mocked(supabaseStub.from).mockImplementation(() => {
+      const query = createQueryStub({
+        singleResult: {
+          data: {
+            id: "event-1",
+            name: "Original Name",
+            location: "Original Location",
+            starts_at: "2025-05-10T10:00:00.000Z",
+            ends_at: "2025-05-10T12:00:00.000Z",
+            linkedin_event_url: "",
+          },
+          error: null,
+        },
+      });
+      return query;
+    });
+
+    renderWithProviders(<CreateEvent />, {
+      initialEntries: [
+        { pathname: "/create-event", state: { eventId: "event-1" } },
+      ],
+    });
+
+    // Wait for form to prefill
+    await screen.findByDisplayValue("Original Name");
+
+    await user.click(
+      screen.getByRole("button", {
+        name: new RegExp(TEXT.createEvent.form.editSubmitIdle, "i"),
+      }),
+    );
+
+    // Should show a "No changes" toast instead of success
+    expect(
+      await screen.findByText(TEXT.event.toast.noChanges),
+    ).toBeInTheDocument();
+  });
 });
