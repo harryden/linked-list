@@ -30,7 +30,9 @@ describe("NotFound smoke", () => {
         <NotFound />
       </MemoryRouter>,
     );
-    const link = screen.getByRole("link", { name: new RegExp(TEXT.notFound.link, "i") });
+    const link = screen.getByRole("link", {
+      name: new RegExp(TEXT.notFound.link, "i"),
+    });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", "/");
   });
