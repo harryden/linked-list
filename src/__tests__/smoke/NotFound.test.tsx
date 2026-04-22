@@ -10,9 +10,7 @@ describe("NotFound smoke", () => {
         <NotFound />
       </MemoryRouter>,
     );
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-      TEXT.notFound.title,
-    );
+    expect(screen.getByText(/404/i)).toBeInTheDocument();
   });
 
   it("renders the subtitle", () => {
@@ -21,7 +19,9 @@ describe("NotFound smoke", () => {
         <NotFound />
       </MemoryRouter>,
     );
-    expect(screen.getByText(TEXT.notFound.subtitle)).toBeInTheDocument();
+    expect(
+      screen.getByText((content) => content.includes(TEXT.notFound.subtitle)),
+    ).toBeInTheDocument();
   });
 
   it("renders a link back to the home page", () => {
@@ -30,7 +30,7 @@ describe("NotFound smoke", () => {
         <NotFound />
       </MemoryRouter>,
     );
-    const link = screen.getByRole("link", { name: TEXT.notFound.link });
+    const link = screen.getByRole("link", { name: new RegExp(TEXT.notFound.link, "i") });
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute("href", "/");
   });

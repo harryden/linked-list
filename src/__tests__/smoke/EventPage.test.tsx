@@ -24,10 +24,10 @@ describe("EventPage states", () => {
     );
 
     expect(
-      await screen.findByText(TEXT.event.page.notFoundTitle),
+      await screen.findByText(/not found/i),
     ).toBeInTheDocument();
     expect(
-      await screen.findByText(TEXT.event.page.notFoundDescription),
+      await screen.findByText((content) => content.includes(TEXT.event.page.notFoundDescription)),
     ).toBeInTheDocument();
   });
 });

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, NavigateFunction } from "react-router-dom";
-import { LayoutDashboard, Plus } from "lucide-react";
+import { LayoutDashboard, Plus, Calendar, History } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
@@ -130,8 +130,8 @@ const Dashboard = () => {
   }, [upcomingEventsData]);
 
   const TABS = [
-    { id: "upcoming", label: "Upcoming" },
-    { id: "past", label: "Past" },
+    { id: "upcoming", label: "Upcoming", icon: Calendar },
+    { id: "past", label: "Past", icon: History },
   ] as const;
 
   const [activeTab, setActiveTab] =
@@ -280,12 +280,13 @@ const Dashboard = () => {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={cn(
-                "pb-3 text-[13px] font-medium transition-colors relative",
+                "pb-3 text-[13px] font-medium transition-colors relative flex items-center gap-2",
                 activeTab === tab.id
                   ? "text-text-primary"
                   : "text-text-secondary hover:text-text-primary",
               )}
             >
+              <tab.icon className="h-3.5 w-3.5" />
               {tab.label}
               {activeTab === tab.id && (
                 <div className="absolute bottom-[-1px] left-0 right-0 h-[2px] bg-brand-accent" />
@@ -303,10 +304,6 @@ const Dashboard = () => {
             {
               l: "Total attendees",
               v: "—",
-            },
-            {
-              l: "CRM-ready export",
-              v: "CSV",
             },
           ].map((s) => (
             <div key={s.l}>

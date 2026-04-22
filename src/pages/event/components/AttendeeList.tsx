@@ -1,9 +1,8 @@
 import { Button } from "@/components/ui/button";
-import { Download, Linkedin } from "lucide-react";
+import { Linkedin } from "lucide-react";
 import type { AttendanceRecord } from "@/hooks/useAttendances";
 import { TEXT } from "@/constants/text";
 import { useToast } from "@/hooks/use-toast";
-import { exportAttendeesToCSV } from "@/lib/export";
 import { cn } from "@/lib/utils";
 
 interface AttendeeListProps {
@@ -19,27 +18,9 @@ const AttendeeList = ({
   currentUserId,
   isOrganizer,
   isLoading,
-  eventName = "event",
 }: AttendeeListProps) => {
   const { toast } = useToast();
   const attendeeCount = attendees.length;
-
-  const handleExport = () => {
-    try {
-      exportAttendeesToCSV(eventName, attendees);
-      toast({
-        title: "Success",
-        description: TEXT.event.toast.exportSuccess,
-      });
-    } catch (error) {
-      console.error("Export failed:", error);
-      toast({
-        title: "Error",
-        variant: "destructive",
-        description: TEXT.event.toast.exportFailure,
-      });
-    }
-  };
 
   return (
     <div>
@@ -47,17 +28,6 @@ const AttendeeList = ({
       <div className="flex items-baseline justify-between mb-1">
         <span className="text-[14px] font-medium">In the room</span>
         <div className="flex items-center gap-2">
-          {isOrganizer && attendeeCount > 0 && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleExport}
-              className="h-auto py-0 px-1 text-[12px] text-text-secondary gap-1"
-            >
-              <Download className="h-3 w-3" aria-hidden="true" />
-              {TEXT.event.attendeeList.exportCsv}
-            </Button>
-          )}
           <span className="text-[12px] text-text-secondary font-mono">
             {attendeeCount}{" "}
             {attendeeCount === 1
