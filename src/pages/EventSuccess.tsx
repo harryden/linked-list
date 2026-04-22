@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { CalendarCheck, Download } from "lucide-react";
+import { CheckCircle2, ArrowRight } from "lucide-react";
 import QRCodePreview from "@/components/QRCodePreview";
 import { useEvent } from "@/hooks/useEvents";
 import { logger } from "@/lib/logger";
-import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
-import PageContainer from "@/components/layout/PageContainer";
-import Heading from "@/components/ui/heading";
 import { getEventUrl } from "@/lib/urls";
+import { TEXT } from "@/constants/text";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -36,21 +33,13 @@ const EventSuccess = () => {
   }, [eventError, navigate]);
 
   useEffect(() => {
-    if (!event) {
-      return;
-    }
-
+    if (!event) return;
     setEventName(event.name);
     setEventCode(eventCodeFromId(event.id));
   }, [event]);
 
-  const isLoading = isEventLoading;
-
   const handleDownload = () => {
-    if (!event || !qrCodeUrl) {
-      return;
-    }
-
+    if (!event || !qrCodeUrl) return;
     const link = document.createElement("a");
     link.href = qrCodeUrl;
     link.download = `${event.slug}-qr-code.png`;
@@ -59,76 +48,97 @@ const EventSuccess = () => {
     document.body.removeChild(link);
   };
 
-  if (isLoading) {
+  if (isEventLoading) {
     return (
-      <PageContainer className="items-center justify-center">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">{TEXT.eventSuccess.loading}</p>
+          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
+            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+          </div>
+          <p className="text-text-secondary">{TEXT.eventSuccess.loading}</p>
         </div>
-      </PageContainer>
+      </div>
     );
   }
 
-  if (!event) {
-    return null;
-  }
+  if (!event) return null;
 
   return (
-    <PageContainer maxWidth="sm" className="justify-center">
-      <Card className="w-full shadow-2xl">
-        <CardContent className="pt-8 pb-6 px-6 space-y-6">
-          <div className="flex justify-center">
-            <div className="bg-success/10 p-4 rounded-full shadow-glow-primary/10">
-              <CalendarCheck
-                className="h-12 w-12 text-success"
-                aria-hidden="true"
-              />
-            </div>
-          </div>
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      <div className="h-11" />
 
-          <div className="text-center space-y-2">
-            <Heading level={1}>{TEXT.eventSuccess.title}</Heading>
-            <p className="text-muted-foreground">
-              {TEXT.eventSuccess.description}
-            </p>
-          </div>
-
-          <div className="bg-muted/50 rounded-lg p-4 text-center space-y-1">
-            <p className="text-sm text-muted-foreground">
-              {TEXT.eventSuccess.codeLabel}
-            </p>
-            <p className="text-4xl font-bold tracking-wider">{eventCode}</p>
-          </div>
-
-          <div className="flex justify-center">
-            <QRCodePreview
-              value={`${getEventUrl(event.slug)}?ref=qr`}
-              size={400}
-              onDataUrlChange={setQrCodeUrl}
+      <div className="flex-1 flex flex-col px-6 justify-between max-w-lg mx-auto w-full">
+        <div className="flex-1 flex flex-col justify-center">
+          <div className="w-[56px] h-[56px] rounded-full bg-state-success-bg border border-state-success flex items-center justify-center mb-6">
+            <CheckCircle2
+              className="h-[28px] w-[28px] text-state-success"
+              strokeWidth={1.5}
+              aria-hidden="true"
             />
           </div>
 
-          <div className="space-y-3">
-            <Button
-              onClick={handleDownload}
-              variant="outline"
-              className="w-full h-12 rounded-full"
-              disabled={!qrCodeUrl}
-            >
-              <Download className="h-4 w-4 mr-2" aria-hidden="true" />
-              {TEXT.common.buttons.downloadQrCode}
-            </Button>
-
-            <Link to={`/event/${slug}`} className="block">
-              <Button className="w-full rounded-full h-12 text-base font-medium shadow-glow-primary">
-                {TEXT.common.buttons.viewEventDashboard}
-              </Button>
-            </Link>
+          <div className="text-[11px] font-mono text-state-success tracking-[1px] uppercase">
+            {TEXT.eventSuccess.title.toUpperCase()} · {eventCode}
           </div>
-        </CardContent>
-      </Card>
-    </PageContainer>
+
+          <h1 className="text-[40px] font-semibold tracking-[-1px] mt-3 leading-[1]">
+            Ready to go.
+          </h1>
+
+          <p className="text-[15px] text-text-secondary leading-relaxed mt-4 max-w-sm">
+            {TEXT.eventSuccess.description}
+          </p>
+
+          <div className="mt-8 p-4 border border-border-subtle rounded-xl bg-bg-surface">
+            <div className="text-[11px] font-mono text-text-secondary tracking-[0.8px] uppercase">
+              EVENT · {eventName.toUpperCase()}
+            </div>
+            <div className="mt-4 flex flex-col items-center gap-4">
+              <div className="bg-white border border-border-subtle rounded-sm p-3">
+                <QRCodePreview
+                  value={`${getEventUrl(event.slug)}?ref=qr`}
+                  size={200}
+                  onDataUrlChange={setQrCodeUrl}
+                  className="shadow-none p-0"
+                  imageClassName="h-[200px] w-[200px]"
+                />
+              </div>
+              <div className="text-center">
+                <div className="text-[11px] font-mono text-text-secondary uppercase">
+                  Check-in code
+                </div>
+                <div className="text-[24px] font-semibold font-mono tracking-[4px] mt-1 uppercase">
+                  {eventCode.replace(/(\w{2})(\w{4})/, "$1 · $2")}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="pb-6 flex flex-col gap-2 mt-8">
+          <Link to={`/event/${slug}`}>
+            <Button variant="primary" size="xl" className="w-full gap-2">
+              View event page{" "}
+              <ArrowRight className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          </Link>
+          <Button
+            variant="outline"
+            size="lg"
+            className="w-full"
+            onClick={handleDownload}
+            disabled={!qrCodeUrl}
+          >
+            {TEXT.common.buttons.downloadQrCode}
+          </Button>
+          <Link to="/dashboard">
+            <Button variant="ghost" size="lg" className="w-full">
+              {TEXT.common.links.backToDashboard}
+            </Button>
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 };
 

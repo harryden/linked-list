@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { logger } from "@/lib/logger";
 import { Input } from "@/components/ui/input";
-import { MapPin, Loader2 } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
 
@@ -91,7 +91,7 @@ export const LocationAutocomplete = ({
     }
 
     debounceTimer.current = setTimeout(() => {
-      searchLocations(newValue);
+      void searchLocations(newValue);
     }, 300);
   };
 
@@ -122,10 +122,9 @@ export const LocationAutocomplete = ({
             className="absolute right-3 top-1/2 -translate-y-1/2"
             role="status"
           >
-            <Loader2
-              className="h-4 w-4 animate-spin text-muted-foreground"
-              aria-hidden="true"
-            />
+            <div className="w-4 h-0.5 bg-border-subtle rounded-full overflow-hidden relative">
+              <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+            </div>
             <span className="sr-only">Searching for locations...</span>
           </div>
         )}
