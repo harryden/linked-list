@@ -23,11 +23,11 @@ describe("EventPage states", () => {
       { route: "/event/missing-event" },
     );
 
+    expect(await screen.findByText(/not found/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(/not found/i),
-    ).toBeInTheDocument();
-    expect(
-      await screen.findByText((content) => content.includes(TEXT.event.page.notFoundDescription)),
+      await screen.findByText((content) =>
+        content.includes(TEXT.event.page.notFoundDescription),
+      ),
     ).toBeInTheDocument();
   });
 });
