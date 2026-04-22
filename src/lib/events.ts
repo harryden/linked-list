@@ -1,6 +1,20 @@
 import { format, isValid, parseISO } from "date-fns";
 import { logger } from "@/lib/logger";
 
+export function getDashboardGreeting(
+  name?: string | null,
+  hostedCount = 0,
+  attendedCount = 0,
+): string {
+  const firstName = name?.split(" ")[0];
+
+  if (hostedCount === 0 && attendedCount === 0) {
+    return firstName ? `Welcome, ${firstName}!` : "Welcome!";
+  }
+
+  return firstName ? `Welcome back, ${firstName}!` : "Welcome back!";
+}
+
 export function eventCodeFromId(id: string): string {
   return Math.abs(parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
     .toString()
