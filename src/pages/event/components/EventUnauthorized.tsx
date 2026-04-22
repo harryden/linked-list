@@ -35,7 +35,7 @@ const EventUnauthorized = ({
   redirectPath,
 }: EventUnauthorizedProps) => (
   <PageContainer maxWidth="sm" className="justify-center">
-    <Card className="w-full shadow-2xl">
+    <Card className="w-full">
       <CardContent className="pt-8 pb-6 px-6 space-y-6">
         <EventHeader
           event={event}
@@ -68,7 +68,7 @@ const EventUnauthorized = ({
           <div className="text-center pt-2">
             <Link
               to="/dashboard"
-              className="text-sm text-primary hover:underline"
+              className="text-sm text-text-primary hover:underline"
             >
               {TEXT.common.links.viewPastEvents}
             </Link>
