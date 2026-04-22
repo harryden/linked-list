@@ -5,8 +5,8 @@
 - **NO DIRECT COMMITS TO MAIN:** Under no circumstances should any code be committed directly to the `main` branch.
 - All changes must originate from a `feature/` or `chore/` branch and be merged via a Pull Request.
 - Branch from latest main: `feature/<descriptive-name>` or `chore/<descriptive-name>`
-- Make focused, atomic commits — one logical change per commit
-- Use fixup commits while iterating; squash with `git rebase -i --autosquash main` before opening a PR
+- **One Atomic Commit per PR:** Ideally, a feature branch should have exactly **one** logical, atomic commit when the PR is opened. This makes the PR the single unit of revertibility.
+- Use fixup commits while iterating; squash with `git rebase -i --autosquash main` into a single commit before opening a PR
 - Rebase on latest main before pushing
 
 ## Commit Messages
