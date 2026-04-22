@@ -52,12 +52,20 @@ describe("EventSuccess smoke", () => {
 
     renderPage();
 
+    expect(await screen.findByText(/ready to go/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(TEXT.eventSuccess.title),
+      await screen.findByText((content) =>
+        content.toLowerCase().includes(event.name.toLowerCase()),
+      ),
     ).toBeInTheDocument();
 
     const expectedCode = eventCodeFromId(eventId);
-    expect(await screen.findByText(expectedCode)).toBeInTheDocument();
+    const codePart1 = expectedCode.slice(0, 2);
+    const codePart2 = expectedCode.slice(2);
+    const codeRegex = new RegExp(`${codePart1}.*${codePart2}`);
+
+    const codeMatches = await screen.findAllByText(codeRegex);
+    expect(codeMatches.length).toBeGreaterThan(0);
   });
 
   it("redirects to the dashboard when the event fails to load", async () => {

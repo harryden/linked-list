@@ -10,7 +10,7 @@ const DemoNotes = () => (
         size="lg"
         className="rounded-full px-8 h-12 text-base font-medium"
       >
-        {TEXT.common.buttons.tryLinkBackNow}
+        {TEXT.common.buttons.tryLinkedListNow}
         <ArrowRight className="ml-2 h-5 w-5" aria-hidden="true" />
       </Button>
     </Link>

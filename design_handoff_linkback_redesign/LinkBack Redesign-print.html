@@ -1,0 +1,287 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>LinkBack — Precision Utility (Print)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap"
+    />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background: #f0eee9;
+      }
+      body {
+        font-family:
+          "Geist",
+          "Inter",
+          system-ui,
+          -apple-system,
+          sans-serif;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      .page {
+        width: 1120px;
+        min-height: 780px;
+        margin: 0 auto 32px;
+        padding: 48px 48px 56px;
+        background: #fff;
+        box-sizing: border-box;
+        break-after: page;
+        page-break-after: always;
+        break-inside: avoid;
+        page-break-inside: avoid;
+        display: flex;
+        flex-direction: column;
+      }
+      .page:last-child {
+        break-after: auto;
+        page-break-after: auto;
+      }
+
+      .page-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        border-bottom: 1px solid #e4e4e7;
+      }
+      .page-header .section {
+        font-family:
+          "Geist Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 11px;
+        letter-spacing: 1px;
+        color: #71717a;
+        text-transform: uppercase;
+      }
+      .page-header .title {
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.3px;
+        color: #09090b;
+        margin-top: 4px;
+      }
+      .page-header .meta {
+        font-family:
+          "Geist Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 11px;
+        color: #71717a;
+        letter-spacing: 0.5px;
+      }
+
+      .artboard-wrap {
+        flex: 1;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+      }
+      .artboard {
+        background: #fff;
+        border: 1px solid #e4e4e7;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow:
+          0 1px 3px rgba(0, 0, 0, 0.06),
+          0 4px 12px rgba(0, 0, 0, 0.04);
+        position: relative;
+      }
+
+      .footer {
+        margin-top: 20px;
+        padding-top: 12px;
+        border-top: 1px solid #e4e4e7;
+        display: flex;
+        justify-content: space-between;
+        font-family:
+          "Geist Mono", "JetBrains Mono", ui-monospace, Menlo, monospace;
+        font-size: 10px;
+        color: #71717a;
+        letter-spacing: 0.5px;
+      }
+
+      @page {
+        size: 1216px 1280px;
+        margin: 0;
+      }
+
+      @media print {
+        body {
+          background: #fff;
+        }
+        .page {
+          margin: 0;
+          box-shadow: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script
+      src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+      integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+      integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+      integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+      crossorigin="anonymous"
+    ></script>
+
+    <script type="text/babel" src="screens.jsx"></script>
+
+    <script type="text/babel">
+      const PAGES = [
+        {
+          section: "Foundations",
+          title: "Design system · Precision Utility",
+          meta: "TOKENS · TYPE · COMPONENTS",
+          w: 900,
+          h: 1120,
+          C: ComponentsSpec,
+        },
+        {
+          section: "Marketing · /",
+          title: "Landing",
+          meta: "DESKTOP · 1024",
+          w: 1024,
+          h: 1200,
+          C: LandingScreen,
+        },
+        {
+          section: "Auth · /auth",
+          title: "Sign in",
+          meta: "MOBILE · 390",
+          w: 390,
+          h: 780,
+          C: AuthScreen,
+        },
+        {
+          section: "Organizer · /dashboard",
+          title: "Dashboard",
+          meta: "DESKTOP · 1024",
+          w: 1024,
+          h: 860,
+          C: DashboardScreen,
+        },
+        {
+          section: "Organizer · /create-event",
+          title: "Create event",
+          meta: "DESKTOP · 1024",
+          w: 1024,
+          h: 860,
+          C: CreateEventScreen,
+        },
+        {
+          section: "Attendee · /event/:slug",
+          title: "Event page — pre check-in",
+          meta: "MOBILE · 390",
+          w: 390,
+          h: 780,
+          props: { checkedIn: false },
+          C: EventPageScreen,
+        },
+        {
+          section: "Attendee · /event/:slug",
+          title: "Event page — checked in",
+          meta: "MOBILE · 390",
+          w: 390,
+          h: 780,
+          props: { checkedIn: true },
+          C: EventPageScreen,
+        },
+        {
+          section: "Attendee · /event-success/:slug",
+          title: "Confirmation",
+          meta: "MOBILE · 390",
+          w: 390,
+          h: 780,
+          C: EventSuccessScreen,
+        },
+        {
+          section: "Attendee · signature moment",
+          title: "QR modal",
+          meta: "MOBILE · 390",
+          w: 390,
+          h: 780,
+          C: QRModalScreen,
+        },
+      ];
+
+      function Page({ p, i, n }) {
+        // Fit artboards into the print area; scale large ones down to a max width.
+        const MAX_W = 1024;
+        const scale = Math.min(1, MAX_W / p.w);
+        const C = p.C;
+        return (
+          <div className="page">
+            <div className="page-header">
+              <div>
+                <div className="section">{p.section}</div>
+                <div className="title">{p.title}</div>
+              </div>
+              <div className="meta">{p.meta}</div>
+            </div>
+            <div className="artboard-wrap">
+              <div style={{ width: p.w * scale, height: p.h * scale }}>
+                <div
+                  className="artboard"
+                  style={{
+                    width: p.w,
+                    height: p.h,
+                    transform: `scale(${scale})`,
+                    transformOrigin: "top left",
+                  }}
+                >
+                  <C {...(p.props || {})} />
+                </div>
+              </div>
+            </div>
+            <div className="footer">
+              <span>LINKBACK · UI REDESIGN · v1</span>
+              <span>
+                {String(i + 1).padStart(2, "0")} / {String(n).padStart(2, "0")}
+              </span>
+            </div>
+          </div>
+        );
+      }
+
+      function App() {
+        return (
+          <>
+            {PAGES.map((p, i) => (
+              <Page key={i} p={p} i={i} n={PAGES.length} />
+            ))}
+          </>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+      // Auto-print once fonts + render settle
+      (async () => {
+        try {
+          if (document.fonts && document.fonts.ready)
+            await document.fonts.ready;
+        } catch {}
+        await new Promise((r) => setTimeout(r, 800));
+        window.print();
+      })();
+    </script>
+  </body>
+</html>

@@ -1,8 +1,8 @@
 export const TEXT = {
   common: {
-    brand: "LinkBack",
+    brand: "Linked List",
     copy: {
-      footer: "© 2025 LinkBack. Powered by LinkedIn.",
+      footer: "© 2025 Linked List.",
     },
     buttons: {
       signInWithLinkedIn: "Sign in with LinkedIn",
@@ -23,7 +23,7 @@ export const TEXT = {
       creatingEvent: "Creating event...",
       downloadQrCode: "Download QR Code",
       viewEventDashboard: "View Dashboard",
-      tryLinkBackNow: "Try LinkBack",
+      tryLinkedListNow: "Try Linked List",
       viewQrCode: "View QR Code",
       cancel: "Cancel",
       signOut: "Sign out",
@@ -58,7 +58,7 @@ export const TEXT = {
       titleLine: "Event Check-In.",
       highlight: "Simplified.",
       authenticatedDescription:
-        "LinkedIn-verified check-in for your events. One QR code, instant attendee lists, real professional connections.",
+        "LinkedIn-verified check-in for your events. One QR code, instant attendee rosters, and verified professional profiles.",
       guestDescription:
         "Generate a QR code. Attendees scan and check in with LinkedIn. Build verified attendee lists in real time.",
       joinButton: "Join Event",
@@ -114,15 +114,15 @@ export const TEXT = {
   dashboard: {
     header: {
       welcomePrefix: "Welcome back,",
-      tagline: "Host events, check in, and connect with attendees.",
+      tagline: "Manage your event check-ins and attendee rosters.",
       signOutSuccess: "Signed out successfully",
     },
     loading: "Loading dashboard...",
     myEvents: {
       title: "Your Events",
       loading: "Loading events...",
-      emptyTitle: "Host your first event in 10 seconds.",
-      emptyDescription: "Create a QR code and start connecting.",
+      emptyTitle: "Host your first event.",
+      emptyDescription: "Create a QR code to start checking in attendees.",
       viewAttendees: "View attendees →",
     },
     upcoming: {
@@ -133,65 +133,11 @@ export const TEXT = {
       viewAttendeeList: "View attendee list →",
     },
     greetings: {
-      newJoiner: "Hey, glad to have you here! Ready to start connecting?",
-      firstCheckIn: "Nice, you got your first check in!",
+      newJoiner: "Welcome! Ready to host your first event?",
+      firstCheckIn: "You've completed your first check-in.",
       firstHost:
-        "Nice job hosting your first event, share the 6 digit code or QR code and start connecting!",
+        "You're hosting your first event. Share your code or QR to begin.",
       welcomeBack: "Welcome back, {name}!",
-    },
-  },
-  demo: {
-    header: {
-      title: "See It in Action",
-      subtitle: "How LinkBack works from start to finish",
-    },
-    showcase: {
-      steps: [
-        {
-          title: "Create an Event",
-          description: "Sign in, create your event, and get your QR code",
-          checklist: [
-            'Name your event: "Tech Meetup 2025"',
-            "Set date and time (optional)",
-            "Add LinkedIn event URL (optional)",
-            "Receive unique QR code instantly",
-          ],
-        },
-        {
-          title: "Display the QR Code",
-          description: "Print or display your code at the event entrance",
-          note: "Every event gets a unique code",
-        },
-        {
-          title: "Attendees Check In",
-          description: "Attendees scan and sign in with LinkedIn",
-          privacyNotice: "⚠️ Privacy Notice:",
-          privacyCopy:
-            '"Your LinkedIn name and headline will be visible to other attendees."',
-          confirmation: "Check-in recorded automatically",
-        },
-        {
-          title: "View Attendee List",
-          description: "Everyone can see who's at the event",
-          attendees: [
-            {
-              name: "Sarah Johnson",
-              title: "Senior Product Manager at Tech Corp",
-            },
-            {
-              name: "Michael Chen",
-              title: "Software Engineer at StartupXYZ",
-            },
-            {
-              name: "Emma Davis",
-              title: "UX Designer at Creative Studio",
-            },
-          ],
-        },
-      ],
-    },
-    notes: {
-      helper: "No payment required. Sign in and start connecting.",
     },
   },
   createEvent: {
@@ -207,9 +153,9 @@ export const TEXT = {
       editDescription: "Update event details",
       fields: {
         nameLabel: "Event Name *",
-        namePlaceholder: "Summer Tech Meetup 2025",
+        namePlaceholder: "Annual Conference 2025",
         locationLabel: "Location",
-        locationPlaceholder: "TechHub Conference Center, San Francisco",
+        locationPlaceholder: "City Center, Main Hall",
         dateLabel: "Event Date",
         datePlaceholder: "Select date",
         startTimeLabel: "Start Time",
@@ -255,8 +201,8 @@ export const TEXT = {
     },
   },
   auth: {
-    brand: "LinkBack",
-    tagline: "LinkedIn-verified event networking",
+    brand: "Linked List",
+    tagline: "LinkedIn-verified event rosters",
     card: {
       title: "Sign in with LinkedIn",
       description: "Authenticate with your LinkedIn account",
@@ -268,11 +214,11 @@ export const TEXT = {
       items: [
         {
           title: "Name and profile picture",
-          description: "To identify you at events",
+          description: "To identify you on the event roster",
         },
         {
           title: "Headline and email",
-          description: "For networking purposes",
+          description: "For professional networking",
         },
         {
           title: "Read-only access",
@@ -342,7 +288,7 @@ export const TEXT = {
         "By checking in, you agree to share your LinkedIn profile with event attendees.",
       signInPrompt: "Sign In",
       backToDashboard: "Back to Dashboard",
-      checkInSuccessBanner: "You're in! Here's who else is coming.",
+      checkInSuccessBanner: "You're in! The roster is visible below.",
     },
     toast: {
       loadFailure: "Failed to load event",

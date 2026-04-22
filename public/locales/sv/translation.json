@@ -1,8 +1,8 @@
 {
   "common": {
-    "brand": "LinkBack",
+    "brand": "Linked List",
     "copy": {
-      "footer": "© 2025 LinkBack. Drivs av LinkedIn."
+      "footer": "© 2025 Linked List."
     },
     "buttons": {
       "signInWithLinkedIn": "Logga in med LinkedIn",
@@ -23,7 +23,7 @@
       "creatingEvent": "Skapar event...",
       "downloadQrCode": "Ladda ner QR-kod",
       "viewEventDashboard": "Visa översikt",
-      "tryLinkBackNow": "Prova LinkBack",
+      "tryLinkedListNow": "Prova Linked List",
       "viewQrCode": "Visa QR-kod",
       "cancel": "Avbryt",
       "signOut": "Sign out"
@@ -57,11 +57,10 @@
     "hero": {
       "titleLine": "Incheckning för event.",
       "highlight": "Förenklad.",
-      "authenticatedDescription": "LinkedIn-verifierad incheckning för dina event. En QR-kod, omedelbara deltagarlistor, riktiga professionella kontakter.",
+      "authenticatedDescription": "LinkedIn-verifierad incheckning för dina event. En QR-kod, omedelbara deltagarlistor och verifierade professionella profiler.",
       "guestDescription": "Skapa en QR-kod. Deltagarna skannar och checkar in med LinkedIn. Bygg verifierade deltagarlistor i realtid.",
       "joinButton": "Gå med i event",
       "hostButton": "Värd för event",
-      "demoButton": "Så fungerar det",
       "signInButton": "Logga in med LinkedIn"
     },
     "features": {
@@ -77,44 +76,20 @@
         "title": "Omedelbara listor",
         "description": "Deltagarlista i realtid med namn, rubriker och LinkedIn-profiler."
       }
-    },
-    "howItWorks": {
-      "title": "Så fungerar det",
-      "steps": [
-        {
-          "step": "1",
-          "title": "Skapa ditt event",
-          "description": "Logga in och skapa ditt event. Få din unika QR-kod omedelbart."
-        },
-        {
-          "step": "2",
-          "title": "Deltagare checkar in",
-          "description": "Deltagarna skannar koden och loggar in med LinkedIn. Incheckningen registreras automatiskt."
-        },
-        {
-          "step": "3",
-          "title": "Visa din lista",
-          "description": "Se vem som är där i realtid. Namn, rubriker och LinkedIn-profiler inkluderas."
-        }
-      ]
-    },
-    "footerCta": {
-      "title": "Redo att förenkla dina event?",
-      "description": "Börja bygga verifierade deltagarlistor idag."
     }
   },
   "dashboard": {
     "header": {
       "welcomePrefix": "Välkommen tillbaka,",
-      "tagline": "Hantera event, checka in och kontakta deltagare.",
+      "tagline": "Hantera dina incheckningar och deltagarlistor.",
       "signOutSuccess": "Utloggad"
     },
     "loading": "Laddar översikt...",
     "myEvents": {
       "title": "Dina event",
       "loading": "Laddar event...",
-      "emptyTitle": "Skapa ditt första event på 10 sekunder.",
-      "emptyDescription": "Skapa en QR-kod och börja nätverka.",
+      "emptyTitle": "Skapa ditt första event.",
+      "emptyDescription": "Skapa en QR-kod för att börja checka in deltagare.",
       "viewAttendees": "Visa deltagare →"
     },
     "upcoming": {
@@ -125,63 +100,10 @@
       "viewAttendeeList": "Visa deltagarlista →"
     },
     "greetings": {
-      "newJoiner": "Hej, glad att ha dig här! Redo att börja nätverka?",
-      "firstCheckIn": "Snyggt, du har din första incheckning!",
-      "firstHost": "Bra jobbat med ditt första event, dela den 6-siffriga koden eller QR-koden och börja nätverka!",
+      "newJoiner": "Välkommen! Redo att skapa ditt första event?",
+      "firstCheckIn": "Du har genomfört din första incheckning.",
+      "firstHost": "Du är värd för ditt första event. Dela din kod eller QR-kod för att börja.",
       "welcomeBack": "Välkommen tillbaka, {name}!"
-    }
-  },
-  "demo": {
-    "header": {
-      "title": "Se det in action",
-      "subtitle": "Så fungerar LinkBack från början till slut"
-    },
-    "showcase": {
-      "steps": [
-        {
-          "title": "Skapa ett event",
-          "description": "Logga in, skapa ditt event och få din QR-kod",
-          "checklist": [
-            "Namnge ditt event: \"Tech Meetup 2025\"",
-            "Ställ in datum och tid (valfritt)",
-            "Lägg till LinkedIn-event-URL (valfritt)",
-            "Få en unik QR-kod omedelbart"
-          ]
-        },
-        {
-          "title": "Visa QR-koden",
-          "description": "Skriv ut eller visa din kod vid ingången",
-          "note": "Varje event får en unik kod"
-        },
-        {
-          "title": "Deltagare checkar in",
-          "description": "Deltagarna skannar och loggar in med LinkedIn",
-          "privacyNotice": "⚠️ Integritetsmeddelande:",
-          "privacyCopy": "\"Ditt LinkedIn-namn och din rubrik kommer att vara synliga för andra deltagare.\"",
-          "confirmation": "Incheckningen registreras automatiskt"
-        },
-        {
-          "title": "Visa deltagarlista",
-          "description": "Alla kan se vem som är på eventet",
-          "attendees": [
-            {
-              "name": "Sarah Johnson",
-              "title": "Senior Product Manager at Tech Corp"
-            },
-            {
-              "name": "Michael Chen",
-              "title": "Software Engineer at StartupXYZ"
-            },
-            {
-              "name": "Emma Davis",
-              "title": "UX Designer at Creative Studio"
-            }
-          ]
-        }
-      ]
-    },
-    "notes": {
-      "helper": "Ingen betalning krävs. Logga in och börja nätverka."
     }
   },
   "createEvent": {
@@ -197,9 +119,9 @@
       "editDescription": "Uppdatera eventdetaljer",
       "fields": {
         "nameLabel": "Eventnamn *",
-        "namePlaceholder": "Summer Tech Meetup 2025",
+        "namePlaceholder": "Konferens 2025",
         "locationLabel": "Plats",
-        "locationPlaceholder": "TechHub Conference Center, San Francisco",
+        "locationPlaceholder": "Stadshuset, Stora salen",
         "dateLabel": "Eventdatum",
         "datePlaceholder": "Välj datum",
         "startTimeLabel": "Starttid",
@@ -245,8 +167,8 @@
     }
   },
   "auth": {
-    "brand": "LinkBack",
-    "tagline": "LinkedIn-verifierat nätverkande för event",
+    "brand": "Linked List",
+    "tagline": "LinkedIn-verifierade deltagarlistor",
     "card": {
       "title": "Logga in med LinkedIn",
       "description": "Autentisera med ditt LinkedIn-konto",
@@ -258,11 +180,11 @@
       "items": [
         {
           "title": "Namn och profilbild",
-          "description": "För att identifiera dig på event"
+          "description": "För att identifiera dig på deltagarlistan"
         },
         {
           "title": "Rubrik och e-post",
-          "description": "För nätverksändamål"
+          "description": "För professionellt nätverkande"
         },
         {
           "title": "Skrivskyddad åtkomst",
@@ -328,7 +250,7 @@
       "guestNotice": "Genom att checka in godkänner du att dela din LinkedIn-profil med eventets deltagare.",
       "signInPrompt": "Logga in",
       "backToDashboard": "Tillbaka till översikt",
-      "checkInSuccessBanner": "Du är med! Här är andra som kommer."
+      "checkInSuccessBanner": "Du är incheckad! Deltagarlistan syns nedan."
     },
     "toast": {
       "loadFailure": "Kunde inte ladda event",

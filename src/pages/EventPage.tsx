@@ -1,26 +1,33 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import {
-  useParams,
-  Link,
-  useNavigate,
-  useLocation,
-  NavigateFunction,
-} from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
+import {
+  ArrowLeft,
+  Calendar,
+  MapPin,
+  QrCode,
+  Share2,
+  MoreVertical,
+  Pencil,
+  Trash2,
+  X,
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
-import EventHeader from "@/pages/event/components/EventHeader";
 import AttendButton from "@/pages/event/components/AttendButton";
 import AttendeeList from "@/pages/event/components/AttendeeList";
 import EventLoading from "@/pages/event/components/EventLoading";
 import EventNotFound from "@/pages/event/components/EventNotFound";
 import EventUnauthorized from "@/pages/event/components/EventUnauthorized";
 import EventDeleteDialog from "@/pages/event/components/EventDeleteDialog";
-import CheckInSuccess from "@/pages/event/components/CheckInSuccess";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
 import {
   useAttendances,
@@ -30,11 +37,9 @@ import {
 import { useMyProfile } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
-import linkbackLogo from "@/assets/linkback-logo.png";
-import PageContainer from "@/components/layout/PageContainer";
 import { analytics } from "@/lib/analytics";
 
-const useSession = (navigate: NavigateFunction) => {
+const useSession = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
 
@@ -51,7 +56,7 @@ const useSession = (navigate: NavigateFunction) => {
           setCurrentUserId(session?.user?.id ?? null);
         }
       } catch (_error) {
-        logger.error(error, { category: "Events" });
+        logger.error(_error, { category: "Events" });
       } finally {
         if (isMounted) {
           setIsSessionLoading(false);
@@ -59,13 +64,27 @@ const useSession = (navigate: NavigateFunction) => {
       }
     };
 
-    loadSession();
+    void loadSession();
     return () => {
       isMounted = false;
     };
   }, []);
 
   return { currentUserId, isSessionLoading };
+};
+
+const getTimeZoneAbbreviation = (date: Date | null) => {
+  if (!date) return null;
+  const part = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Europe/Stockholm",
+    timeZoneName: "short",
+  })
+    .formatToParts(date)
+    .find((p) => p.type === "timeZoneName")?.value;
+  if (!part) return null;
+  if (part.includes("GMT+2") || part.includes("GMT+02")) return "CEST";
+  if (part.includes("GMT+1") || part.includes("GMT+01")) return "CET";
+  return part;
 };
 
 const EventPage = () => {
@@ -135,6 +154,53 @@ const EventPage = () => {
     }
   }, [justJoined, isAttendeesLoading]);
 
+  const eventStartDate = useMemo(() => {
+    if (!event?.starts_at) return null;
+    const d = new Date(event.starts_at);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }, [event?.starts_at]);
+
+  const eventEndDate = useMemo(() => {
+    if (!event?.ends_at) return null;
+    const d = new Date(event.ends_at);
+    return Number.isNaN(d.getTime()) ? null : d;
+  }, [event?.ends_at]);
+
+  const dateReference = eventStartDate ?? eventEndDate;
+
+  const formattedEventDate = useMemo(() => {
+    if (!dateReference) return TEXT.common.labels.dateNotSet;
+    return dateReference.toLocaleDateString("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+  }, [dateReference]);
+
+  const timeZoneAbbreviation = useMemo(
+    () => getTimeZoneAbbreviation(eventStartDate ?? eventEndDate),
+    [eventStartDate, eventEndDate],
+  );
+
+  const formattedTimeRange = useMemo(() => {
+    if (!eventStartDate && !eventEndDate) return TEXT.common.labels.timeNotSet;
+    const fmt = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+      timeZone: "Europe/Stockholm",
+    });
+    const start = eventStartDate ? fmt.format(eventStartDate) : null;
+    const end = eventEndDate ? fmt.format(eventEndDate) : null;
+    const zone = timeZoneAbbreviation ? ` ${timeZoneAbbreviation}` : "";
+    if (start && end) return `${start} — ${end}${zone}`;
+    return start
+      ? `${start}${zone}`
+      : end
+        ? `${end}${zone}`
+        : TEXT.common.labels.timeNotSet;
+  }, [eventStartDate, eventEndDate, timeZoneAbbreviation]);
+
   const joinEvent = useJoinEvent();
   const deleteEvent = useDeleteEvent();
 
@@ -172,12 +238,9 @@ const EventPage = () => {
         "code" in error &&
         (error as { code?: string }).code === "23505"
       ) {
-        toast({
-          description: TEXT.event.toast.alreadyCheckedIn,
-        });
+        toast({ description: TEXT.event.toast.alreadyCheckedIn });
         return;
       }
-
       toast({
         variant: "destructive",
         description: TEXT.event.toast.checkInFailure,
@@ -186,32 +249,21 @@ const EventPage = () => {
   };
 
   const handleEditEvent = () => {
-    if (!event) {
-      return;
-    }
-
+    if (!event) return;
     navigate("/create-event", {
-      state: {
-        eventId: event.id,
-        eventSlug: event.slug,
-      },
+      state: { eventId: event.id, eventSlug: event.slug },
     });
   };
 
   const handleDeleteEvent = async () => {
-    if (!event) {
-      return;
-    }
-
+    if (!event) return;
     try {
       await deleteEvent.mutateAsync({
         eventId: event.id,
         organizerId: event.organizer_id ?? undefined,
         eventSlug: event.slug,
       });
-      toast({
-        description: TEXT.event.toast.deleteSuccess,
-      });
+      toast({ description: TEXT.event.toast.deleteSuccess });
       navigate("/dashboard");
     } catch (_error) {
       toast({
@@ -223,13 +275,8 @@ const EventPage = () => {
     }
   };
 
-  if (isLoading) {
-    return <EventLoading />;
-  }
-
-  if (!event) {
-    return <EventNotFound />;
-  }
+  if (isLoading) return <EventLoading />;
+  if (!event) return <EventNotFound />;
 
   if (!currentUserId || !canViewAttendees) {
     return (
@@ -249,86 +296,198 @@ const EventPage = () => {
     );
   }
 
+  const organizerInitials = organizerProfile?.name
+    ? organizerProfile.name
+        .split(" ")
+        .map((p) => p[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
+    : "?";
+
   return (
-    <div className="min-h-screen bg-gradient-subtle flex flex-col">
-      <header className="border-b border-border bg-background/80 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Link
-            to={currentUserId ? "/dashboard" : "/"}
-            className="flex items-center gap-2"
+    <div className="min-h-screen bg-bg-base flex flex-col">
+      <div className="flex items-center px-4 pt-3 pb-4 gap-3">
+        <Link to={currentUserId ? "/dashboard" : "/"}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-9 h-9 p-0"
+            aria-label={TEXT.common.links.backToDashboard}
           >
-            <img src={linkbackLogo} alt="LinkBack" className="h-20 w-auto" />
-          </Link>
-          {!currentUserId && (
-            <Link to="/auth">
-              <Button variant="outline" className="rounded-full">
-                {TEXT.common.buttons.signIn}
-              </Button>
-            </Link>
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+          </Button>
+        </Link>
+        <div className="flex-1 text-[12px] font-mono text-text-secondary tracking-[0.5px] uppercase truncate">
+          EVENT · {event.slug?.toUpperCase()}
+        </div>
+        <div className="flex items-center gap-1.5">
+          <Button
+            variant="outline"
+            size="sm"
+            className="w-9 h-9 p-0"
+            aria-label="Share"
+            onClick={() => {
+              const shareData = {
+                title: event.name,
+                url: window.location.href,
+              };
+              if (navigator.share) {
+                void navigator.share(shareData).catch(() => undefined);
+              } else {
+                void navigator.clipboard.writeText(window.location.href);
+                toast({
+                  description: "Link copied to clipboard",
+                });
+              }
+            }}
+          >
+            <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+          </Button>
+
+          {isOrganizer && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-9 h-9 p-0"
+                  aria-label={TEXT.event.header.options}
+                >
+                  <MoreVertical className="h-3.5 w-3.5" aria-hidden="true" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuItem
+                  onSelect={() =>
+                    navigate("/create-event", {
+                      state: {
+                        eventId: event.id,
+                        eventSlug: event.slug,
+                        fromDashboard: false,
+                      },
+                    })
+                  }
+                >
+                  <Pencil className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {TEXT.event.header.edit}
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onSelect={() => setShowDeleteDialog(true)}
+                  className="text-state-error focus:text-state-error focus:bg-state-error-bg"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {TEXT.event.header.delete}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           )}
         </div>
-      </header>
+      </div>
 
-      <PageContainer withGradient={false} className="py-8">
-        <div className="space-y-8">
-          {currentUserId && (
-            <Link to="/dashboard">
-              <Button variant="ghost">
-                <ArrowLeft className="h-4 w-4 mr-2" aria-hidden="true" />
-                {TEXT.common.links.backToDashboard}
-              </Button>
-            </Link>
-          )}
-
-          <Card className="shadow-xl">
-            <CardHeader className="space-y-4">
-              <EventHeader
-                event={event}
-                eventCode={eventCode}
-                organizer={organizerProfile}
-                currentUserId={currentUserId}
-                isOrganizer={isOrganizer}
-                isAttending={isAttending}
-                onEdit={isOrganizer ? handleEditEvent : undefined}
-                onDelete={
-                  isOrganizer ? () => setShowDeleteDialog(true) : undefined
-                }
-                onShowQr={() => setShowQRDialog(true)}
-              />
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <AttendButton
-                currentUserId={currentUserId}
-                isOrganizer={isOrganizer}
-                isAttending={isAttending}
-                onCheckIn={handleCheckIn}
-                isLoading={joinEvent.isPending}
-                mode="primary"
-                redirectPath={`${location.pathname}${location.search}`}
-              />
-            </CardContent>
-          </Card>
-
-          <div ref={attendeeListRef}>
-            {justJoined && (
-              <CheckInSuccess onDismiss={() => setJustJoined(false)} />
-            )}
-            <AttendeeList
-              attendees={attendeeRecords ?? []}
-              currentUserId={currentUserId}
-              isOrganizer={isOrganizer}
-              isLoading={isAttendeesLoading}
-              eventName={event.name}
-            />
+      <div className="flex-1 overflow-y-auto px-5 pb-5">
+        {organizerProfile && (
+          <div className="flex items-center gap-2.5 mb-3">
+            <div className="w-6 h-6 rounded-full bg-bg-surface-hover border border-border-subtle flex items-center justify-center text-[9px] font-medium text-text-secondary flex-shrink-0">
+              {organizerInitials}
+            </div>
+            <span className="text-[13px] text-text-secondary">
+              Hosted by {organizerProfile.name}
+            </span>
           </div>
+        )}
+
+        <h1 className="text-[28px] font-semibold tracking-[-0.6px] leading-[1.1] mb-5">
+          {event.name}
+        </h1>
+
+        <div className="flex flex-col gap-2.5 mb-6">
+          {dateReference && (
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-md bg-bg-surface border border-border-subtle flex items-center justify-center flex-shrink-0">
+                <Calendar className="h-3.5 w-3.5" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="text-[13px] font-medium">
+                  {formattedEventDate}
+                </div>
+                <div className="text-[12px] text-text-secondary font-mono">
+                  {formattedTimeRange}
+                </div>
+              </div>
+            </div>
+          )}
+          {event.location && (
+            <div className="flex items-center gap-2.5">
+              <div className="w-8 h-8 rounded-md bg-bg-surface border border-border-subtle flex items-center justify-center flex-shrink-0">
+                <MapPin className="h-3.5 w-3.5" aria-hidden="true" />
+              </div>
+              <div>
+                <div className="text-[13px] font-medium">{event.location}</div>
+              </div>
+            </div>
+          )}
         </div>
-      </PageContainer>
+
+        {isOrganizer && (
+          <Button
+            variant="outline"
+            size="md"
+            className="w-full mb-6 gap-2"
+            onClick={() => setShowQRDialog(true)}
+          >
+            <QrCode className="h-4 w-4" aria-hidden="true" />
+            {TEXT.common.buttons.viewQrCode}
+          </Button>
+        )}
+
+        <div className="mb-8">
+          {justJoined && (
+            <div className="mb-6 p-4 bg-state-success-bg border border-state-success rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4 duration-500">
+              <div className="flex-1">
+                <div className="text-sm font-semibold text-state-success">
+                  {TEXT.event.page.checkInSuccessBanner}
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 text-state-success hover:bg-state-success/10"
+                onClick={() => setJustJoined(false)}
+                aria-label="Dismiss"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+          <AttendButton
+            currentUserId={currentUserId}
+            isOrganizer={isOrganizer}
+            isAttending={isAttending}
+            checkedInAt={userAttendance?.[0]?.created_at ?? null}
+            onCheckIn={handleCheckIn}
+            isLoading={joinEvent.isPending}
+            redirectPath={`${location.pathname}${location.search}`}
+          />
+        </div>
+
+        <div ref={attendeeListRef}>
+          <AttendeeList
+            attendees={attendeeRecords ?? []}
+            currentUserId={currentUserId}
+            isOrganizer={isOrganizer}
+            isLoading={isAttendeesLoading}
+            eventName={event.name}
+          />
+        </div>
+      </div>
 
       <QRCodeDialog
         open={showQRDialog}
         onClose={() => setShowQRDialog(false)}
         eventSlug={event.slug}
         eventName={event.name}
+        eventCode={eventCode}
       />
 
       <EventDeleteDialog
