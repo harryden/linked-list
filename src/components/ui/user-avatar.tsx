@@ -35,8 +35,8 @@ export const UserAvatar = ({
       {showImage ? (
         <img
           src={src}
-          alt={name || "User avatar"}
-          className="aspect-square h-full w-full object-cover"
+          alt={name ?? ""}
+          className="h-full w-full object-cover"
           onError={() => setHasError(true)}
         />
       ) : (
@@ -51,4 +51,4 @@ export const UserAvatar = ({
       )}
     </div>
   );
-};
+  };
