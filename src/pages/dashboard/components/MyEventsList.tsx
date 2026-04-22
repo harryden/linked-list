@@ -96,10 +96,8 @@ const MyEventsList = ({
             return (
               <Link
                 key={event.id}
-                to="/create-event"
+                to={`/event/${event.slug}`}
                 state={{
-                  eventId: event.id,
-                  eventSlug: event.slug,
                   fromDashboard: true,
                 }}
                 className={cn(

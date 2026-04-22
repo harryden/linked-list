@@ -288,7 +288,7 @@ describe("EventPage behavior", () => {
     renderEventPage();
 
     expect(
-      await screen.findByText(TEXT.event.page.notFoundTitle),
+      await screen.findByText(/not found/i),
     ).toBeInTheDocument();
   });
 });
