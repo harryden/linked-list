@@ -383,10 +383,12 @@ const EventPage = () => {
                   <QrCode className="mr-2 h-4 w-4" aria-hidden="true" />
                   {TEXT.common.buttons.viewQrCode}
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={handleExport}>
-                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
-                  {TEXT.event.attendeeList.exportCsv}
-                </DropdownMenuItem>
+                {(attendeeRecords?.length ?? 0) > 0 && (
+                  <DropdownMenuItem onSelect={handleExport}>
+                    <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                    {TEXT.event.attendeeList.exportCsv}
+                  </DropdownMenuItem>
+                )}
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() =>
