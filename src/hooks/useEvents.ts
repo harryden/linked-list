@@ -261,6 +261,7 @@ export const useDeleteEvent = () => {
       }
 
       await queryClient.invalidateQueries({ queryKey: ["attendances"] });
+      await queryClient.invalidateQueries({ queryKey: ["upcoming-events"] });
     },
   });
 };
