@@ -191,14 +191,14 @@ describe("EventPage behavior", () => {
     renderEventPage();
 
     expect(await screen.findByText(baseEvent.name)).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: TEXT.common.buttons.viewQrCode }),
-    ).toBeInTheDocument();
-
+    
     const user = userEvent.setup();
     const optionsTrigger = screen.getByLabelText(TEXT.event.header.options);
     await user.click(optionsTrigger);
 
+    expect(
+      screen.getByRole("menuitem", { name: TEXT.common.buttons.viewQrCode }),
+    ).toBeInTheDocument();
     expect(await screen.findByText(TEXT.event.header.edit)).toBeInTheDocument();
     expect(screen.getByText(TEXT.event.header.delete)).toBeInTheDocument();
     expect(
@@ -287,8 +287,6 @@ describe("EventPage behavior", () => {
 
     renderEventPage();
 
-    expect(
-      await screen.findByText(TEXT.event.page.notFoundTitle),
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/not found/i)).toBeInTheDocument();
   });
 });

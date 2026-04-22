@@ -30,7 +30,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
       <div className="flex gap-3 mt-8 max-md:flex-col max-md:max-w-xs">
         <Link to={isAuthenticated ? "/create-event" : "/auth"}>
           <Button
-            variant="primary"
+            variant={isAuthenticated ? "primary" : "linkedin"}
             size="lg"
             className="gap-2"
             iconRight={<ArrowRight className="h-4 w-4" />}

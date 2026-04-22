@@ -1,5 +1,5 @@
 {
-  "name": "linked-list",
+  "name": "linkback",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
     "preview": "vite preview",
-    "test": "vitest",
+    "test": "vitest run",
     "test:run": "vitest run",
     "test:ui": "vitest --ui",
     "test:e2e": "playwright test",
@@ -70,6 +70,7 @@
     "globals": "^15.15.0",
     "happy-dom": "^19.0.2",
     "husky": "^9.1.7",
+    "jsdom": "^27.0.0",
     "msw": "^2.11.3",
     "postcss": "^8.5.6",
     "prettier": "^3.6.2",
