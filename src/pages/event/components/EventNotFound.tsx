@@ -16,7 +16,7 @@ const EventNotFound = () => (
       </div>
 
       <h1 className="text-[32px] font-semibold tracking-[-0.8px] mt-3 leading-tight">
-        Event expired or missing.
+        {TEXT.event.page.notFoundTitle}
       </h1>
 
       <p className="text-[14px] text-text-secondary leading-relaxed mt-4 mb-8">

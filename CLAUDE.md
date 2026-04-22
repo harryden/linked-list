@@ -39,11 +39,12 @@ Always use `.github/pull_request_template.md`. When using `gh pr create`, do not
 - [ ] No `console.log` or commented-out code
 - [ ] Docs updated if behavior changed
 
-## Merging
+## Merging & Finalization Protocol
 
 - Merge commits only (no squash, no rebase merge)
 - 1 approving review required
 - **Wait for Copilot Review:** Do not merge until Copilot has finished its review.
+  - **MANDATORY AI AUDIT TRAIL:** You MUST address all findings and reply to **every individual comment thread** directly using the GitHub API (for PR review replies, use `gh api repos/OWNER/REPO/pulls/comments -X POST -f body="..." -F in_reply_to=<comment_id>`) BEFORE executing any merge commands.
   - Address all findings and reply to **every individual comment thread** directly.
   - Do not use top-level summary comments as a substitute for threaded replies.
 - **No Admin Merge:** Do not use admin privileges to bypass CI or review requirements unless explicitly instructed by the user.

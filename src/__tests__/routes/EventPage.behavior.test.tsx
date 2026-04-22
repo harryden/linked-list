@@ -287,6 +287,8 @@ describe("EventPage behavior", () => {
 
     renderEventPage();
 
-    expect(await screen.findByText(/not found/i)).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: TEXT.event.page.notFoundTitle }),
+    ).toBeInTheDocument();
   });
 });

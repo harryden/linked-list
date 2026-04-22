@@ -23,7 +23,9 @@ describe("EventPage states", () => {
       { route: "/event/missing-event" },
     );
 
-    expect(await screen.findByText(/not found/i)).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: TEXT.event.page.notFoundTitle }),
+    ).toBeInTheDocument();
     expect(
       await screen.findByText((content) =>
         content.includes(TEXT.event.page.notFoundDescription),
