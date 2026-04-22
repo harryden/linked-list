@@ -1,4 +1,4 @@
-# LinkBack
+# Linked List
 
 ## Stack
 
