@@ -4,7 +4,11 @@ import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import EventPage from "@/pages/EventPage";
 import { TEXT } from "@/constants/text";
-import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
+import {
+  createQueryStub,
+  supabaseStub,
+  resetSupabaseStub,
+} from "@/test-utils/supabase";
 
 const createDeferred = <T,>() => {
   let resolve!: (value: T) => void;
@@ -108,7 +112,7 @@ const setupEventPageMocks = ({
         update: vi.fn().mockReturnValue(createQueryStub()),
         insert: vi.fn().mockReturnValue(createQueryStub()),
       };
-      return eventsProxy as any;
+      return eventsProxy as unknown as any;
     }
 
     if (table === "attendances") {
@@ -130,6 +134,10 @@ const setupEventPageMocks = ({
 };
 
 describe("EventPage behavior", () => {
+  beforeEach(() => {
+    resetSupabaseStub();
+  });
+
   const renderEventPage = () =>
     renderWithProviders(
       <Routes>
@@ -206,7 +214,7 @@ describe("EventPage behavior", () => {
   it("keeps the guest view minimal until the attendee joins", async () => {
     setupEventPageMocks({
       event: baseEvent,
-      currentUserId: "guest-1",
+      currentUserId: null,
       userAttendance: [],
       attendeeProfiles: [],
     });

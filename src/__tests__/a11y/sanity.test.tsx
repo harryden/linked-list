@@ -3,6 +3,15 @@ import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import { screen } from "@testing-library/react";
 import { createQueryStub, supabaseStub } from "@/test-utils/supabase";
+import { vi } from "vitest";
+
+vi.mock("@/lib/events", async (importOriginal) => {
+  const actual = await importOriginal<any>();
+  return {
+    ...actual,
+    getDashboardGreeting: vi.fn().mockReturnValue("Welcome back, Dash User!"),
+  };
+});
 
 describe("Accessibility sanity checks", () => {
   it("Landing page exposes a single level-one heading", async () => {

@@ -7,7 +7,6 @@ export const getBaseUrl = () => {
     url = import.meta.env.VITE_PUBLIC_URL;
   }
 
-  // Trim trailing slash to avoid double slashes when joining paths
   return url.replace(/\/$/, "");
 };
 
@@ -16,10 +15,6 @@ export const getEventUrl = (slug: string) => {
   return `${baseUrl}/event/${slug}`;
 };
 
-/**
- * Returns the stable production URL.
- * Used for OAuth redirects since LinkedIn requires a pre-registered stable domain.
- */
 export const getProductionUrl = (isProd = import.meta.env.PROD) => {
   const url = import.meta.env.VITE_PUBLIC_URL;
 

@@ -105,7 +105,7 @@ describe("EventPage check-in arrival moment", () => {
     renderEventPage();
 
     const checkInButton = await screen.findByRole("button", {
-      name: TEXT.event.attendButton.checkInLinkedIn,
+      name: TEXT.event.attendButton.checkIn,
     });
 
     await userEvent.click(checkInButton);
@@ -122,7 +122,7 @@ describe("EventPage check-in arrival moment", () => {
     renderEventPage();
 
     const checkInButton = await screen.findByRole("button", {
-      name: TEXT.event.attendButton.checkInLinkedIn,
+      name: TEXT.event.attendButton.checkIn,
     });
     await userEvent.click(checkInButton);
 
@@ -146,7 +146,7 @@ describe("EventPage check-in arrival moment", () => {
     renderEventPage();
 
     const checkInButton = await screen.findByRole("button", {
-      name: TEXT.event.attendButton.checkInLinkedIn,
+      name: TEXT.event.attendButton.checkIn,
     });
     await userEvent.click(checkInButton);
 
