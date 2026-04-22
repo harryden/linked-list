@@ -1,15 +1,31 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { UserAvatar } from "@/components/ui/user-avatar";
 
 interface HeroSectionProps {
   isAuthenticated: boolean;
 }
 
 const PREVIEW_ATTENDEES = [
-  { name: "Elena Vasquez", headline: "Design Lead · Ramp", initials: "EV" },
-  { name: "Marcus Chen", headline: "Founder · Vellum", initials: "MC" },
-  { name: "Priya Sharma", headline: "Principal PM · Stripe", initials: "PS" },
+  {
+    name: "Elena Vasquez",
+    headline: "Design Lead · Ramp",
+    avatar:
+      "https://images.unsplash.com/photo-1531123964728-5fd89a763ea2?auto=format&fit=facearea&facepad=2&w=128&h=128&q=80",
+  },
+  {
+    name: "Marcus Chen",
+    headline: "Founder · Vellum",
+    avatar:
+      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=facearea&facepad=2&w=128&h=128&q=80",
+  },
+  {
+    name: "Priya Sharma",
+    headline: "Principal PM · Stripe",
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=facearea&facepad=2&w=128&h=128&q=80",
+  },
 ];
 
 const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
@@ -23,7 +39,7 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
       {/* Body */}
       <p className="text-lg text-text-secondary leading-relaxed mt-5 max-w-[560px]">
         Linked List turns check-ins into contacts. Every attendee leaves with
-        the people they actually met — no business cards, no follow-up forms.
+        the people they actually met. No business cards, no follow-up forms.
       </p>
 
       {/* CTAs */}
@@ -73,9 +89,12 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
                 key={a.name}
                 className="flex items-center gap-2.5 py-2 border-b border-border-subtle last:border-0"
               >
-                <div className="w-7 h-7 rounded-full bg-bg-surface-hover border border-border-subtle flex items-center justify-center text-[10px] font-medium text-text-secondary flex-shrink-0">
-                  {a.initials}
-                </div>
+                <UserAvatar
+                  src={a.avatar}
+                  name={a.name}
+                  className="w-7 h-7 border border-border-subtle"
+                  fallbackClassName="text-[10px] bg-bg-surface-hover text-text-secondary"
+                />
                 <div className="flex-1 min-w-0">
                   <div className="text-[13px] font-medium">{a.name}</div>
                   <div className="text-[11px] text-text-secondary truncate">
