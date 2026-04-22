@@ -30,7 +30,7 @@ const PageContainer = ({
     <div
       className={cn(
         "min-h-screen flex flex-col",
-        withGradient && "bg-gradient-subtle",
+        withGradient && "bg-bg-surface",
       )}
     >
       <main
