@@ -110,7 +110,11 @@ const Landing = () => {
             </p>
             <div className="mt-10 flex gap-3 justify-center max-md:flex-col">
               <Link to={user ? "/create-event" : "/auth"}>
-                <Button variant="primary" size="lg" className="px-10 h-12">
+                <Button
+                  variant={user ? "primary" : "linkedin"}
+                  size="lg"
+                  className="px-10 h-12"
+                >
                   {user ? "Create your first event" : "Sign in with LinkedIn"}
                 </Button>
               </Link>

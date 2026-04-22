@@ -13,6 +13,7 @@ import {
   Pencil,
   Trash2,
   X,
+  Download,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { QRCodeDialog } from "@/components/QRCodeDialog";
@@ -26,6 +27,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
@@ -38,6 +40,7 @@ import { useMyProfile } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import { analytics } from "@/lib/analytics";
+import { exportAttendeesToCSV } from "@/lib/export";
 
 const useSession = () => {
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
@@ -275,6 +278,24 @@ const EventPage = () => {
     }
   };
 
+  const handleExport = () => {
+    if (!event || !attendeeRecords) return;
+    try {
+      exportAttendeesToCSV(event.name, attendeeRecords);
+      toast({
+        title: "Success",
+        description: TEXT.event.toast.exportSuccess,
+      });
+    } catch (error) {
+      console.error("Export failed:", error);
+      toast({
+        title: "Error",
+        variant: "destructive",
+        description: TEXT.event.toast.exportFailure,
+      });
+    }
+  };
+
   if (isLoading) return <EventLoading />;
   if (!event) return <EventNotFound />;
 
@@ -358,6 +379,15 @@ const EventPage = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-44">
+                <DropdownMenuItem onSelect={() => setShowQRDialog(true)}>
+                  <QrCode className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {TEXT.common.buttons.viewQrCode}
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={handleExport}>
+                  <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+                  {TEXT.event.attendeeList.exportCsv}
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() =>
                     navigate("/create-event", {
@@ -428,18 +458,6 @@ const EventPage = () => {
             </div>
           )}
         </div>
-
-        {isOrganizer && (
-          <Button
-            variant="outline"
-            size="md"
-            className="w-full mb-6 gap-2"
-            onClick={() => setShowQRDialog(true)}
-          >
-            <QrCode className="h-4 w-4" aria-hidden="true" />
-            {TEXT.common.buttons.viewQrCode}
-          </Button>
-        )}
 
         <div className="mb-8">
           {justJoined && (

@@ -77,14 +77,18 @@ const TimePickerField = forwardRef<HTMLInputElement, TimePickerFieldProps>(
             onChange={(event) => handleChange(event.target.value)}
             onBlur={onBlur}
             step={60}
-            className={cn("pr-10", error && "border-destructive", className)}
+            className={cn(
+              "pr-10 bg-bg-surface",
+              error && "border-state-error",
+              className,
+            )}
             aria-invalid={error}
             aria-describedby={ariaDescribedby}
             required={required}
             aria-required={required}
           />
           <Clock
-            className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none"
+            className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none"
             aria-hidden="true"
           />
         </div>
