@@ -4,6 +4,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const WEBHOOK_SECRET = Deno.env.get("WEBHOOK_SECRET");
 const EMAIL_FROM =
   Deno.env.get("EMAIL_FROM") ?? "Linked List <events@updates.linkedlist.app>";
 const APP_URL = Deno.env.get("APP_URL")?.replace(/\/+$/, "");
@@ -17,10 +18,7 @@ const escapeHtml = (str: string): string =>
 
 serve(async (req) => {
   const authHeader = req.headers.get("Authorization");
-  if (
-    !SUPABASE_SERVICE_ROLE_KEY ||
-    authHeader !== `Bearer ${SUPABASE_SERVICE_ROLE_KEY}`
-  ) {
+  if (!WEBHOOK_SECRET || authHeader !== `Bearer ${WEBHOOK_SECRET}`) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       headers: { "Content-Type": "application/json" },
       status: 401,
@@ -37,6 +35,13 @@ serve(async (req) => {
   if (!SUPABASE_URL) {
     return new Response(
       JSON.stringify({ error: "SUPABASE_URL is not configured" }),
+      { headers: { "Content-Type": "application/json" }, status: 500 },
+    );
+  }
+
+  if (!SUPABASE_SERVICE_ROLE_KEY) {
+    return new Response(
+      JSON.stringify({ error: "SUPABASE_SERVICE_ROLE_KEY is not configured" }),
       { headers: { "Content-Type": "application/json" }, status: 500 },
     );
   }
