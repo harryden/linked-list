@@ -7,6 +7,7 @@ interface MinimalEvent {
   name: string;
   slug: string;
   starts_at: string | null;
+  ends_at: string | null;
   location: string | null;
 }
 
@@ -18,13 +19,15 @@ interface MyEventsListProps {
 
 type EventStatus = "live" | "upcoming" | "draft" | "past";
 
-function getStatus(startsAt: string | null): EventStatus {
+function getStatus(startsAt: string | null, endsAt: string | null): EventStatus {
   if (!startsAt) return "draft";
   const start = new Date(startsAt).getTime();
+  const end = endsAt ? new Date(endsAt).getTime() : start + 8 * 60 * 60 * 1000;
   const now = Date.now();
-  if (start <= now && now - start < 8 * 60 * 60 * 1000) return "live";
-  if (start < now) return "past";
-  return "upcoming";
+
+  if (now >= start && now <= end) return "live";
+  if (now < start) return "upcoming";
+  return "past";
 }
 
 function formatMonoDate(startsAt: string): string {
@@ -92,7 +95,7 @@ const MyEventsList = ({
       ) : (
         <div className="bg-bg-base border border-border-subtle rounded-xl overflow-hidden">
           {events.map((event, i) => {
-            const status = getStatus(event.starts_at);
+            const status = getStatus(event.starts_at, event.ends_at);
             return (
               <Link
                 key={event.id}

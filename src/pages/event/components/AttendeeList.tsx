@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Linkedin } from "lucide-react";
 import type { AttendanceRecord } from "@/hooks/useAttendances";
@@ -11,6 +12,8 @@ interface AttendeeListProps {
   isOrganizer: boolean;
   isLoading: boolean;
   eventName?: string;
+  startsAt?: string | null;
+  endsAt?: string | null;
 }
 
 const AttendeeList = ({
@@ -18,22 +21,32 @@ const AttendeeList = ({
   currentUserId,
   isOrganizer,
   isLoading,
+  startsAt,
+  endsAt,
 }: AttendeeListProps) => {
   const { toast } = useToast();
   const attendeeCount = attendees.length;
+
+  const isLive = useMemo(() => {
+    if (!startsAt) return false;
+    const start = new Date(startsAt).getTime();
+    const end = endsAt ? new Date(endsAt).getTime() : start + 8 * 60 * 60 * 1000;
+    const now = Date.now();
+    return now >= start && now <= end;
+  }, [startsAt, endsAt]);
 
   return (
     <div>
       {/* Section header */}
       <div className="flex items-baseline justify-between mb-1">
-        <span className="text-[14px] font-medium">In the room</span>
+        <span className="text-[14px] font-medium">Checked in</span>
         <div className="flex items-center gap-2">
           <span className="text-[12px] text-text-secondary font-mono">
             {attendeeCount}{" "}
             {attendeeCount === 1
               ? TEXT.event.attendeeList.singular
-              : TEXT.event.attendeeList.plural}{" "}
-            · LIVE
+              : TEXT.event.attendeeList.plural}
+            {isLive && " · LIVE"}
           </span>
         </div>
       </div>
