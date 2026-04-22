@@ -10,6 +10,7 @@ CREATE TABLE public.feedback (
 
 ALTER TABLE public.feedback ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Anyone can insert feedback"
+CREATE POLICY "Authenticated users can insert feedback"
   ON public.feedback FOR INSERT
-  WITH CHECK (user_id IS NULL OR user_id = auth.uid());
+  TO authenticated
+  WITH CHECK (user_id = auth.uid());

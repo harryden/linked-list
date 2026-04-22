@@ -46,11 +46,17 @@ export const FeedbackDialog = ({
 
       setMessage("");
       setOpen(false);
-    } catch (_error) {
+    } catch (error) {
+      const isAuthError =
+        error instanceof Error &&
+        error.message === "Authentication required to submit feedback";
+
       toast({
-        title: "Error",
+        title: isAuthError ? "Sign in required" : "Error",
         variant: "destructive",
-        description: "Could not send feedback. Please try again later.",
+        description: isAuthError
+          ? "Please sign in to your account to send feedback."
+          : "Could not send feedback. Please try again later.",
       });
     }
   };

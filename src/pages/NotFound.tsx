@@ -24,12 +24,14 @@ const NotFound = () => {
         </div>
 
         <div className="text-[11px] font-mono text-text-secondary tracking-[1px] uppercase">
-          {TEXT.notFound.title} — PAGE NOT FOUND
+          PAGE NOT FOUND
         </div>
 
         <h1 className="text-[32px] font-semibold tracking-[-0.8px] mt-3 leading-tight">
-          Lost in the grid.
+          {TEXT.notFound.title}
         </h1>
+
+        <p className="text-[18px] font-medium mt-3">Lost in the grid.</p>
 
         <p className="text-[14px] text-text-secondary leading-relaxed mt-4 mb-8">
           {TEXT.notFound.subtitle}. The page you're looking for doesn't exist or
