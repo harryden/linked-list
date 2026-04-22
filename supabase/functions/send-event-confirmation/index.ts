@@ -5,7 +5,7 @@ const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const EMAIL_FROM =
-  Deno.env.get("EMAIL_FROM") ?? "LinkBack <events@updates.linkback.com>";
+  Deno.env.get("EMAIL_FROM") ?? "Linked List <events@updates.linkedlist.app>";
 const APP_URL = Deno.env.get("APP_URL")?.replace(/\/+$/, "");
 
 const escapeHtml = (str: string): string =>
@@ -16,7 +16,6 @@ const escapeHtml = (str: string): string =>
     .replace(/"/g, "&quot;");
 
 serve(async (req) => {
-  // Verify the request originates from our database trigger
   const authHeader = req.headers.get("Authorization");
   if (
     !SUPABASE_SERVICE_ROLE_KEY ||
@@ -88,27 +87,30 @@ serve(async (req) => {
       body: JSON.stringify({
         from: EMAIL_FROM,
         to: [email],
-        subject: `Your event is live: ${eventName}`,
+        subject: `Event Live: ${eventName}`,
         html: `
-          <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-            <h1 style="color: #0077b5; margin-bottom: 24px;">Event Created Successfully!</h1>
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">
-              Hi there, your event <strong>${eventName}</strong> is now live and ready for check-ins.
+          <div style="font-family: ui-sans-serif, system-ui, sans-serif; max-width: 500px; margin: 0 auto; padding: 40px 20px; color: #111;">
+            <h1 style="font-size: 24px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 8px;">Event Created</h1>
+            <p style="font-size: 14px; line-height: 1.5; color: #666; margin-bottom: 32px;">
+              Your event <strong>${eventName}</strong> is now live and ready for check-ins.
             </p>
-            <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 24px 0; text-align: center;">
-              <p style="margin: 0; font-size: 14px; color: #666; text-transform: uppercase; letter-spacing: 1px;">Event Access Code</p>
-              <p style="margin: 8px 0 0 0; font-size: 32px; font-weight: bold; color: #000; letter-spacing: 4px;">${shortCode}</p>
+            
+            <div style="border: 1px solid #eee; border-radius: 8px; padding: 24px; text-align: center; margin-bottom: 32px;">
+              <p style="margin: 0; font-size: 11px; font-family: ui-monospace, monospace; color: #999; text-transform: uppercase; letter-spacing: 0.1em;">Check-in Code</p>
+              <p style="margin: 12px 0 0 0; font-size: 32px; font-weight: 700; color: #000; letter-spacing: 0.2em; font-family: ui-monospace, monospace;">${shortCode}</p>
             </div>
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">
-              Attendees can scan your QR code or enter the 6-digit code above to check in with their LinkedIn profile.
-            </p>
-            <div style="margin-top: 32px; text-align: center;">
-              <a href="${dashboardUrl}" style="background-color: #0077b5; color: white; padding: 12px 24px; text-decoration: none; border-radius: 25px; font-weight: bold;">View Event Dashboard</a>
+
+            <div style="margin-bottom: 40px;">
+              <a href="${dashboardUrl}" style="display: block; background-color: #000; color: #fff; padding: 14px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: 500; text-align: center;">View Roster</a>
             </div>
-            <hr style="margin: 40px 0 20px 0; border: 0; border-top: 1px solid #eee;" />
-            <p style="font-size: 12px; color: #999; text-align: center;">
-              &copy; 2025 LinkBack. Powered by LinkedIn.
-            </p>
+
+            <hr style="margin-bottom: 24px; border: 0; border-top: 1px solid #eee;" />
+            
+            <footer style="text-align: center;">
+              <p style="font-size: 12px; color: #999; margin: 0;">
+                &copy; 2025 Linked List
+              </p>
+            </footer>
           </div>
         `,
       }),

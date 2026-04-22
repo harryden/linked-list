@@ -14,14 +14,14 @@ describe("URL Helpers", () => {
 
   describe("getBaseUrl", () => {
     it("should prioritize window.location.origin over VITE_PUBLIC_URL", () => {
-      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkback.com");
+      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkedlist.app");
       expect(getBaseUrl()).toBe("http://localhost:3000");
     });
 
     it("should use VITE_PUBLIC_URL if window.location is undefined", () => {
       vi.stubGlobal("window", undefined);
-      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkback.com/");
-      expect(getBaseUrl()).toBe("https://app.linkback.com");
+      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkedlist.app/");
+      expect(getBaseUrl()).toBe("https://app.linkedlist.app");
     });
 
     it("should fall back to window.location.origin if VITE_PUBLIC_URL is not set", () => {
@@ -36,7 +36,7 @@ describe("URL Helpers", () => {
 
   describe("getEventUrl", () => {
     it("should return a correctly formatted event URL using origin", () => {
-      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkback.com");
+      vi.stubEnv("VITE_PUBLIC_URL", "https://app.linkedlist.app");
       expect(getEventUrl("my-event")).toBe(
         "http://localhost:3000/event/my-event",
       );
@@ -45,8 +45,8 @@ describe("URL Helpers", () => {
 
   describe("getProductionUrl", () => {
     it("should prioritize VITE_PUBLIC_URL", () => {
-      vi.stubEnv("VITE_PUBLIC_URL", "https://prod.linkback.com/");
-      expect(getProductionUrl()).toBe("https://prod.linkback.com");
+      vi.stubEnv("VITE_PUBLIC_URL", "https://prod.linkedlist.app/");
+      expect(getProductionUrl()).toBe("https://prod.linkedlist.app");
     });
 
     it("should fall back to localhost in development when VITE_PUBLIC_URL is unset", () => {

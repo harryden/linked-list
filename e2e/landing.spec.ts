@@ -31,6 +31,6 @@ test.describe("Landing page", () => {
   });
 
   test("renders the page title in the document head", async ({ page }) => {
-    await expect(page).toHaveTitle(/LinkBack/i);
+    await expect(page).toHaveTitle(/Linked List/i);
   });
 });
