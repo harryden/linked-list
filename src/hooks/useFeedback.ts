@@ -21,11 +21,13 @@ interface FeedbackInsert {
 export const useFeedback = () => {
   return useMutation({
     mutationFn: async (payload: FeedbackPayload) => {
-      const { data: session } = await supabase.auth.getSession();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
 
       const insert: FeedbackInsert = {
         ...payload,
-        user_id: session?.session?.user?.id,
+        user_id: user?.id,
         user_agent: window.navigator.userAgent,
       };
 

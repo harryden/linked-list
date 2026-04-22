@@ -19,5 +19,6 @@ export default defineConfig(({ mode }) => ({
     target: "es2020",
     sourcemap: mode === "development" ? "hidden" : false,
     minify: "terser",
+    modulePreload: { polyfill: false },
   },
 }));

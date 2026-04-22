@@ -27,8 +27,8 @@ describe("Accessibility sanity checks", () => {
   });
 
   it("Dashboard page keeps a single level-one heading with user data loaded", async () => {
-    supabaseStub.auth.getSession.mockResolvedValue({
-      data: { session: { user: { id: "dashboard-user" } } },
+    supabaseStub.auth.getUser.mockResolvedValue({
+      data: { user: { id: "dashboard-user" } },
       error: null,
     });
 

@@ -52,11 +52,11 @@ const useSession = () => {
     const loadSession = async () => {
       try {
         const {
-          data: { session },
-        } = await supabase.auth.getSession();
+          data: { user },
+        } = await supabase.auth.getUser();
 
         if (isMounted) {
-          setCurrentUserId(session?.user?.id ?? null);
+          setCurrentUserId(user?.id ?? null);
         }
       } catch (_error) {
         logger.error(_error, { category: "Events" });

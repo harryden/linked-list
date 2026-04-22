@@ -32,8 +32,8 @@ const attendanceRecord = [{ id: "attendance-1" }];
  *                     canViewAttendees flips to true and the full page renders
  */
 const setupMocks = ({ isAttending }: { isAttending: boolean }) => {
-  supabaseStub.auth.getSession.mockResolvedValue({
-    data: { session: { user: { id: "attendee-1" } } },
+  supabaseStub.auth.getUser.mockResolvedValue({
+    data: { user: { id: "attendee-1" } },
     error: null,
   });
 

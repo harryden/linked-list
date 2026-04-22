@@ -49,10 +49,8 @@ const setupEventPageMocks = ({
   deleteResult = { data: null, error: null },
   resolveEventWith = "immediate",
 }: LocationMocksOptions) => {
-  supabaseStub.auth.getSession.mockResolvedValue({
-    data: currentUserId
-      ? { session: { user: { id: currentUserId } } }
-      : { session: null },
+  supabaseStub.auth.getUser.mockResolvedValue({
+    data: { user: currentUserId ? { id: currentUserId } : null },
     error: null,
   });
 
@@ -267,8 +265,8 @@ describe("EventPage behavior", () => {
   });
 
   it("renders the not-found view when the event cannot be loaded", async () => {
-    supabaseStub.auth.getSession.mockResolvedValue({
-      data: { session: { user: { id: "guest-1" } } },
+    supabaseStub.auth.getUser.mockResolvedValue({
+      data: { user: { id: "guest-1" } },
       error: null,
     });
 

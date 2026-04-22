@@ -36,14 +36,14 @@ const useSession = (navigate: NavigateFunction) => {
 
     const loadSession = async () => {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
+        data: { user },
+      } = await supabase.auth.getUser();
 
       if (isMounted) {
-        if (!session) {
+        if (!user) {
           navigate("/auth");
         } else {
-          setUserId(session.user.id);
+          setUserId(user.id);
         }
         setIsSessionLoading(false);
       }
