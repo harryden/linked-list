@@ -41,7 +41,7 @@ export const FeedbackDialog = ({
 
       toast({
         title: "Thank you!",
-        description: "Your feedback helps us make LinkBack better.",
+        description: "Your feedback helps us make Linked List better.",
       });
 
       setMessage("");
@@ -106,7 +106,7 @@ export const FeedbackDialog = ({
               type === "bug"
                 ? "What happened? (Optional: steps to reproduce)"
                 : type === "feature"
-                  ? "What would you like to see added to LinkBack?"
+                  ? "What would you like to see added to Linked List?"
                   : "Your message..."
             }
             value={message}

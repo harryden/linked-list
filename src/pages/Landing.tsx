@@ -64,7 +64,7 @@ const Landing = () => {
         <Link to="/" className="flex items-center gap-2.5">
           <LogoMark size={26} />
           <span className="text-[15px] font-semibold tracking-[-0.3px]">
-            LinkBack
+            Linked List
           </span>
         </Link>
 
@@ -102,7 +102,7 @@ const Landing = () => {
 
       <footer className="relative z-10 pt-24 border-t border-border-subtle">
         <div className="container mx-auto px-4 pb-8 text-center text-sm text-text-secondary">
-          <p>© 2025 LinkBack. All rights reserved.</p>
+          <p>© 2025 Linked List. All rights reserved.</p>
         </div>
       </footer>
     </div>

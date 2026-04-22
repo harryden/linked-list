@@ -67,7 +67,7 @@ const Auth = () => {
         <Link to="/" className="flex items-center gap-2">
           <LogoMark size={22} />
           <span className="text-[13px] font-semibold tracking-[-0.3px]">
-            LinkBack
+            Linked List
           </span>
         </Link>
         <Link to="/">
@@ -87,7 +87,7 @@ const Auth = () => {
             Pick up where you left off.
           </h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-3">
-            LinkBack uses your LinkedIn profile so you always arrive with the
+            Linked List uses your LinkedIn profile so you always arrive with the
             right name tag.
           </p>
 
@@ -157,11 +157,12 @@ const Auth = () => {
             <p className="text-[12px] text-text-secondary leading-relaxed mt-6">
               {TEXT.auth.info.consentPrefix}{" "}
               <a
-                href="https://www.linkedin.com/mypreferences/d/apps"
+                href="https://www.linkedin.com/mypreferences/d/data-sharing-for-permitted-services"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-linkedin hover:underline font-medium"
               >
+                {" "}
                 LinkedIn settings
               </a>
               .

@@ -22,8 +22,8 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
 
       {/* Body */}
       <p className="text-lg text-text-secondary leading-relaxed mt-5 max-w-[560px]">
-        LinkBack turns check-ins into contacts. Every attendee leaves with the
-        people they actually met — no business cards, no follow-up forms.
+        Linked List turns check-ins into contacts. Every attendee leaves with
+        the people they actually met — no business cards, no follow-up forms.
       </p>
 
       {/* CTAs */}
