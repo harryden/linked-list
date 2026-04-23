@@ -384,7 +384,9 @@ const EventPage = () => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-44">
-                <DropdownMenuItem onSelect={() => setShowQRDialog(true)}>
+                <DropdownMenuItem
+                  onSelect={() => setTimeout(() => setShowQRDialog(true), 0)}
+                >
                   <QrCode className="mr-2 h-4 w-4" aria-hidden="true" />
                   {TEXT.common.buttons.viewQrCode}
                 </DropdownMenuItem>
@@ -410,7 +412,9 @@ const EventPage = () => {
                   {TEXT.event.header.edit}
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onSelect={() => setShowDeleteDialog(true)}
+                  onSelect={() =>
+                    setTimeout(() => setShowDeleteDialog(true), 0)
+                  }
                   className="text-state-error focus:text-state-error focus:bg-state-error-bg"
                 >
                   <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
