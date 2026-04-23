@@ -229,19 +229,20 @@ export const TEXT = {
       buttonLoading: "Connecting...",
     },
     info: {
-      title: "What we access:",
+      title: "Why we use LinkedIn:",
+      description: "We only request what's necessary to make your professional event experience seamless and trusted.",
       items: [
         {
-          title: "Name and profile picture",
-          description: "To identify you on the event roster",
+          title: "Verified Identity",
+          description: "Your real name and photo ensure a trusted and professional event roster.",
         },
         {
-          title: "Headline and email",
-          description: "For professional networking",
+          title: "Professional Context",
+          description: "Your headline helps other attendees understand your role and network better.",
         },
         {
-          title: "Read-only access",
-          description: "We never post or message on your behalf",
+          title: "Privacy First",
+          description: "We only request read-only access. We never post or message on your behalf.",
         },
       ],
       consentPrefix:
