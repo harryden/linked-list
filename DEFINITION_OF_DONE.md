@@ -19,7 +19,8 @@ This document defines the requirements that must be met before any feature or bu
 ## 3. Documentation
 
 - [ ] `README.md` or `PROJECT_CONTEXT.md` updated if architecture changed.
-- [ ] PR description follows the template and explains the "Why."
+- [ ] PR description follows the template, is not empty, summarizes the git diff, and includes relevant test results.
+- [ ] Agent-authored PRs include the required AI metadata and labels from `WORKFLOW.md`.
 
 ## 4. UI/UX & A11y
 

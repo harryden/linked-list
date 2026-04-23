@@ -19,3 +19,4 @@
 - No comments. Self-documentary code only.
 - Atomic commits. PRs required.
 - Copilot review required before merge.
+- Shared GitHub workflow and AI review assignment rules live in `WORKFLOW.md`.
