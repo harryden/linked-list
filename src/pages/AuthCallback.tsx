@@ -5,6 +5,7 @@ import { useMyProfile } from "@/hooks/useProfile";
 import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
 import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { ErrorScreen } from "@/components/ui/ErrorScreen";
 import { isSafeRedirect } from "@/lib/utils";
 import { analytics } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
@@ -39,13 +40,7 @@ const AuthCallback = () => {
         category: "Auth",
         extra: { errorDescription },
       });
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: errorDescription || TEXT.authCallback.toast.genericFailure,
-      });
       setStatus("error");
-      setTimeout(() => navigate("/auth"), 2000);
       return;
     }
 
@@ -58,21 +53,15 @@ const AuthCallback = () => {
       }
 
       if (event === "SIGNED_OUT" || (!session && event !== "INITIAL_SESSION")) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: TEXT.authCallback.toast.noSession,
-        });
         setStatus("error");
         subscription.unsubscribe();
-        setTimeout(() => navigate("/auth"), 2000);
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [location.search, navigate, toast]);
+  }, [location.search]);
 
   useEffect(() => {
     if (!userId || isProfileLoading || hasHandledProfile) {
@@ -81,14 +70,8 @@ const AuthCallback = () => {
 
     if (profileError) {
       logger.error(profileError, { category: "Auth" });
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: TEXT.authCallback.toast.loadProfileFailure,
-      });
       setStatus("error");
       setHasHandledProfile(true);
-      setTimeout(() => navigate("/auth"), 2000);
       return;
     }
 
@@ -111,26 +94,22 @@ const AuthCallback = () => {
     _profile?.name,
   ]);
 
-  if (status === "loading") {
+  if (status === "error") {
     return (
-      <LoadingScreen
-        title={TEXT.authCallback.loadingTitle}
-        message={TEXT.authCallback.loadingDescription}
+      <ErrorScreen
+        title={TEXT.authCallback.errorTitle}
+        message={TEXT.authCallback.errorDescription}
+        backPath="/auth"
+        backLabel="Back to Sign In"
       />
     );
   }
 
   return (
-    <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
-      <div className="text-center w-full max-w-[320px]">
-        <h1 className="text-[20px] font-semibold tracking-[-0.4px] text-state-error">
-          {TEXT.authCallback.errorTitle}
-        </h1>
-        <p className="text-[13px] text-text-secondary mt-2">
-          {TEXT.authCallback.errorDescription}
-        </p>
-      </div>
-    </div>
+    <LoadingScreen
+      title={TEXT.authCallback.loadingTitle}
+      message={TEXT.authCallback.loadingDescription}
+    />
   );
 };
 

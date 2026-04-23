@@ -79,19 +79,26 @@ const Landing = () => {
               <Button variant="ghost" size="sm" onClick={handleSignOut}>
                 Sign out
               </Button>
+              <Link to="/create-event">
+                <Button variant="primary" size="sm">
+                  Create event
+                </Button>
+              </Link>
             </>
           ) : (
-            <Link to="/auth">
-              <Button variant="ghost" size="sm">
-                Sign in
-              </Button>
-            </Link>
+            <>
+              <Link to="/join-event">
+                <Button variant="ghost" size="sm">
+                  Join event
+                </Button>
+              </Link>
+              <Link to="/auth">
+                <Button variant="primary" size="sm">
+                  Sign in
+                </Button>
+              </Link>
+            </>
           )}
-          <Link to={user ? "/create-event" : "/auth"}>
-            <Button variant="primary" size="sm">
-              Create event
-            </Button>
-          </Link>
         </div>
       </header>
 
@@ -118,6 +125,13 @@ const Landing = () => {
                   {user ? "Create your first event" : "Sign in with LinkedIn"}
                 </Button>
               </Link>
+              {!user && (
+                <Link to="/join-event">
+                  <Button variant="outline" size="lg" className="px-10 h-12">
+                    Join with code
+                  </Button>
+                </Link>
+              )}
             </div>
           </div>
         </section>
