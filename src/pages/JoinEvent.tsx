@@ -31,10 +31,14 @@ const JoinEvent = () => {
   const queryClient = useQueryClient();
 
   const fromDashboard = location.state?.fromDashboard;
-  const backPath = fromDashboard ? "/dashboard" : "/";
+  const fromAuth = location.state?.fromAuth;
+
+  const backPath = fromDashboard ? "/dashboard" : fromAuth ? "/auth" : "/";
   const backText = fromDashboard
     ? TEXT.common.links.backToDashboard
-    : TEXT.common.links.backToHome;
+    : fromAuth
+      ? TEXT.common.links.backToSignIn
+      : TEXT.common.links.backToHome;
 
   const getAuthenticatedUserId = async () => {
     const {
