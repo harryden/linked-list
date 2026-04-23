@@ -173,7 +173,10 @@ describe("EventPage behavior", () => {
 
     renderEventPage();
 
-    expect(screen.getByText(TEXT.event.page.loading)).toBeInTheDocument();
+    expect(screen.getByText(TEXT.event.page.loadingTitle)).toBeInTheDocument();
+    expect(
+      screen.getByText(TEXT.event.page.loadingMessage),
+    ).toBeInTheDocument();
 
     deferred.resolve({ data: baseEvent, error: null });
 
