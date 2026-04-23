@@ -111,7 +111,7 @@ const CreateEvent = () => {
         values.eventDate,
         values.startTime,
       );
-      const normalizedEndsAt = combineEventDateAndTime(
+      let normalizedEndsAt = combineEventDateAndTime(
         values.eventDate,
         values.endTime,
       );
@@ -122,6 +122,13 @@ const CreateEvent = () => {
           description: TEXT.createEvent.toast.missingDateTime,
         });
         return;
+      }
+
+      // If end time is earlier than start time, it means the event ends the next day
+      if (normalizedEndsAt <= normalizedStartsAt) {
+        const endDate = new Date(normalizedEndsAt);
+        endDate.setDate(endDate.getDate() + 1);
+        normalizedEndsAt = endDate.toISOString();
       }
 
       if (isEditing && editingEventId) {

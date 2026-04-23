@@ -13,9 +13,7 @@ export const createEventSchema = z
   .refine(
     (data) => {
       if (!data.eventDate || !data.startTime || !data.endTime) return true;
-      const start = new Date(`${data.eventDate}T${data.startTime}`);
-      const end = new Date(`${data.eventDate}T${data.endTime}`);
-      return end > start;
+      return data.startTime !== data.endTime;
     },
     {
       message: TEXT.createEvent.toast.invalidTimeRange,
