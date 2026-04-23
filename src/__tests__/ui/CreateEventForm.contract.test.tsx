@@ -69,6 +69,9 @@ describe("CreateEventForm contract", () => {
       screen.getByLabelText(TEXT.createEvent.form.fields.nameLabel),
     ).toBeInTheDocument();
     expect(
+      screen.getByLabelText(TEXT.createEvent.form.fields.locationLabel),
+    ).toBeRequired();
+    expect(
       screen.getByPlaceholderText(
         TEXT.createEvent.form.fields.locationPlaceholder,
       ),
@@ -126,5 +129,31 @@ describe("CreateEventForm contract", () => {
     );
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it("blocks submission and shows an error when location is missing", async () => {
+    const onSubmit = vi.fn();
+    const user = userEvent.setup();
+
+    render(
+      <FormHarness
+        initialValues={{
+          name: "Weekend Launch",
+          eventDate: "2025-05-10",
+          startTime: "10:00",
+          endTime: "12:00",
+        }}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    await user.click(
+      screen.getByRole("button", { name: TEXT.createEvent.form.submitIdle }),
+    );
+
+    expect(
+      await screen.findByText(TEXT.createEvent.toast.missingLocation),
+    ).toBeInTheDocument();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 });
