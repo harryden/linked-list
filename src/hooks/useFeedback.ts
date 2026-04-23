@@ -21,15 +21,16 @@ interface FeedbackInsert {
 export const useFeedback = () => {
   return useMutation({
     mutationFn: async (payload: FeedbackPayload) => {
-      const { data: sessionData } = await supabase.auth.getSession();
+      const { data: userData, error: userError } =
+        await supabase.auth.getUser();
 
-      if (!sessionData?.session) {
+      if (userError || !userData.user) {
         throw new Error("Authentication required to submit feedback");
       }
 
       const insert: FeedbackInsert = {
         ...payload,
-        user_id: sessionData.session.user.id,
+        user_id: userData.user.id,
         user_agent: window.navigator.userAgent,
       };
 
