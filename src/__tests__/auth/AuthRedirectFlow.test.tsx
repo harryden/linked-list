@@ -65,7 +65,7 @@ describe("Auth redirect flow", () => {
     });
 
     await user.click(
-      screen.getByRole("button", {
+      await screen.findByRole("button", {
         name: new RegExp(TEXT.auth.card.buttonIdle, "i"),
       }),
     );
@@ -92,7 +92,7 @@ describe("Auth redirect flow", () => {
     });
 
     await user.click(
-      screen.getByRole("button", {
+      await screen.findByRole("button", {
         name: new RegExp(TEXT.auth.card.buttonIdle, "i"),
       }),
     );
