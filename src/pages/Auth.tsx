@@ -12,6 +12,7 @@ import { getBaseUrl } from "@/lib/urls";
 const Auth = () => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isSessionLoading, setIsSessionLoading] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -27,12 +28,47 @@ const Auth = () => {
   }, [location.search]);
 
   useEffect(() => {
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        navigate(redirectPath, { replace: true });
-      }
-    });
+    let isActive = true;
+
+    void supabase.auth
+      .getSession()
+      .then(({ data: { session } }) => {
+        if (!isActive) {
+          return;
+        }
+
+        if (session) {
+          navigate(redirectPath, { replace: true });
+          return;
+        }
+
+        setIsSessionLoading(false);
+      })
+      .catch(() => {
+        if (isActive) {
+          setIsSessionLoading(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
   }, [navigate, redirectPath]);
+
+  if (isSessionLoading || isLoading) {
+    return (
+      <div className="min-h-screen bg-bg-base flex items-center justify-center px-5">
+        <div className="text-center">
+          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
+            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
+          </div>
+          <p className="text-[13px] text-text-secondary">
+            {isLoading ? "Redirecting to LinkedIn..." : "Loading sign in..."}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const handleLinkedInSignIn = async () => {
     setIsLoading(true);

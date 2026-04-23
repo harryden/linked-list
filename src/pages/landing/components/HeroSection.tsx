@@ -49,11 +49,11 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
             variant={isAuthenticated ? "primary" : "linkedin"}
             size="lg"
             className="gap-2"
-            iconRight={<ArrowRight className="h-4 w-4" />}
           >
             {isAuthenticated
               ? "Create your first event"
               : "Sign in with LinkedIn"}
+            <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
         <Link to="/join-event">
