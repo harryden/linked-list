@@ -50,6 +50,7 @@ jq_filter='
     | select(.isDraft | not)
     | select((.labelNames | index("agent:'"$agent"'") | not) and (.authorAgent != "'"$agent"'"))
     | select((.labelNames | index("🤖 ai-ready-for-review")) or .reviewStatus == "ready")
+    | select((.labelNames | index("🤖 ai-changes-requested") | not) and .reviewStatus != "changes-requested")
     | select((.labelNames | index("🤖 ai-reviewing") | not) and .reviewStatus != "claimed")
   ]
   | sort_by(.updatedAt)
@@ -119,7 +120,15 @@ if [[ "$claim" == "--claim" ]]; then
     '
   )"
 
-  gh pr edit "$number" --add-label "🤖 ai-reviewing" --body "$updated_body" >/dev/null
+  body_file="$(mktemp)"
+  json_file="$(mktemp)"
+  trap 'rm -f "$body_file" "$json_file"' EXIT
+
+  printf '%s' "$updated_body" >"$body_file"
+  jq -n --rawfile body "$body_file" '{body:$body}' >"$json_file"
+
+  gh api --method PATCH "repos/{owner}/{repo}/pulls/$number" --input "$json_file" >/dev/null
+  gh api --method POST "repos/{owner}/{repo}/issues/$number/labels" -f 'labels[]=🤖 ai-reviewing' >/dev/null
   echo "Claimed PR #$number for $agent review."
 fi
 
