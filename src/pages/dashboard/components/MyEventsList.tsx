@@ -88,7 +88,11 @@ const MyEventsList = ({
         </div>
       ) : events.length === 0 ? (
         <div className="bg-bg-base border border-border-subtle rounded-xl p-8 text-center">
-          <p className="text-sm text-text-secondary mb-4">No events found.</p>
+          <p className="text-sm text-text-secondary mb-4">
+            {title === "My events" || title === "Upcoming"
+              ? "No upcoming events found."
+              : "No past events found."}
+          </p>
           <Link to="/create-event" state={{ fromDashboard: true }}>
             <Button variant="primary" size="sm">
               Create event

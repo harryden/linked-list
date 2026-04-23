@@ -2,10 +2,10 @@
 
 These two files are ready to replace the existing ones in `linked-list/`:
 
-| From handoff                         | Replace in repo                |
-|--------------------------------------|--------------------------------|
-| `starter/src/index.css`              | `src/index.css`                |
-| `starter/tailwind.config.ts`         | `tailwind.config.ts`           |
+| From handoff                 | Replace in repo      |
+| ---------------------------- | -------------------- |
+| `starter/src/index.css`      | `src/index.css`      |
+| `starter/tailwind.config.ts` | `tailwind.config.ts` |
 
 ## Why
 
