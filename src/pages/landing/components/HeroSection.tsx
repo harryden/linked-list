@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { UserAvatar } from "@/components/ui/user-avatar";
+import { TEXT } from "@/constants/text";
 
 interface HeroSectionProps {
   isAuthenticated: boolean;
@@ -33,13 +34,12 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
     <section className="px-16 pt-24 pb-0 max-md:px-4 max-md:pt-16">
       {/* h1 */}
       <h1 className="text-[64px] max-md:text-[36px] font-semibold tracking-[-1.8px] leading-[1.02] mt-6 max-w-[720px]">
-        The guest list, rebuilt as a network.
+        {TEXT.landing.hero.title}
       </h1>
 
       {/* Body */}
       <p className="text-lg text-text-secondary leading-relaxed mt-5 max-w-[560px]">
-        Linked List turns check-ins into contacts. Every attendee leaves with
-        the people they actually met. No business cards, no follow-up forms.
+        {TEXT.landing.hero.subtitle}
       </p>
 
       {/* CTAs */}
@@ -51,14 +51,14 @@ const HeroSection = ({ isAuthenticated }: HeroSectionProps) => {
             className="gap-2"
           >
             {isAuthenticated
-              ? "Create your first event"
-              : "Sign in with LinkedIn"}
+              ? TEXT.common.buttons.createFirstEvent
+              : TEXT.common.buttons.signInWithLinkedIn}
             <ArrowRight className="h-4 w-4" />
           </Button>
         </Link>
         <Link to="/join-event">
           <Button variant="outline" size="lg">
-            Join with code
+            {TEXT.common.buttons.joinByCode}
           </Button>
         </Link>
       </div>
