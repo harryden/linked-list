@@ -16,9 +16,11 @@ export function getDashboardGreeting(
 }
 
 export function eventCodeFromId(id: string): string {
-  return Math.abs(parseInt(id.replace(/-/g, "").substring(0, 8), 16) % 1000000)
-    .toString()
-    .padStart(6, "0");
+  // Generate a deterministic 6-character alphanumeric code from the UUID
+  return id
+    .replace(/-/g, "")
+    .substring(0, 6)
+    .toUpperCase();
 }
 
 export function generateSlug(name: string): string {

@@ -152,11 +152,12 @@
     },
     "form": {
       "label": "Event Code",
-      "placeholder": "Enter 6-digit code",
+      "hint": "Find it on the event invitation, check-in sign, or QR code screen.",
+      "placeholder": "Enter code",
       "goToEvent": "Go to Event",
       "submitIdle": "Check In",
       "submitLoading": "Finding event...",
-      "helperText": "Or scan the QR code at the venue"
+      "helperText": "Enter the code exactly as shown by the organizer."
     },
     "toast": {
       "missingCode": "Enter an event code",
