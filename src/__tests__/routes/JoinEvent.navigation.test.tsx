@@ -5,7 +5,7 @@ import JoinEvent from "@/pages/JoinEvent";
 import { TEXT } from "@/constants/text";
 
 describe("JoinEvent navigation", () => {
-  it("explains where to find the event code and what format to enter", () => {
+  it("explains where to find the event code", () => {
     renderWithProviders(
       <Routes>
         <Route path="/join-event" element={<JoinEvent />} />

@@ -145,7 +145,7 @@
   "joinEvent": {
     "header": {
       "title": "Join Event",
-      "description": "Enter the 6-digit code from your host to check in"
+      "description": "Enter your event code to check in"
     },
     "alert": {
       "organizer": "You're hosting this event. Open it to manage check-ins."
@@ -153,11 +153,11 @@
     "form": {
       "label": "Event Code",
       "hint": "Find it on the event invitation, check-in sign, or QR code screen.",
-      "placeholder": "Enter 6-digit code",
+      "placeholder": "Enter code",
       "goToEvent": "Go to Event",
       "submitIdle": "Check In",
       "submitLoading": "Finding event...",
-      "helperText": "Codes use numbers only, for example 123456."
+      "helperText": "Enter the code exactly as shown by the organizer."
     },
     "toast": {
       "missingCode": "Enter an event code",
