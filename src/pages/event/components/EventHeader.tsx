@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { useMemo } from "react";
 import type { EventRow } from "@/hooks/useEvents";
-import type { ProfileRow } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
@@ -26,10 +25,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+interface OrganizerInfo {
+  id: string;
+  name: string;
+  avatar_url?: string | null;
+  headline?: string | null;
+  linkedin_id?: string | null;
+}
+
 interface EventHeaderProps {
   event: EventRow;
   eventCode: string;
-  organizer?: ProfileRow | null;
+  organizer?: OrganizerInfo | null;
   currentUserId: string | null;
   isOrganizer: boolean;
   isAttending: boolean;

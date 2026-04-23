@@ -5,12 +5,12 @@ import AttendButton from "@/pages/event/components/AttendButton";
 import PageContainer from "@/components/layout/PageContainer";
 import { TEXT } from "@/constants/text";
 import type { EventRow } from "@/hooks/useEvents";
-import type { ProfileRow } from "@/hooks/useProfile";
+import type { OrganizerPublicProfile } from "@/hooks/useProfile";
 
 interface EventUnauthorizedProps {
   event: EventRow;
   eventCode: string;
-  organizer?: ProfileRow;
+  organizer?: OrganizerPublicProfile;
   currentUserId: string | null;
   isOrganizer: boolean;
   isAttending: boolean;

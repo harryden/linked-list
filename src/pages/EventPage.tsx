@@ -36,7 +36,7 @@ import {
   useJoinEvent,
   useRealtimeAttendances,
 } from "@/hooks/useAttendances";
-import { useMyProfile } from "@/hooks/useProfile";
+import { useOrganizerPublicProfile } from "@/hooks/useProfile";
 import { TEXT } from "@/constants/text";
 import { eventCodeFromId } from "@/lib/events";
 import { analytics } from "@/lib/analytics";
@@ -120,7 +120,9 @@ const EventPage = () => {
     }
   }, [eventError, toast]);
 
-  const { data: organizerProfile } = useMyProfile(event?.organizer_id);
+  const { data: organizerProfile } = useOrganizerPublicProfile(
+    event?.organizer_id,
+  );
 
   const { data: userAttendance, isLoading: isUserAttendanceLoading } =
     useAttendances({
