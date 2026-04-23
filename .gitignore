@@ -147,3 +147,4 @@ vite.config.ts.timestamp-*
 .gstack/
 .vercel/
 test-results/
+.worktrees
