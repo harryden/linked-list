@@ -1,20 +1,29 @@
 interface LogoMarkProps {
   size?: number;
+  className?: string;
 }
 
-export function LogoMark({ size = 26 }: LogoMarkProps) {
+export function LogoMark({
+  size = 26,
+  className = "text-brand-accent",
+}: LogoMarkProps) {
   return (
-    <div
-      style={{ width: size, height: size, borderRadius: 6 }}
-      className="bg-brand-accent flex items-center justify-center flex-shrink-0"
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 100 100"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
+      role="img"
+      aria-labelledby="logo-title"
     >
-      <span className="sr-only">Linked List Logo</span>
-      <span
-        style={{ fontSize: size * 0.54, lineHeight: 1, letterSpacing: -0.5 }}
-        className="text-white font-semibold select-none"
-      >
-        L
-      </span>
-    </div>
+      <title id="logo-title">Linked List Logo</title>
+      <path d="M10 5V75H45L30 60H22V5H10Z" fill="currentColor" />
+      <path
+        d="M35 55L55 75L95 35L85 25L55 55L45 45L35 55Z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
