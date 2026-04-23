@@ -17,21 +17,37 @@ interface TimePickerFieldProps {
   "aria-describedby"?: string;
 }
 
-const normalizeTime = (value: string) => {
-  if (!value) {
-    return "";
-  }
-
-  const segments = value.split(":");
-
-  if (segments.length >= 2) {
-    const hours = segments[0].padStart(2, "0").slice(0, 2);
-    const minutes = segments[1].padStart(2, "0").slice(0, 2);
-    return `${hours}:${minutes}`;
-  }
-
-  return value;
-};
+const TIME_OPTIONS = [
+  "08:00",
+  "08:30",
+  "09:00",
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+  "15:30",
+  "16:00",
+  "16:30",
+  "17:00",
+  "17:30",
+  "18:00",
+  "18:30",
+  "19:00",
+  "19:30",
+  "20:00",
+  "20:30",
+  "21:00",
+  "21:30",
+  "22:00",
+];
 
 const TimePickerField = forwardRef<HTMLInputElement, TimePickerFieldProps>(
   (
@@ -48,22 +64,7 @@ const TimePickerField = forwardRef<HTMLInputElement, TimePickerFieldProps>(
     },
     ref,
   ) => {
-    const [internalValue, setInternalValue] = useState(() =>
-      normalizeTime(value),
-    );
-
-    useEffect(() => {
-      setInternalValue(normalizeTime(value));
-    }, [value]);
-
-    const handleChange = (next: string) => {
-      const normalized = normalizeTime(next);
-      setInternalValue(normalized);
-
-      if (normalized.length === 5 || normalized === "") {
-        onChange(normalized);
-      }
-    };
+    const listId = id ? `${id}-list` : "time-options";
 
     return (
       <div className="relative">
@@ -73,9 +74,10 @@ const TimePickerField = forwardRef<HTMLInputElement, TimePickerFieldProps>(
             id={id}
             name={name}
             type="time"
-            value={internalValue}
-            onChange={(event) => handleChange(event.target.value)}
+            value={value}
+            onChange={(event) => onChange(event.target.value)}
             onBlur={onBlur}
+            list={listId}
             step={60}
             className={cn(
               "pr-10 bg-bg-surface",
@@ -87,6 +89,11 @@ const TimePickerField = forwardRef<HTMLInputElement, TimePickerFieldProps>(
             required={required}
             aria-required={required}
           />
+          <datalist id={listId}>
+            {TIME_OPTIONS.map((time) => (
+              <option key={time} value={time} />
+            ))}
+          </datalist>
           <Clock
             className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-secondary pointer-events-none"
             aria-hidden="true"
