@@ -1,39 +1,26 @@
-import { useTranslation } from "react-i18next";
-
-interface Step {
-  step: string;
-  title: string;
-  description: string;
-}
+import { TEXT } from "@/constants/text";
 
 const HowItWorks = () => {
-  const { t } = useTranslation();
-  const steps = t("landing.howItWorks.steps", {
-    returnObjects: true,
-  }) as Step[];
+  const steps = TEXT.landing.howItWorks.steps;
 
   return (
-    <section className="py-20">
-      <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">
-          {t("landing.howItWorks.title")}
+    <section className="py-24 border-t border-border-subtle bg-bg-base">
+      <div className="max-w-4xl mx-auto px-4">
+        <h2 className="text-[40px] font-semibold tracking-[-1px] text-center mb-20">
+          {TEXT.landing.howItWorks.title}
         </h2>
-        <div className="space-y-12">
-          {steps.map(({ step, title, description }, index) => (
+        <div className="space-y-16">
+          {steps.map(({ step, title, description }) => (
             <div
               key={step}
-              className="flex flex-col md:flex-row gap-6 items-center animate-fade-in"
-              style={{
-                animationDelay: `${0.1 + index * 0.2}s`,
-                animationFillMode: "both",
-              }}
+              className="flex flex-col md:flex-row gap-8 items-start md:items-center group"
             >
-              <div className="flex-shrink-0 w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-2xl font-bold shadow-glow-primary">
+              <div className="flex-shrink-0 w-14 h-14 rounded-2xl bg-primary/10 text-primary flex items-center justify-center text-xl font-bold border border-primary/20 group-hover:scale-105 transition-transform">
                 {step}
               </div>
-              <div>
-                <h3 className="text-xl font-semibold mb-2">{title}</h3>
-                <p className="text-muted-foreground">{description}</p>
+              <div className="max-w-xl">
+                <h3 className="text-xl font-semibold tracking-[-0.3px] mb-2">{title}</h3>
+                <p className="text-text-secondary leading-relaxed">{description}</p>
               </div>
             </div>
           ))}

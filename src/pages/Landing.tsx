@@ -5,8 +5,11 @@ import { User } from "@supabase/supabase-js";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "@/components/LogoMark";
 import { cn } from "@/lib/utils";
+import { TEXT } from "@/constants/text";
+import { Users, Calendar } from "lucide-react";
 import HeroSection from "./landing/components/HeroSection";
 import FeaturesGrid from "./landing/components/FeaturesGrid";
+import HowItWorks from "./landing/components/HowItWorks";
 
 const Landing = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -105,6 +108,57 @@ const Landing = () => {
       <main className="relative z-10">
         <HeroSection isAuthenticated={Boolean(user)} />
         <FeaturesGrid />
+
+        {/* Role Selection */}
+        <section className="px-16 py-24 max-md:px-4 border-t border-border-subtle bg-bg-surface/30">
+          <div className="grid grid-cols-2 gap-8 max-md:grid-cols-1 max-w-[1000px] mx-auto">
+            {/* For Hosts */}
+            <div className="p-8 border border-border-subtle rounded-2xl bg-bg-base flex flex-col gap-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                <Calendar className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold tracking-[-0.3px]">
+                  {TEXT.landing.roles.host.title}
+                </h3>
+                <p className="text-text-secondary text-sm mt-2 leading-relaxed">
+                  {TEXT.landing.roles.host.description}
+                </p>
+              </div>
+              <div className="mt-auto pt-4">
+                <Link to={user ? "/create-event" : "/auth"}>
+                  <Button variant="outline" className="w-full h-11">
+                    {TEXT.landing.roles.host.cta}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+
+            {/* For Attendees */}
+            <div className="p-8 border border-border-subtle rounded-2xl bg-bg-base flex flex-col gap-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-brand-accent/10 rounded-xl flex items-center justify-center text-brand-accent">
+                <Users className="h-6 w-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold tracking-[-0.3px]">
+                  {TEXT.landing.roles.attendee.title}
+                </h3>
+                <p className="text-text-secondary text-sm mt-2 leading-relaxed">
+                  {TEXT.landing.roles.attendee.description}
+                </p>
+              </div>
+              <div className="mt-auto pt-4">
+                <Link to="/join-event">
+                  <Button variant="outline" className="w-full h-11">
+                    {TEXT.landing.roles.attendee.cta}
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <HowItWorks />
 
         <section className="px-16 py-32 flex flex-col items-center text-center max-md:px-4">
           <div className="max-w-[480px]">

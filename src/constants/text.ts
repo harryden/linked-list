@@ -60,16 +60,24 @@ export const TEXT = {
   },
   landing: {
     hero: {
-      titleLine: "Event Check-In.",
-      highlight: "Simplified.",
-      authenticatedDescription:
-        "LinkedIn-verified check-in for your events. One QR code, instant attendee rosters, and verified professional profiles.",
-      guestDescription:
-        "Generate a QR code. Attendees scan and check in with LinkedIn. Build verified attendee lists in real time.",
+      title: "Event Check-In. Simplified.",
+      subtitle: "LinkedIn-verified check-ins for your professional events. Turn attendees into contacts with one scan.",
       joinButton: "Join Event",
       hostButton: "Host Event",
       demoButton: "How It Works",
       signInButton: "Sign in with LinkedIn",
+    },
+    roles: {
+      host: {
+        title: "For Event Hosts",
+        description: "Create your event in seconds. Generate a unique QR code and build a verified attendee roster in real time.",
+        cta: "Host your event",
+      },
+      attendee: {
+        title: "For Attendees",
+        description: "Check in instantly with your LinkedIn profile. Access the professional network of everyone you met at the event.",
+        cta: "Join an event",
+      },
     },
     features: {
       oneQrCode: {
@@ -194,7 +202,9 @@ export const TEXT = {
     },
     form: {
       label: "Event Code",
-      placeholder: "Enter 6-digit code",
+      placeholder: "Enter code",
+      hint: "Find the code on the event's QR poster or ask the organizer.",
+      example: "Format: 6 characters (e.g., AB12CD)",
       goToEvent: "Go to Event",
       submitIdle: "Check In",
       submitLoading: "Finding event...",
