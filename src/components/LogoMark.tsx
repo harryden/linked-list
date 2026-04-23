@@ -19,9 +19,9 @@ export function LogoMark({
       aria-labelledby="logo-title"
     >
       <title id="logo-title">Linked List Logo</title>
-      <path d="M10 5V75H45L30 60H22V5H10Z" fill="currentColor" />
+      <path d="M15 10V85H50L35 70H27V10H15Z" fill="currentColor" />
       <path
-        d="M35 55L55 75L95 35L85 25L55 55L45 45L35 55Z"
+        d="M40 60L55 75L90 40L82 32L55 59L48 52L40 60Z"
         fill="currentColor"
       />
     </svg>
