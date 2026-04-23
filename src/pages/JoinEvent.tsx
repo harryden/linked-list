@@ -135,7 +135,7 @@ const JoinEvent = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6" noValidate>
             {isOwnEvent && (
               <Alert className="mb-4">
                 <AlertCircle className="h-4 w-4" aria-hidden="true" />
