@@ -210,7 +210,7 @@ const EventPage = () => {
 
   const handleCheckIn = async () => {
     if (!currentUserId) {
-      navigate("/auth");
+      navigate(`/auth?next=${encodeURIComponent(window.location.pathname)}`);
       return;
     }
 

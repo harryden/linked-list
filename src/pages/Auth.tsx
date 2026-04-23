@@ -19,7 +19,7 @@ const Auth = () => {
 
   const redirectPath = useMemo(() => {
     const params = new URLSearchParams(location.search);
-    const fromQuery = params.get("redirect");
+    const fromQuery = params.get("next");
 
     if (isSafeRedirect(fromQuery)) {
       return fromQuery as string;

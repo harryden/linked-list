@@ -104,7 +104,7 @@ const CreateEvent = () => {
           variant: "destructive",
           description: TEXT.createEvent.toast.authRequired,
         });
-        navigate("/auth");
+        navigate(`/auth?next=${encodeURIComponent(window.location.pathname)}`);
         return;
       }
 

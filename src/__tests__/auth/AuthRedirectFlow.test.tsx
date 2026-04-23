@@ -61,7 +61,7 @@ describe("Auth redirect flow", () => {
     });
 
     renderWithProviders(<Auth />, {
-      route: "/auth?redirect=/event/test-event",
+      route: "/auth?next=/event/test-event",
     });
 
     await user.click(
@@ -88,7 +88,7 @@ describe("Auth redirect flow", () => {
     });
 
     renderWithProviders(<Auth />, {
-      route: "/auth?redirect=https://malicious.example",
+      route: "/auth?next=https://malicious.example",
     });
 
     await user.click(
