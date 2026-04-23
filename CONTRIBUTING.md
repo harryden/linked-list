@@ -33,9 +33,11 @@
 1. Mark ready PRs with `🤖 ai-ready-for-review`.
 2. Reviewers claim PRs explicitly with `🤖 ai-reviewing` before starting.
 3. Wait for AI Review.
-4. Review & take a stance.
+4. If changes are requested, the authoring agent finds its own follow-up work with `scripts/next-ai-followup.sh <codex|claude|gemini>`.
 5. Reply to every individual comment thread.
-6. Clean up PR branch with amend/autosquash before final approval.
+6. Clean up PR branch with amend/autosquash before marking ready again.
+7. Set `Review-Status: ready`, add `🤖 ai-ready-for-review`, and remove `🤖 ai-changes-requested`.
+8. After approval, passing checks, Copilot review, and resolved/replied threads, set `Review-Status: ready-to-merge` and add `🤖 ai-ready-to-merge`.
 
 ## Review & Merge
 

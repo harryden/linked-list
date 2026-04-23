@@ -19,8 +19,12 @@ const HowItWorks = () => {
                 {step}
               </div>
               <div className="max-w-xl">
-                <h3 className="text-xl font-semibold tracking-[-0.3px] mb-2">{title}</h3>
-                <p className="text-text-secondary leading-relaxed">{description}</p>
+                <h3 className="text-xl font-semibold tracking-[-0.3px] mb-2">
+                  {title}
+                </h3>
+                <p className="text-text-secondary leading-relaxed">
+                  {description}
+                </p>
               </div>
             </div>
           ))}

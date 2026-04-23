@@ -60,13 +60,16 @@ Use labels and PR body metadata together. Labels make GitHub search easy. Metada
 - `status:claimed`: Issue has been claimed by an agent to prevent duplicate work.
 - `🤖 ai-ready-for-review`: PR author says the PR is ready for AI review.
 - `🤖 ai-reviewing`: an AI agent has claimed review work on the PR.
+- `🤖 ai-changes-requested`: an AI reviewer requested author follow-up.
+- `🤖 ai-ready-to-merge`: PR has the required approval, required checks, and no unresolved AI feedback.
 
 Agents may create missing labels with:
 ```bash
 gh label create "status:claimed" --color "fbca04" --description "Issue has been claimed by an agent"
 gh label create "🤖 ai-ready-for-review" --color "0e8a16" --description "Ready for AI agent review"
 gh label create "🤖 ai-reviewing" --color "fbca04" --description "AI agent review is in progress"
-```
+gh label create "🤖 ai-changes-requested" --color "d93f0b" --description "AI agent requested author follow-up"
+gh label create "🤖 ai-ready-to-merge" --color "0e8a16" --description "Ready for merge after AI and CI checks"
 gh label create "agent:codex" --color "5319e7" --description "Authored by Codex"
 gh label create "agent:claude" --color "1d76db" --description "Authored by Claude"
 gh label create "agent:gemini" --color "c2e0c6" --description "Authored by Gemini"
@@ -78,7 +81,7 @@ Every agent-authored PR must fill in the AI metadata section in the PR template:
 
 ```text
 Author-Agent: codex|claude|gemini|human
-Review-Status: draft|ready|claimed|reviewed|changes-requested
+Review-Status: draft|ready|claimed|approved|changes-requested|ready-to-merge
 Review-Claimed-By:
 ```
 
@@ -90,6 +93,8 @@ An AI reviewer should review open PRs that:
 
 - are not drafts,
 - have `🤖 ai-ready-for-review` or `Review-Status: ready`,
+- do not have `🤖 ai-changes-requested`,
+- do not have `Review-Status: changes-requested`,
 - do not have that same agent's author label,
 - do not declare that same agent in `Author-Agent`,
 - do not have `🤖 ai-reviewing`, and
@@ -111,14 +116,67 @@ To claim the next reviewable PR:
 
 Claiming adds `🤖 ai-reviewing` and writes `Review-Status: claimed` plus `Review-Claimed-By: <agent>` to the PR body. This avoids duplicate AI review work.
 
+## Finding Author Follow-Up Work
+
+An AI author should pick up its own PRs that need changes. This is not a self-review; it is author follow-up after another reviewer has requested changes.
+
+An AI author should look for open PRs that:
+
+- are not drafts,
+- have that same agent's author label or declare that same agent in `Author-Agent`, and
+- have `🤖 ai-changes-requested` or `Review-Status: changes-requested`.
+
+Use the helper script:
+
+```bash
+./scripts/next-ai-followup.sh codex
+./scripts/next-ai-followup.sh claude
+./scripts/next-ai-followup.sh gemini
+```
+
+After fixing requested changes, the author must:
+
+- reply to every individual review thread or PR comment that requested a change,
+- amend or autosquash fixup commits so the PR remains atomic,
+- push the branch,
+- set `Review-Status: ready`,
+- clear `Review-Claimed-By`,
+- add or keep `🤖 ai-ready-for-review`, and
+- remove `🤖 ai-changes-requested`, `🤖 ai-reviewing`, and `🤖 ai-ready-to-merge` if present.
+
 ## Completing Review Work
 
 After reviewing:
 
 - leave a GitHub review with findings or approval,
 - remove `🤖 ai-reviewing`,
-- update `Review-Status` to `reviewed` or `changes-requested`,
-- keep `🤖 ai-ready-for-review` if the PR still needs another review pass,
-- remove `🤖 ai-ready-for-review` only when the PR is no longer seeking AI review.
+- when approving or leaving no blocking findings, update `Review-Status` to `approved` and remove `🤖 ai-ready-for-review` unless another review pass is still explicitly needed,
+- when requesting changes, update `Review-Status` to `changes-requested`, clear `Review-Claimed-By`, add `🤖 ai-changes-requested`, and remove `🤖 ai-ready-for-review`.
 
 Do not self-review unless the user explicitly asks for a self-audit. A self-audit is not a substitute for the required approving review.
+
+## Finding Merge Work
+
+An AI merge steward may pick up PRs that are explicitly marked ready to merge. This is separate from review work and author follow-up work.
+
+Before setting `Review-Status: ready-to-merge`, verify that:
+
+- the PR is open and not draft,
+- `Review-Status: approved`,
+- at least one required approving review is present,
+- Copilot review is complete,
+- required CI/status checks are passing,
+- every individual review thread has been replied to or resolved,
+- the branch is mergeable,
+- the PR does not have `🤖 ai-reviewing` or `🤖 ai-changes-requested`, and
+- the PR body is complete.
+
+When those conditions are met, set `Review-Status: ready-to-merge` and add `🤖 ai-ready-to-merge`.
+
+Use the helper script to find the next PR that has been marked ready to merge and has passing GitHub checks:
+
+```bash
+./scripts/next-ai-merge.sh
+```
+
+The helper script only identifies merge candidates. Do not merge unless the user has explicitly asked for merging or the current task clearly includes merge authority.

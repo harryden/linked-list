@@ -17,10 +17,7 @@ export function getDashboardGreeting(
 
 export function eventCodeFromId(id: string): string {
   // Generate a deterministic 6-character alphanumeric code from the UUID
-  return id
-    .replace(/-/g, "")
-    .substring(0, 6)
-    .toUpperCase();
+  return id.replace(/-/g, "").substring(0, 6).toUpperCase();
 }
 
 export function generateSlug(name: string): string {
