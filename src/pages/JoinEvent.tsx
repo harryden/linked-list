@@ -153,11 +153,19 @@ const JoinEvent = () => {
                 placeholder={TEXT.joinEvent.form.placeholder}
                 value={eventCode}
                 onChange={(e) => setEventCode(e.target.value)}
-                className="text-center text-lg tracking-wider"
+                className="text-center text-lg tracking-wider uppercase font-mono"
                 maxLength={20}
                 disabled={isLoading}
                 aria-required="true"
               />
+              <div className="pt-1.5 space-y-1">
+                <p className="text-xs text-muted-foreground text-center">
+                  {TEXT.joinEvent.form.hint}
+                </p>
+                <p className="text-[10px] text-muted-foreground/60 text-center font-mono uppercase tracking-tighter">
+                  {TEXT.joinEvent.form.example}
+                </p>
+              </div>
             </div>
 
             <div className="pt-2">
