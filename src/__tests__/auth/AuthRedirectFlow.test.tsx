@@ -158,11 +158,10 @@ describe("Auth redirect flow", () => {
       route: "/auth/callback",
     });
 
-    await waitFor(
-      () => {
-        expect(mockNavigate).toHaveBeenCalledWith("/auth");
-      },
-      { timeout: 3000 },
-    );
+    // With ErrorScreen, we no longer auto-redirect. We show a button.
+    expect(await screen.findByText(/Back to Sign In/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /Back to Sign In/i }),
+    ).toHaveAttribute("href", "/auth");
   });
 });
