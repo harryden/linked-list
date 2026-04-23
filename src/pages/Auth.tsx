@@ -8,6 +8,7 @@ import { TEXT } from "@/constants/text";
 import { isSafeRedirect } from "@/lib/utils";
 import { logger } from "@/lib/logger";
 import { getBaseUrl } from "@/lib/urls";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 const Auth = () => {
   const { toast } = useToast();
@@ -57,16 +58,14 @@ const Auth = () => {
 
   if (isSessionLoading || isLoading) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center px-5">
-        <div className="text-center">
-          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
-            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
-          </div>
-          <p className="text-[13px] text-text-secondary">
-            {isLoading ? "Redirecting to LinkedIn..." : "Loading sign in..."}
-          </p>
-        </div>
-      </div>
+      <LoadingScreen
+        title={TEXT.auth.loadingTitle}
+        message={
+          isLoading
+            ? TEXT.auth.loadingMessage
+            : "Initializing your secure session..."
+        }
+      />
     );
   }
 

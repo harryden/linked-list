@@ -3,6 +3,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { supabase } from "@/integrations/supabase/client";
 import Auth from "@/pages/Auth";
+import { TEXT } from "@/constants/text";
 import type { Mock } from "vitest";
 import { describe, expect, it } from "vitest";
 
@@ -22,7 +23,7 @@ describe("Auth loading", () => {
 
     renderWithProviders(<Auth />, { route: "/auth" });
 
-    expect(screen.getByText(/Loading sign in/i)).toBeInTheDocument();
+    expect(screen.getByText(TEXT.auth.loadingTitle)).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /Sign in with LinkedIn/i }),
     ).not.toBeInTheDocument();
@@ -51,7 +52,8 @@ describe("Auth loading", () => {
       await screen.findByRole("button", { name: /Sign in with LinkedIn/i }),
     );
 
-    expect(screen.getByText(/Redirecting to LinkedIn/i)).toBeInTheDocument();
+    expect(screen.getByText(TEXT.auth.loadingTitle)).toBeInTheDocument();
+    expect(screen.getByText(TEXT.auth.loadingMessage)).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /Enter event code/i }),
     ).not.toBeInTheDocument();

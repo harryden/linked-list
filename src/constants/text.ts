@@ -41,6 +41,10 @@ export const TEXT = {
       dateNotSet: "Date not set",
       timeNotSet: "Time not set",
     },
+    loading: {
+      title: "Loading",
+      message: "Please wait...",
+    },
     ui: {
       breadcrumbMore: "More",
       carouselPrevious: "Previous slide",
@@ -119,6 +123,8 @@ export const TEXT = {
       signOutSuccess: "Signed out successfully",
     },
     loading: "Loading dashboard...",
+    loadingTitle: "Your Dashboard",
+    loadingMessage: "Syncing your events...",
     myEvents: {
       title: "Your Events",
       loading: "Loading events...",
@@ -204,6 +210,8 @@ export const TEXT = {
   auth: {
     brand: "Linked List",
     tagline: "LinkedIn-verified event rosters",
+    loadingTitle: "Signing In",
+    loadingMessage: "Connecting to LinkedIn...",
     card: {
       title: "Sign in with LinkedIn",
       description: "Authenticate with your LinkedIn account",
@@ -282,6 +290,8 @@ export const TEXT = {
     },
     page: {
       loading: "Loading event...",
+      loadingTitle: "Event Details",
+      loadingMessage: "Fetching the latest info...",
       notFoundTitle: "Event expired or missing.",
       notFoundDescription: "This event doesn't exist.",
       homeButton: "Go Home",

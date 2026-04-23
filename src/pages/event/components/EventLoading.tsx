@@ -1,15 +1,11 @@
 import { TEXT } from "@/constants/text";
-import PageContainer from "@/components/layout/PageContainer";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 const EventLoading = () => (
-  <PageContainer className="items-center justify-center">
-    <div className="text-center">
-      <div className="w-12 h-[2px] bg-border-subtle overflow-hidden mx-auto mb-4">
-        <div className="w-full h-full bg-text-primary animate-loader-slide"></div>
-      </div>
-      <p className="text-muted-foreground">{TEXT.event.page.loading}</p>
-    </div>
-  </PageContainer>
+  <LoadingScreen
+    title={TEXT.event.page.loadingTitle}
+    message={TEXT.event.page.loadingMessage}
+  />
 );
 
 export default EventLoading;

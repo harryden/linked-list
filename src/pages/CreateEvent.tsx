@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { useCreateEvent, useEvent, useUpdateEvent } from "@/hooks/useEvents";
 import {
   generateSlug,
@@ -198,16 +199,14 @@ const CreateEvent = () => {
 
   if (isInitialLoading) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
-            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
-          </div>
-          <p className="text-sm text-text-secondary">
-            {TEXT.event.page.loading}
-          </p>
-        </div>
-      </div>
+      <LoadingScreen
+        title={
+          isEditing
+            ? TEXT.createEvent.form.editTitle
+            : TEXT.createEvent.form.title
+        }
+        message={TEXT.event.page.loading}
+      />
     );
   }
 

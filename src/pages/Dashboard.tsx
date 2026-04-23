@@ -10,6 +10,7 @@ import { useMyProfile } from "@/hooks/useProfile";
 import { getDashboardGreeting } from "@/lib/events";
 import { Button } from "@/components/ui/button";
 import { LogoMark } from "@/components/LogoMark";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { cn } from "@/lib/utils";
 import MyEventsList from "./dashboard/components/MyEventsList";
 import UpcomingSection from "./dashboard/components/UpcomingSection";
@@ -168,16 +169,10 @@ const Dashboard = () => {
 
   if (isInitialLoading) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
-            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
-          </div>
-          <p className="text-sm text-text-secondary">
-            {TEXT.dashboard.loading}
-          </p>
-        </div>
-      </div>
+      <LoadingScreen
+        title={TEXT.dashboard.loadingTitle}
+        message={TEXT.dashboard.loadingMessage}
+      />
     );
   }
 

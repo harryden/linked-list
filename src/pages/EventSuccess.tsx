@@ -8,6 +8,7 @@ import { logger } from "@/lib/logger";
 import { eventCodeFromId } from "@/lib/events";
 import { getEventUrl } from "@/lib/urls";
 import { TEXT } from "@/constants/text";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 
 const EventSuccess = () => {
   const { slug } = useParams<{ slug: string }>();
@@ -50,14 +51,10 @@ const EventSuccess = () => {
 
   if (isEventLoading) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-4 relative">
-            <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
-          </div>
-          <p className="text-text-secondary">{TEXT.eventSuccess.loading}</p>
-        </div>
-      </div>
+      <LoadingScreen
+        title={TEXT.eventSuccess.title}
+        message={TEXT.eventSuccess.loading}
+      />
     );
   }
 

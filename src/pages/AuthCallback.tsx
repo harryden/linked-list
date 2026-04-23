@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useMyProfile } from "@/hooks/useProfile";
 import { useToast } from "@/hooks/use-toast";
 import { TEXT } from "@/constants/text";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
 import { isSafeRedirect } from "@/lib/utils";
 import { analytics } from "@/lib/analytics";
 import { logger } from "@/lib/logger";
@@ -110,31 +111,24 @@ const AuthCallback = () => {
     _profile?.name,
   ]);
 
+  if (status === "loading") {
+    return (
+      <LoadingScreen
+        title={TEXT.authCallback.loadingTitle}
+        message={TEXT.authCallback.loadingDescription}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen bg-bg-base flex items-center justify-center p-4">
       <div className="text-center w-full max-w-[320px]">
-        {status === "loading" ? (
-          <>
-            <div className="w-12 h-0.5 bg-border-subtle rounded-full overflow-hidden mx-auto mb-6 relative">
-              <div className="absolute inset-0 bg-text-primary animate-loader-slide" />
-            </div>
-            <h1 className="text-[20px] font-semibold tracking-[-0.4px]">
-              {TEXT.authCallback.loadingTitle}
-            </h1>
-            <p className="text-[13px] text-text-secondary mt-2">
-              {TEXT.authCallback.loadingDescription}
-            </p>
-          </>
-        ) : (
-          <>
-            <h1 className="text-[20px] font-semibold tracking-[-0.4px] text-state-error">
-              {TEXT.authCallback.errorTitle}
-            </h1>
-            <p className="text-[13px] text-text-secondary mt-2">
-              {TEXT.authCallback.errorDescription}
-            </p>
-          </>
-        )}
+        <h1 className="text-[20px] font-semibold tracking-[-0.4px] text-state-error">
+          {TEXT.authCallback.errorTitle}
+        </h1>
+        <p className="text-[13px] text-text-secondary mt-2">
+          {TEXT.authCallback.errorDescription}
+        </p>
       </div>
     </div>
   );
