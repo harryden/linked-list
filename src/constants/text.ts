@@ -61,7 +61,8 @@ export const TEXT = {
   landing: {
     hero: {
       title: "Event Check-In. Simplified.",
-      subtitle: "LinkedIn-verified check-ins for your professional events. Turn attendees into contacts with one scan.",
+      subtitle:
+        "LinkedIn-verified check-ins for your professional events. Turn attendees into contacts with one scan.",
       joinButton: "Join Event",
       hostButton: "Host Event",
       demoButton: "How It Works",
@@ -70,12 +71,14 @@ export const TEXT = {
     roles: {
       host: {
         title: "For Event Hosts",
-        description: "Create your event in seconds. Generate a unique QR code and build a verified attendee roster in real time.",
+        description:
+          "Create your event in seconds. Generate a unique QR code and build a verified attendee roster in real time.",
         cta: "Host your event",
       },
       attendee: {
         title: "For Attendees",
-        description: "Check in instantly with your LinkedIn profile. Access the professional network of everyone you met at the event.",
+        description:
+          "Check in instantly with your LinkedIn profile. Access the professional network of everyone you met at the event.",
         cta: "Join an event",
       },
     },
@@ -229,19 +232,23 @@ export const TEXT = {
     },
     info: {
       title: "Why we use LinkedIn:",
-      description: "We only request what's necessary to make your professional event experience seamless and trusted.",
+      description:
+        "We only request what's necessary to make your professional event experience seamless and trusted.",
       items: [
         {
           title: "Verified Identity",
-          description: "Your real name and photo ensure a trusted and professional event roster.",
+          description:
+            "Your real name and photo ensure a trusted and professional event roster.",
         },
         {
           title: "Professional Context",
-          description: "Your headline helps other attendees understand your role and network better.",
+          description:
+            "Your headline helps other attendees understand your role and network better.",
         },
         {
           title: "Privacy First",
-          description: "We only request read-only access. We never post or message on your behalf.",
+          description:
+            "We only request read-only access. We never post or message on your behalf.",
         },
       ],
       consentPrefix:
