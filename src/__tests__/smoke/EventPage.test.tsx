@@ -41,7 +41,7 @@ describe("EventPage states", () => {
 
     // Mock session for organizer
     vi.mocked(supabase.auth.getSession).mockResolvedValue({
-      data: { session: { user: { id: "user-1" } } as any },
+      data: { session: { user: { id: "user-1" } } as { user: { id: string } } },
       error: null,
     });
 
@@ -71,7 +71,7 @@ describe("EventPage states", () => {
       singleResult: { data: { name: "Test Organizer" }, error: null },
     });
 
-    vi.mocked(supabase.from).mockImplementation((table: any) => {
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
       if (table === "events") return eventQuery;
       if (table === "attendances") return attendanceQuery;
       if (table === "profiles") return profileQuery;

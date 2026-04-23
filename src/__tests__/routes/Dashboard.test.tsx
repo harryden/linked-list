@@ -9,7 +9,7 @@ import Dashboard from "@/pages/Dashboard";
 describe("Dashboard", () => {
   it("displays correct counts for hosted events", async () => {
     vi.mocked(supabase.auth.getSession).mockResolvedValue({
-      data: { session: { user: { id: "user-1" } } as any },
+      data: { session: { user: { id: "user-1" } } as { user: { id: string } } },
       error: null,
     });
 
@@ -17,7 +17,7 @@ describe("Dashboard", () => {
     const futureDate = new Date(now + 86400000).toISOString(); // +1 day
     const pastDate = new Date(now - 86400000).toISOString(); // -1 day
 
-    vi.mocked(supabase.from).mockImplementation((table: any) => {
+    vi.mocked(supabase.from).mockImplementation((table: string) => {
       if (table === "events") {
         return createQueryStub({
           baseResult: {
@@ -33,10 +33,10 @@ describe("Dashboard", () => {
                 name: "Past Event",
                 starts_at: pastDate,
                 organizer_id: "user-1",
-              }
+              },
             ],
             error: null,
-          }
+          },
         });
       }
       return createQueryStub({});
@@ -46,11 +46,13 @@ describe("Dashboard", () => {
       <Routes>
         <Route path="/dashboard" element={<Dashboard />} />
       </Routes>,
-      { route: "/dashboard" }
+      { route: "/dashboard" },
     );
 
     // Wait for it to load
-    expect(await screen.findByText("2 events hosted · 0 attended")).toBeInTheDocument();
+    expect(
+      await screen.findByText("2 events hosted · 0 attended"),
+    ).toBeInTheDocument();
 
     // Check tabs
     expect(screen.getByText("Future Event")).toBeInTheDocument();
