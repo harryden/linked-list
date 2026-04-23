@@ -195,7 +195,7 @@ export const TEXT = {
   joinEvent: {
     header: {
       title: "Join Event",
-      description: "Enter your event code to check in",
+      description: "Enter the 6-character code from your host to check in",
     },
     alert: {
       organizer: "You're hosting this event. Open it to manage check-ins.",
@@ -203,12 +203,11 @@ export const TEXT = {
     form: {
       label: "Event Code",
       placeholder: "Enter code",
-      hint: "Find the code on the event's QR poster or ask the organizer.",
-      example: "Format: 6 characters (e.g., AB12CD)",
+      hint: "Find it on the event invitation, check-in sign, or QR code screen.",
       goToEvent: "Go to Event",
       submitIdle: "Check In",
       submitLoading: "Finding event...",
-      helperText: "Or scan the QR code at the venue",
+      helperText: "Codes are 6-character alphanumeric (e.g., AB12CD).",
     },
     toast: {
       missingCode: "Enter an event code",

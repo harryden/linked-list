@@ -5,6 +5,27 @@ import JoinEvent from "@/pages/JoinEvent";
 import { TEXT } from "@/constants/text";
 
 describe("JoinEvent navigation", () => {
+  it("explains where to find the event code and what format to enter", () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="/join-event" element={<JoinEvent />} />
+      </Routes>,
+      { route: "/join-event" },
+    );
+
+    expect(
+      screen.getByText(TEXT.joinEvent.header.description),
+    ).toBeInTheDocument();
+    expect(screen.getByText(TEXT.joinEvent.form.hint)).toBeInTheDocument();
+    expect(
+      screen.getByText(TEXT.joinEvent.form.helperText),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(TEXT.joinEvent.form.label)).toHaveAttribute(
+      "aria-describedby",
+      "eventCode-hint eventCode-format",
+    );
+  });
+
   it("defaults to 'Back to Home' when no state is provided", () => {
     renderWithProviders(
       <Routes>
