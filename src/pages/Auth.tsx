@@ -157,9 +157,12 @@ const Auth = () => {
 
           {/* Data access info section */}
           <div className="mt-8 pt-8 border-t border-border-subtle">
-            <div className="text-[11px] font-mono text-text-secondary tracking-[1px] mb-4">
-              {TEXT.auth.info.title.toUpperCase()}
+            <div className="text-[11px] font-mono text-text-secondary tracking-[1px] mb-4 uppercase">
+              {TEXT.auth.info.title}
             </div>
+            <p className="text-[13px] text-text-secondary leading-relaxed mb-6">
+              {TEXT.auth.info.description}
+            </p>
             <div className="space-y-4">
               {TEXT.auth.info.items.map((item) => (
                 <div key={item.title} className="flex items-start gap-3">
