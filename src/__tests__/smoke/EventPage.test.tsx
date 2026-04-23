@@ -24,7 +24,9 @@ describe("EventPage states", () => {
     );
 
     expect(
-      await screen.findByRole("heading", { name: TEXT.event.page.notFoundTitle }),
+      await screen.findByRole("heading", {
+        name: TEXT.event.page.notFoundTitle,
+      }),
     ).toBeInTheDocument();
     expect(
       await screen.findByText((content) =>

@@ -298,6 +298,7 @@ export const TEXT = {
       eventNotFound: "Event not found",
       updateSuccess: "Event updated successfully",
       updateFailure: "Failed to update event",
+      noChanges: "No changes detected",
       deleteSuccess: "Event deleted successfully",
       deleteFailure: "Failed to delete event",
       exportSuccess: "Attendee list exported to CSV",

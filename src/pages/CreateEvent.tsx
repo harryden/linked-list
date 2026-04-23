@@ -132,6 +132,22 @@ const CreateEvent = () => {
       }
 
       if (isEditing && editingEventId) {
+        // Check if anything actually changed
+        const hasChanges =
+          existingEvent &&
+          (values.name !== existingEvent.name ||
+            values.location !== (existingEvent.location || "") ||
+            normalizedStartsAt !== existingEvent.starts_at ||
+            normalizedEndsAt !== existingEvent.ends_at ||
+            values.linkedinUrl !== (existingEvent.linkedin_event_url || ""));
+
+        if (!hasChanges) {
+          toast({
+            description: TEXT.event.toast.noChanges,
+          });
+          return;
+        }
+
         const updatedEvent = await updateEvent.mutateAsync({
           eventId: editingEventId,
           payload: {
