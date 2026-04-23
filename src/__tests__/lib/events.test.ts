@@ -12,9 +12,9 @@ describe("eventCodeFromId", () => {
     expect(code).toHaveLength(6);
   });
 
-  it("pads with leading zeros when the hash value is small", () => {
-    const code = eventCodeFromId("00000000-0000-0000-0000-000000000000");
-    expect(code).toMatch(/^\d{6}$/);
+  it("returns uppercase characters", () => {
+    const code = eventCodeFromId("550e8400-e29b-41d4-a716-446655440000");
+    expect(code).toBe(code.toUpperCase());
   });
 
   it("produces a consistent result for the same input", () => {
@@ -28,9 +28,9 @@ describe("eventCodeFromId", () => {
     expect(code1).not.toBe(code2);
   });
 
-  it("only contains digits", () => {
+  it("contains alphanumeric characters", () => {
     const code = eventCodeFromId("f47ac10b-58cc-4372-a567-0e02b2c3d479");
-    expect(code).toMatch(/^\d+$/);
+    expect(code).toMatch(/^[A-Z0-9]{6}$/);
   });
 });
 
