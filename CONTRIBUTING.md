@@ -1,5 +1,7 @@
 # Contributing
 
+`WORKFLOW.md` is the source of truth for GitHub workflow, AI PR signaling, and review assignment. This file is the short contributor checklist.
+
 ## Team
 
 - Harry Denell (@harryden)
@@ -23,13 +25,17 @@
 - Rebased, no conflicts
 - CI green (lint, typecheck, test, build)
 - Docs updated if behavior changed
+- PR description is filled out, summarizes the git diff, and includes relevant test results
+- Agent-authored PRs include AI metadata and labels from `WORKFLOW.md`
 
 ## AI Review & Feedback Loop
 
-1. Wait for AI Review
-2. Review & take a stance
-3. Reply to every individual comment thread
-4. Clean up PR branch with amend/autosquash before final approval
+1. Mark ready PRs with `🤖 ai-ready-for-review`.
+2. Reviewers claim PRs explicitly with `🤖 ai-reviewing` before starting.
+3. Wait for AI Review.
+4. Review & take a stance.
+5. Reply to every individual comment thread.
+6. Clean up PR branch with amend/autosquash before final approval.
 
 ## Review & Merge
 

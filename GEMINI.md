@@ -1,8 +1,14 @@
-See `CLAUDE.md` for all AI agent guidelines.
+See `WORKFLOW.md` for shared GitHub workflow, PR signaling, review assignment, and merge rules. See `CLAUDE.md` for additional AI agent guidelines.
 
 ## AI Agent Mandates
 
 - **Always Sign Commits**: Use GPG signing for every commit to ensure authenticity and maintain verified status in GitHub.
+
+## AI Review Assignment
+
+- Use `./scripts/next-ai-review.sh gemini` to find the next open PR Gemini can review.
+- Use `./scripts/next-ai-review.sh gemini --claim` before starting review work.
+- Do not self-review Gemini-authored PRs unless the user explicitly asks for a self-audit.
 
 ## Efficiency Mandates
 

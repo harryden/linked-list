@@ -1,5 +1,7 @@
 # AI Agent Guidelines
 
+Shared GitHub workflow, PR signaling, review assignment, and merge rules live in `WORKFLOW.md`. Follow that file first when rules overlap.
+
 ## Branching
 
 - **NO DIRECT COMMITS TO MAIN:** Under no circumstances should any code be committed directly to the `main` branch.
@@ -29,6 +31,15 @@
 ## PR Descriptions
 
 Always use `.github/pull_request_template.md`. When using `gh pr create`, do not pass `--body` — let GitHub auto-populate the template, then fill in every section.
+
+PR descriptions must not be empty. They must summarize the git diff and relevant test results. Agent-authored PRs must fill in `Author-Agent`, `Review-Status`, and `Review-Claimed-By` metadata from `WORKFLOW.md`.
+
+## AI Review Assignment
+
+- Use `./scripts/next-ai-review.sh claude` to find the next open PR Claude can review.
+- Use `./scripts/next-ai-review.sh claude --claim` before starting review work.
+- Do not self-review Claude-authored PRs unless the user explicitly asks for a self-audit.
+- A claim means adding `🤖 ai-reviewing` and setting `Review-Status: claimed` with `Review-Claimed-By: claude`.
 
 ## Before Opening a PR
 
