@@ -147,6 +147,9 @@ const JoinEvent = () => {
 
             <div className="space-y-2">
               <Label htmlFor="eventCode">{TEXT.joinEvent.form.label}</Label>
+              <p id="eventCode-hint" className="text-sm text-muted-foreground">
+                {TEXT.joinEvent.form.hint}
+              </p>
               <Input
                 id="eventCode"
                 type="text"
@@ -157,6 +160,7 @@ const JoinEvent = () => {
                 maxLength={20}
                 disabled={isLoading}
                 aria-required="true"
+                aria-describedby="eventCode-hint eventCode-format"
               />
               <div className="pt-1.5 space-y-1">
                 <p className="text-xs text-muted-foreground text-center">
@@ -191,7 +195,10 @@ const JoinEvent = () => {
               )}
             </div>
 
-            <p className="text-sm text-muted-foreground text-center">
+            <p
+              id="eventCode-format"
+              className="text-sm text-muted-foreground text-center"
+            >
               {TEXT.joinEvent.form.helperText}
             </p>
           </form>
