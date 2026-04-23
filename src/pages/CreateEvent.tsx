@@ -96,10 +96,11 @@ const CreateEvent = () => {
   const onSubmit = async (values: CreateEventValues) => {
     try {
       const {
-        data: { session },
-      } = await supabase.auth.getSession();
+        data: { user },
+        error: userError,
+      } = await supabase.auth.getUser();
 
-      if (!session) {
+      if (userError || !user) {
         toast({
           variant: "destructive",
           description: TEXT.createEvent.toast.authRequired,
@@ -176,7 +177,7 @@ const CreateEvent = () => {
           starts_at: normalizedStartsAt,
           ends_at: normalizedEndsAt,
           linkedin_event_url: values.linkedinUrl || null,
-          organizer_id: session.user.id,
+          organizer_id: user.id,
         });
 
         analytics.track("event_created", { slug });
