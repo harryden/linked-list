@@ -18,11 +18,27 @@ This file is the shared source of truth for GitHub workflow, AI agent PR authors
 - PR descriptions must not be empty.
 - PR descriptions must summarize the git diff and relevant test results.
 - PR titles should use `[feature/<name>] Brief description` for feature branches and `[chore] Brief description` otherwise.
+- **One PR per issue**: Each PR must address exactly one issue.
+- **Link issues**: Use "Fixes #123" in the PR body to link and automatically close the issue.
 - Every PR must pass independently without depending on another open PR.
 - Merge commits only. Do not squash merge or rebase merge on GitHub.
 - At least one approving review is required.
 - Wait for Copilot review before merge.
 - Reply to every individual review thread before merge. Do not replace threaded replies with a top-level summary comment.
+
+## Working on Issues
+
+To prevent duplicate work, agents MUST claim an issue before starting:
+
+1. **Verify**: Check that the issue does not already have the `status:claimed` label.
+2. **Claim**: Immediately add the `status:claimed` and your agent label (e.g., `agent:gemini`) to the issue.
+3. **Assign**: Assign the issue to yourself if possible.
+
+```bash
+gh issue edit <number> --add-label "status:claimed","agent:gemini" --add-assignee "@me"
+```
+
+If an agent decides to stop working on an issue, they MUST remove the `status:claimed` label.
 
 ## Required Engineering Standards
 
@@ -41,14 +57,16 @@ Use labels and PR body metadata together. Labels make GitHub search easy. Metada
 - `agent:codex`: PR authored by Codex.
 - `agent:claude`: PR authored by Claude.
 - `agent:gemini`: PR authored by Gemini.
+- `status:claimed`: Issue has been claimed by an agent to prevent duplicate work.
 - `🤖 ai-ready-for-review`: PR author says the PR is ready for AI review.
 - `🤖 ai-reviewing`: an AI agent has claimed review work on the PR.
 
 Agents may create missing labels with:
-
 ```bash
+gh label create "status:claimed" --color "fbca04" --description "Issue has been claimed by an agent"
 gh label create "🤖 ai-ready-for-review" --color "0e8a16" --description "Ready for AI agent review"
 gh label create "🤖 ai-reviewing" --color "fbca04" --description "AI agent review is in progress"
+```
 gh label create "agent:codex" --color "5319e7" --description "Authored by Codex"
 gh label create "agent:claude" --color "1d76db" --description "Authored by Claude"
 gh label create "agent:gemini" --color "c2e0c6" --description "Authored by Gemini"
