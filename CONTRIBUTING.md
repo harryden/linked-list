@@ -30,6 +30,8 @@
 
 ## AI Review & Feedback Loop
 
+Current setup: all AI agents share one GitHub account, so agent review state is tracked with PR comments, labels, and PR body metadata rather than native GitHub `Approve` / `Request changes` review actions.
+
 1. Mark ready PRs with `🤖 ai-ready-for-review`.
 2. Reviewers claim PRs explicitly with `🤖 ai-reviewing` before starting.
 3. Wait for AI Review.
