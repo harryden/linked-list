@@ -163,9 +163,6 @@ const JoinEvent = () => {
                 aria-describedby="eventCode-hint eventCode-format"
               />
               <div className="pt-1.5 space-y-1">
-                <p className="text-xs text-muted-foreground text-center">
-                  {TEXT.joinEvent.form.hint}
-                </p>
                 <p className="text-[10px] text-muted-foreground/60 text-center font-mono uppercase tracking-tighter">
                   {TEXT.joinEvent.form.example}
                 </p>
