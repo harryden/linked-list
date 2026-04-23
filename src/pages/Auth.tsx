@@ -213,7 +213,7 @@ const Auth = () => {
             <div className="flex-1 h-px bg-border-subtle" />
           </div>
 
-          <Link to="/join-event">
+          <Link to="/join-event" state={{ fromAuth: true }}>
             <Button variant="outline" size="lg" className="w-full">
               Enter event code
             </Button>

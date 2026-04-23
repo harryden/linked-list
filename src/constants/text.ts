@@ -31,6 +31,7 @@ export const TEXT = {
     links: {
       backToDashboard: "Back to Dashboard",
       backToHome: "Back to Home",
+      backToSignIn: "Back to Sign In",
       viewPastEvents: "View past events",
       returnHome: "Return Home",
       backToHomeArrow: "← Back to home",
