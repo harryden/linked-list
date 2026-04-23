@@ -42,7 +42,9 @@ const useSession = (navigate: NavigateFunction) => {
 
       if (isMounted) {
         if (!session) {
-          navigate(`/auth?next=${encodeURIComponent(window.location.pathname)}`);
+          navigate(
+            `/auth?next=${encodeURIComponent(window.location.pathname)}`,
+          );
         } else {
           setUserId(session.user.id);
         }
@@ -57,7 +59,9 @@ const useSession = (navigate: NavigateFunction) => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (isMounted) {
         if (!session) {
-          navigate(`/auth?next=${encodeURIComponent(window.location.pathname)}`);
+          navigate(
+            `/auth?next=${encodeURIComponent(window.location.pathname)}`,
+          );
         } else {
           setUserId(session?.user?.id ?? null);
         }
