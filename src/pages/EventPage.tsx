@@ -99,6 +99,7 @@ const EventPage = () => {
   const [showQRDialog, setShowQRDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [justJoined, setJustJoined] = useState(false);
+  const isDeleting = useRef(false);
   const attendeeListRef = useRef<HTMLDivElement>(null);
 
   const eventIdentifier = slug ? { slug } : undefined;
@@ -111,7 +112,7 @@ const EventPage = () => {
   useRealtimeAttendances(event?.id);
 
   useEffect(() => {
-    if (eventError) {
+    if (eventError && !isDeleting.current) {
       toast({
         variant: "destructive",
         description: TEXT.event.toast.loadFailure,
@@ -261,14 +262,18 @@ const EventPage = () => {
   const handleDeleteEvent = async () => {
     if (!event) return;
     try {
+      isDeleting.current = true;
       await deleteEvent.mutateAsync({
         eventId: event.id,
         organizerId: event.organizer_id ?? undefined,
         eventSlug: event.slug,
       });
+      analytics.track("event_deleted", { slug: event.slug });
       toast({ description: TEXT.event.toast.deleteSuccess });
       navigate("/dashboard");
-    } catch (_error) {
+    } catch (error) {
+      isDeleting.current = false;
+      logger.error(error, { category: "Events" });
       toast({
         variant: "destructive",
         description: TEXT.event.toast.deleteFailure,

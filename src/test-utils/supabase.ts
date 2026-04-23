@@ -96,6 +96,7 @@ export const supabaseStub = {
       .mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } }),
   },
   from: vi.fn(),
+  rpc: vi.fn(),
   channel: vi.fn().mockImplementation(() => makeChannelStub()),
   removeChannel: vi.fn().mockResolvedValue(undefined),
 };
@@ -107,6 +108,7 @@ export const resetSupabaseStub = () => {
   supabaseStub.auth.signOut.mockReset();
   supabaseStub.auth.onAuthStateChange.mockReset();
   supabaseStub.from.mockReset();
+  supabaseStub.rpc.mockReset();
   supabaseStub.channel.mockReset();
   supabaseStub.channel.mockImplementation(() => makeChannelStub());
   supabaseStub.removeChannel.mockReset();
