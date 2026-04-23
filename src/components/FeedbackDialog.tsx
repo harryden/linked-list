@@ -117,7 +117,10 @@ export const FeedbackDialog = ({
 
         {isAuthenticated === false ? (
           <div className="pt-4">
-            <Link to={`/auth?next=${encodeURIComponent(location.pathname)}`}>
+            <Link
+              to={`/auth?next=${encodeURIComponent(location.pathname)}`}
+              onClick={() => setOpen(false)}
+            >
               <Button
                 className="w-full gap-2 py-6 text-base"
                 variant="linkedin"
