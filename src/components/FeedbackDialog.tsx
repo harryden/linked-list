@@ -128,7 +128,7 @@ export const FeedbackDialog = ({
             </Link>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-6 pt-4">
+          <form onSubmit={handleSubmit} className="space-y-6 pt-4" noValidate>
             <div className="flex justify-between gap-2">
               {[
                 { id: "bug", label: "Bug", icon: Bug },

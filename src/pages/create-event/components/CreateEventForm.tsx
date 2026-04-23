@@ -23,7 +23,7 @@ const CreateEventForm = ({
   onSubmit,
   onCancel,
 }: CreateEventFormProps) => (
-  <form onSubmit={onSubmit} className="flex flex-col gap-5">
+  <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
     <div className="sr-only">
       <h1>
         {mode === "edit"
