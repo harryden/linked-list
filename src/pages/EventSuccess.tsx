@@ -88,7 +88,7 @@ const EventSuccess = () => {
 
           <div className="mt-8 p-4 border border-border-subtle rounded-xl bg-bg-surface">
             <div className="text-[11px] font-mono text-text-secondary tracking-[0.8px] uppercase">
-              EVENT · {eventName.toUpperCase()}
+              {TEXT.event.breadcrumb} · {eventName.toUpperCase()}
             </div>
             <div className="mt-4 flex flex-col items-center gap-4">
               <div className="bg-white border border-border-subtle rounded-sm p-3">

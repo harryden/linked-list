@@ -259,6 +259,7 @@ export const TEXT = {
     },
   },
   event: {
+    breadcrumb: "Event",
     header: {
       hostedBy: "Hosted by",
       viewProfile: "View Profile",
