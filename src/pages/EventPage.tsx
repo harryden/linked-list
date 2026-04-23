@@ -345,7 +345,7 @@ const EventPage = () => {
           </Button>
         </Link>
         <div className="flex-1 text-[12px] font-mono text-text-secondary tracking-[0.5px] uppercase truncate">
-          EVENT · {event.slug?.toUpperCase()}
+          {TEXT.event.breadcrumb} · {event.name.toUpperCase()}
         </div>
         <div className="flex items-center gap-1.5">
           <Button
