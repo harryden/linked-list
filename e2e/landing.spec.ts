@@ -1,8 +1,10 @@
 import { test, expect } from "@playwright/test";
 import { TEXT } from "../src/constants/text";
+import { mockSupabase } from "./support/supabase";
 
 test.describe("Landing page", () => {
   test.beforeEach(async ({ page }) => {
+    await mockSupabase(page);
     await page.goto("/");
   });
 
@@ -12,7 +14,7 @@ test.describe("Landing page", () => {
   });
 
   test("displays the hero title text", async ({ page }) => {
-    await expect(page.getByText(TEXT.landing.hero.titleLine)).toBeVisible();
+    await expect(page.getByText(TEXT.landing.hero.title)).toBeVisible();
   });
 
   test("shows the 'How It Works' section", async ({ page }) => {

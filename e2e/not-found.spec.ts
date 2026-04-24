@@ -13,7 +13,9 @@ test.describe("Not Found page", () => {
   });
 
   test("shows the page-not-found subtitle", async ({ page }) => {
-    await expect(page.getByText(TEXT.notFound.subtitle)).toBeVisible();
+    await expect(
+      page.locator("p").filter({ hasText: TEXT.notFound.subtitle }),
+    ).toBeVisible();
   });
 
   test("has a link back to the home page", async ({ page }) => {
