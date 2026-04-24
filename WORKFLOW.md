@@ -95,6 +95,44 @@ Review-Claimed-By:
 
 Set `Author-Agent` to the authoring agent. Set `Review-Status: ready` when the PR is ready and add `🤖 ai-ready-for-review`. Leave `Review-Claimed-By` empty until a reviewer claims the PR.
 
+### Updating PR Metadata Reliably
+
+For this repo, prefer `gh api` when changing PR body metadata or PR labels programmatically.
+
+- Use `gh api repos/{owner}/{repo}/pulls/<number> --method PATCH --input <json-file>` to update the PR body.
+- Use `gh api repos/{owner}/{repo}/issues/<number>/labels` to add, replace, or remove labels.
+- Do not default to `gh pr edit` for review-state updates here. In this repo it can fail with a GitHub GraphQL `repository.pullRequest.projectCards` error, which leaves review state half-updated.
+
+Recommended pattern:
+
+```bash
+cat <<'EOF' > /tmp/pr-body.md
+## AI Metadata
+
+Author-Agent: gemini
+Review-Status: changes-requested
+Review-Claimed-By:
+EOF
+
+jq -n --rawfile body /tmp/pr-body.md '{body:$body}' > /tmp/pr-body.json
+
+gh api repos/{owner}/{repo}/pulls/185 \
+  --method PATCH \
+  --input /tmp/pr-body.json
+
+gh api repos/{owner}/{repo}/issues/185/labels \
+  --method PUT \
+  -f 'labels[]=agent:gemini' \
+  -f 'labels[]=🤖 ai-changes-requested'
+```
+
+Notes:
+
+- `pulls/<number>` updates the PR body.
+- `issues/<number>/labels` is the correct REST endpoint for PR labels because pull requests are issues for label operations.
+- `POST` on the labels endpoint adds labels; `PUT` replaces the full label set.
+- If you are only claiming review work, prefer `./scripts/next-ai-review.sh <agent> --claim`, which already uses `gh api`.
+
 ## Finding Review Work
 
 An AI reviewer should review open PRs that:
