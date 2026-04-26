@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 export type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
+export type OrganizerPublicProfile =
+  Database["public"]["Views"]["organizer_public_profiles"]["Row"];
 
 export const profileQueryKey = (userId?: string) => ["profile", userId];
 
@@ -35,5 +37,26 @@ export const useMyProfile = (userId?: string) => {
     queryKey: profileQueryKey(userId),
     enabled: Boolean(userId),
     queryFn: () => fetchProfile(userId!),
+  });
+};
+
+export const fetchOrganizerPublicProfile = async (
+  organizerId: string,
+): Promise<OrganizerPublicProfile | null> => {
+  const { data, error } = await supabase
+    .from("organizer_public_profiles")
+    .select("id, name, avatar_url")
+    .eq("id", organizerId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ?? null;
+};
+
+export const useOrganizerPublicProfile = (organizerId?: string) => {
+  return useQuery({
+    queryKey: ["organizer_public_profile", organizerId],
+    enabled: Boolean(organizerId),
+    queryFn: () => fetchOrganizerPublicProfile(organizerId!),
   });
 };
