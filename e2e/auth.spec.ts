@@ -8,7 +8,7 @@ test.describe("Auth page", () => {
 
   test("renders the sign-in card title", async ({ page }) => {
     await expect(
-      page.getByRole("heading", { name: TEXT.auth.card.title }),
+      page.getByRole("heading", { name: "Pick up where you left off." }),
     ).toBeVisible();
   });
 
@@ -26,7 +26,7 @@ test.describe("Auth page", () => {
 
   test("has a link back to the home page", async ({ page }) => {
     const backLink = page.getByRole("link", {
-      name: TEXT.auth.navigation.backToHome,
+      name: TEXT.common.ui.close,
     });
     await expect(backLink).toBeVisible();
     await expect(backLink).toHaveAttribute("href", "/");

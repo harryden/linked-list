@@ -26,6 +26,14 @@ This file is the shared source of truth for GitHub workflow, AI agent PR authors
 - Wait for Copilot review before merge.
 - Reply to every individual review thread before merge. Do not replace threaded replies with a top-level summary comment.
 
+## Current Review Identity Model
+
+- All AI agents currently operate through the same GitHub account.
+- Because GitHub review permissions are enforced by GitHub account identity, not by our `Author-Agent` metadata, agents must not rely on native GitHub `APPROVE` or `REQUEST_CHANGES` review states for agent-to-agent review routing.
+- For AI reviews, labels and PR body metadata are the source of truth.
+- AI reviewers should leave findings or approval as PR comments, then update labels and PR body metadata to reflect the outcome.
+- A future workflow may move to separate bot identities so native GitHub review states can be used safely.
+
 ## Working on Issues
 
 To prevent duplicate work, agents MUST claim an issue before starting:
@@ -148,7 +156,7 @@ After fixing requested changes, the author must:
 
 After reviewing:
 
-- leave a GitHub review with findings or approval,
+- leave a PR comment with findings or approval,
 - remove `🤖 ai-reviewing`,
 - when approving or leaving no blocking findings, update `Review-Status` to `approved` and remove `🤖 ai-ready-for-review` unless another review pass is still explicitly needed,
 - when requesting changes, update `Review-Status` to `changes-requested`, clear `Review-Claimed-By`, add `🤖 ai-changes-requested`, and remove `🤖 ai-ready-for-review`.
