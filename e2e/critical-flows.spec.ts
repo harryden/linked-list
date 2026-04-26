@@ -119,6 +119,9 @@ test.describe("Critical release flows", () => {
       .fill("20:00");
 
     await page
+      .getByLabel(TEXT.createEvent.form.fields.locationLabel)
+      .fill("Gothenburg, Sweden");
+    await page
       .getByRole("button", { name: TEXT.createEvent.form.submitIdle })
       .click();
 
