@@ -76,6 +76,6 @@ describe("JoinEvent navigation", () => {
     const backLink = screen.getByRole("link", {
       name: new RegExp(TEXT.common.links.backToSignIn, "i"),
     });
-    expect(backLink).toHaveAttribute("href", "/auth");
+    expect(backLink).toHaveAttribute("href", "/auth?next=/join-event");
   });
 });

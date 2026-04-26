@@ -56,13 +56,16 @@ const useSession = (navigate: NavigateFunction) => {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange((event, session) => {
       if (isMounted) {
-        if (!session) {
+        if (
+          event === "SIGNED_OUT" ||
+          (!session && event !== "INITIAL_SESSION")
+        ) {
           navigate(
             `/auth?next=${encodeURIComponent(window.location.pathname)}`,
           );
-        } else {
+        } else if (session) {
           setUserId(session?.user?.id ?? null);
         }
       }
