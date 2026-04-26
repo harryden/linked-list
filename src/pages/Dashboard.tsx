@@ -28,12 +28,16 @@ const NAV_ITEMS = [
   { label: "Dashboard", icon: LayoutDashboard, active: true },
 ] as const;
 
+const getAuthRedirectUrl = (redirectPath: string) =>
+  `/auth?next=${encodeURIComponent(redirectPath)}`;
+
 const useSession = (navigate: NavigateFunction) => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isSessionLoading, setIsSessionLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
+    const redirectPath = `${window.location.pathname}${window.location.search}${window.location.hash}`;
 
     const loadSession = async () => {
       const {
@@ -42,9 +46,7 @@ const useSession = (navigate: NavigateFunction) => {
 
       if (isMounted) {
         if (!session) {
-          navigate(
-            `/auth?next=${encodeURIComponent(window.location.pathname)}`,
-          );
+          navigate(getAuthRedirectUrl(redirectPath), { replace: true });
         } else {
           setUserId(session.user.id);
         }
@@ -59,9 +61,7 @@ const useSession = (navigate: NavigateFunction) => {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (isMounted) {
         if (!session) {
-          navigate(
-            `/auth?next=${encodeURIComponent(window.location.pathname)}`,
-          );
+          navigate(getAuthRedirectUrl(redirectPath), { replace: true });
         } else {
           setUserId(session?.user?.id ?? null);
         }
