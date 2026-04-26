@@ -33,7 +33,11 @@ const JoinEvent = () => {
   const fromDashboard = location.state?.fromDashboard;
   const fromAuth = location.state?.fromAuth;
 
-  const backPath = fromDashboard ? "/dashboard" : fromAuth ? "/auth" : "/";
+  const backPath = fromDashboard
+    ? "/dashboard"
+    : fromAuth
+      ? "/auth?next=/join-event"
+      : "/";
   const backText = fromDashboard
     ? TEXT.common.links.backToDashboard
     : fromAuth

@@ -214,16 +214,6 @@ const EventPage = () => {
       return;
     }
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
-
-    if (userError || !user) {
-      navigate(`/auth?next=${encodeURIComponent(window.location.pathname)}`);
-      return;
-    }
-
     if (!event?.id) {
       toast({
         variant: "destructive",

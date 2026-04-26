@@ -17,7 +17,24 @@ class ErrorBoundary extends Component<Props, State> {
     hasError: false,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
+  public static getDerivedStateFromError(error: Error): State {
+    // Detect Vite chunk load errors and attempt a hard reload to recover from stale deployments
+    const isChunkError =
+      error.name === "ChunkLoadError" ||
+      error.message.includes("Failed to fetch dynamically imported module") ||
+      error.message.includes("Importing a module script failed");
+
+    if (isChunkError) {
+      const lastReload = sessionStorage.getItem("last-chunk-error-reload");
+      const now = Date.now();
+
+      // Only reload if we haven't reloaded for a chunk error in the last 10 seconds
+      if (!lastReload || now - parseInt(lastReload) > 10000) {
+        sessionStorage.setItem("last-chunk-error-reload", now.toString());
+        window.location.reload();
+        return { hasError: false };
+      }
+    }
     return { hasError: true };
   }
 

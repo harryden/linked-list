@@ -146,6 +146,28 @@ describe("Auth redirect flow", () => {
     });
   });
 
+  it("should preserve the redirect parameter through the complete flow to the final destination", async () => {
+    mockNavigate.mockReset();
+
+    // Simulate AuthCallback handling a redirect back to dashboard
+    onAuthStateChangeMock.mockImplementation((cb) => {
+      queueMicrotask(() =>
+        cb("INITIAL_SESSION", { user: { id: "user_test" } }),
+      );
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
+    });
+
+    renderWithProviders(<AuthCallback />, {
+      route: "/auth/callback?next=%2Fdashboard",
+    });
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/dashboard", {
+        replace: true,
+      });
+    });
+  });
+
   it("redirects to auth on failed session establishment", async () => {
     mockNavigate.mockReset();
 
