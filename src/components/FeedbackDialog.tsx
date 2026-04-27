@@ -57,6 +57,15 @@ export const FeedbackDialog = ({
     if (!message.trim() || !isAuthenticated) return;
 
     try {
+      if (message.trim().length < 10) {
+        toast({
+          title: "Message too short",
+          variant: "destructive",
+          description: "Please provide at least 10 characters of feedback.",
+        });
+        return;
+      }
+
       await submitFeedback.mutateAsync({
         type,
         message,
@@ -156,19 +165,33 @@ export const FeedbackDialog = ({
               ))}
             </div>
 
-            <Textarea
-              placeholder={
-                type === "bug"
-                  ? "What happened? (Optional: steps to reproduce)"
-                  : type === "feature"
-                    ? "What would you like to see added to Linked List?"
-                    : "Your message..."
-              }
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              className="min-h-[120px] resize-none"
-              required
-            />
+            <div className="space-y-2">
+              <Textarea
+                placeholder={
+                  type === "bug"
+                    ? "What happened? (Optional: steps to reproduce)"
+                    : type === "feature"
+                      ? "What would you like to see added to Linked List?"
+                      : "Your message..."
+                }
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                className="min-h-[120px] resize-none"
+                required
+              />
+              <div className="flex justify-end">
+                <span
+                  className={cn(
+                    "text-[10px] font-medium uppercase tracking-wider",
+                    message.trim().length > 0 && message.trim().length < 10
+                      ? "text-state-error"
+                      : "text-text-secondary",
+                  )}
+                >
+                  {message.trim().length} / 10 minimum
+                </span>
+              </div>
+            </div>
 
             <DialogFooter>
               <Button

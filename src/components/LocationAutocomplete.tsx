@@ -60,6 +60,7 @@ export const LocationAutocomplete = ({
         {
           headers: {
             Accept: "application/json",
+            "User-Agent": "Linked List (thelinkedlist.xyz)",
           },
           signal: controller.signal,
         },
