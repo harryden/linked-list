@@ -172,7 +172,7 @@ export const TEXT = {
       fields: {
         nameLabel: "Event Name *",
         namePlaceholder: "Annual Conference 2025",
-        locationLabel: "Location",
+        locationLabel: "Location *",
         locationPlaceholder: "City Center, Main Hall",
         dateLabel: "Event Date",
         datePlaceholder: "Select date",
@@ -190,6 +190,7 @@ export const TEXT = {
       success: "Event created successfully",
       failure: "Failed to create event",
       authRequired: "Sign in to create events",
+      missingLocation: "Select a location",
       missingDateTime: "Select a date and start time",
       invalidTimeRange: "End time must be after start time",
       missingEndTime: "Provide an end time",

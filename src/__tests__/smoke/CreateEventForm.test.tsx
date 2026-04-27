@@ -94,6 +94,7 @@ describe("CreateEvent smoke", () => {
     renderCreateEvent();
 
     await user.type(screen.getByLabelText(/event name/i), "Weekend MVP Launch");
+    await user.type(screen.getByLabelText(/location/i), "Gothenburg, Sweden");
     await user.type(screen.getByLabelText(/event date/i), "2025-05-10");
     await user.type(screen.getByLabelText(/start time/i), "12:00");
     await user.type(screen.getByLabelText(/end time/i), "12:00");
@@ -106,6 +107,47 @@ describe("CreateEvent smoke", () => {
 
     expect(
       await screen.findByText(TEXT.createEvent.toast.invalidTimeRange),
+    ).toBeInTheDocument();
+  });
+
+  it("surfaces validation feedback when location is missing", async () => {
+    const user = userEvent.setup();
+    renderCreateEvent();
+
+    await user.type(screen.getByLabelText(/event name/i), "Weekend MVP Launch");
+    await user.type(screen.getByLabelText(/event date/i), "2025-05-10");
+    await user.type(screen.getByLabelText(/start time/i), "10:00");
+    await user.type(screen.getByLabelText(/end time/i), "12:00");
+
+    await user.click(
+      screen.getByRole("button", {
+        name: new RegExp(TEXT.createEvent.form.submitIdle, "i"),
+      }),
+    );
+
+    expect(
+      await screen.findByText(TEXT.createEvent.toast.missingLocation),
+    ).toBeInTheDocument();
+  });
+
+  it("surfaces validation feedback when location is only whitespace", async () => {
+    const user = userEvent.setup();
+    renderCreateEvent();
+
+    await user.type(screen.getByLabelText(/event name/i), "Weekend MVP Launch");
+    await user.type(screen.getByLabelText(/location/i), "   ");
+    await user.type(screen.getByLabelText(/event date/i), "2025-05-10");
+    await user.type(screen.getByLabelText(/start time/i), "10:00");
+    await user.type(screen.getByLabelText(/end time/i), "12:00");
+
+    await user.click(
+      screen.getByRole("button", {
+        name: new RegExp(TEXT.createEvent.form.submitIdle, "i"),
+      }),
+    );
+
+    expect(
+      await screen.findByText(TEXT.createEvent.toast.missingLocation),
     ).toBeInTheDocument();
   });
 

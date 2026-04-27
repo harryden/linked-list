@@ -17,6 +17,8 @@ interface LocationAutocompleteProps {
   onChange: (value: string) => void;
   placeholder?: string;
   id?: string;
+  required?: boolean;
+  error?: string;
 }
 
 export const LocationAutocomplete = ({
@@ -24,6 +26,8 @@ export const LocationAutocomplete = ({
   onChange,
   placeholder = TEXT.locationAutocomplete.placeholder,
   id,
+  required = false,
+  error,
 }: LocationAutocompleteProps) => {
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -101,6 +105,8 @@ export const LocationAutocomplete = ({
     setSuggestions([]);
   };
 
+  const errorId = id ? `${id}-error` : undefined;
+
   return (
     <div ref={wrapperRef} className="relative w-full">
       <div className="relative">
@@ -115,7 +121,11 @@ export const LocationAutocomplete = ({
           value={value}
           onChange={(e) => handleInputChange(e.target.value)}
           onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-          className="pl-10"
+          className={cn("pl-10", error && "border-destructive")}
+          required={required}
+          aria-required={required}
+          aria-invalid={!!error}
+          aria-describedby={error ? errorId : undefined}
         />
         {isLoading && (
           <div
@@ -151,6 +161,16 @@ export const LocationAutocomplete = ({
             </button>
           ))}
         </div>
+      )}
+
+      {error && (
+        <p
+          id={errorId}
+          className="mt-2 text-xs text-destructive font-medium"
+          role="alert"
+        >
+          {error}
+        </p>
       )}
     </div>
   );

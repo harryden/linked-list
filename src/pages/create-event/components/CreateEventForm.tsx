@@ -129,6 +129,8 @@ const CreateEventForm = ({
             value={field.value ?? ""}
             onChange={field.onChange}
             placeholder={TEXT.createEvent.form.fields.locationPlaceholder}
+            required
+            error={errors.location?.message}
           />
         )}
       />

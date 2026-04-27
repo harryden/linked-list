@@ -154,7 +154,7 @@ const CreateEvent = () => {
           eventId: editingEventId,
           payload: {
             name: values.name,
-            location: values.location || null,
+            location: values.location,
             starts_at: normalizedStartsAt,
             ends_at: normalizedEndsAt,
             linkedin_event_url: values.linkedinUrl || null,
@@ -173,7 +173,7 @@ const CreateEvent = () => {
         const _newEvent = await createEvent.mutateAsync({
           name: values.name,
           slug,
-          location: values.location || null,
+          location: values.location,
           starts_at: normalizedStartsAt,
           ends_at: normalizedEndsAt,
           linkedin_event_url: values.linkedinUrl || null,
