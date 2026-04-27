@@ -4,7 +4,7 @@ import { TEXT } from "@/constants/text";
 export const createEventSchema = z
   .object({
     name: z.string().min(1, TEXT.createEvent.form.fields.nameLabel),
-    location: z.string().optional().default(""),
+    location: z.string().trim().min(1, TEXT.createEvent.toast.missingLocation),
     eventDate: z.string().min(1, TEXT.createEvent.toast.missingDateTime),
     startTime: z.string().min(1, TEXT.createEvent.toast.missingDateTime),
     endTime: z.string().min(1, TEXT.createEvent.toast.missingEndTime),

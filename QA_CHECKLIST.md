@@ -12,7 +12,7 @@ This checklist tracks the core use cases to prevent regressions. Perform these c
 
 ### 2. Event Creation
 
-- [ ] **Validation:** Cannot submit without a name, location, or date.
+- [ ] **Validation:** Cannot submit without a name, location, date, or end time.
 - [ ] **Time Logic:** Start time must be before end time.
 - [ ] **Autocomplete:** Location search returns valid suggestions.
 - [ ] **Success Flow:** Redirects to the event page after creation.
