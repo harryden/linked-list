@@ -45,7 +45,7 @@ jq_filter='
     | select((.labelNames | index("🤖 ai-ready-to-merge")) or .reviewStatus == "ready-to-merge")
     | select((.labelNames | index("🤖 ai-reviewing") | not) and (.labelNames | index("🤖 ai-changes-requested") | not))
     | select(.mergeable == "MERGEABLE")
-    | select(.reviewDecision == "APPROVED")
+    | select(.reviewDecision == "APPROVED" or .reviewStatus == "ready-to-merge" or .reviewStatus == "approved")
     | select(checks_pass)
   ]
   | sort_by(.updatedAt)
