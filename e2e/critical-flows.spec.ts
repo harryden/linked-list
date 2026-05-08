@@ -31,8 +31,8 @@ const hostedEvent: MockEvent = {
   organizer_id: organizer.id,
   short_code: "FB2025",
   location: "Gothenburg",
-  starts_at: "2026-05-01T08:00:00.000Z",
-  ends_at: "2026-05-01T10:00:00.000Z",
+  starts_at: "2099-05-01T08:00:00.000Z",
+  ends_at: "2099-05-01T10:00:00.000Z",
 };
 
 const attendedEvent: MockEvent = {
@@ -42,8 +42,8 @@ const attendedEvent: MockEvent = {
   organizer_id: organizer.id,
   short_code: "CD2025",
   location: "Stockholm",
-  starts_at: "2026-05-03T18:00:00.000Z",
-  ends_at: "2026-05-03T20:00:00.000Z",
+  starts_at: "2099-05-03T18:00:00.000Z",
+  ends_at: "2099-05-03T20:00:00.000Z",
 };
 
 test.describe("Critical release flows", () => {
