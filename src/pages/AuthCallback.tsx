@@ -20,7 +20,7 @@ const AuthCallback = () => {
 
   const redirectPath = (() => {
     const params = new URLSearchParams(location.search);
-    const next = params.get("next");
+    const next = params.get("next") ?? params.get("redirect");
     return isSafeRedirect(next) ? (next as string) : "/";
   })();
 

@@ -79,6 +79,33 @@ describe("Auth redirect flow", () => {
     });
   });
 
+  it("preserves a legacy redirect path when starting OAuth", async () => {
+    const user = userEvent.setup();
+    configureSignIn();
+    getSessionMock.mockResolvedValue({
+      data: { session: null },
+      error: null,
+    });
+
+    renderWithProviders(<Auth />, {
+      route: "/auth?redirect=/event/test-event",
+    });
+
+    await user.click(
+      await screen.findByRole("button", {
+        name: new RegExp(TEXT.auth.card.buttonIdle, "i"),
+      }),
+    );
+
+    expect(supabase.auth.signInWithOAuth).toHaveBeenCalledWith({
+      provider: "linkedin_oidc",
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=%2Fevent%2Ftest-event`,
+        scopes: "openid profile email",
+      },
+    });
+  });
+
   it("falls back to root when the redirect path is unsafe", async () => {
     const user = userEvent.setup();
     configureSignIn();
@@ -116,6 +143,25 @@ describe("Auth redirect flow", () => {
 
     renderWithProviders(<AuthCallback />, {
       route: "/auth/callback?next=%2Fevent%2Ftest-event",
+    });
+
+    await waitFor(() => {
+      expect(mockNavigate).toHaveBeenCalledWith("/event/test-event", {
+        replace: true,
+      });
+    });
+  });
+
+  it("navigates to a legacy redirect path encoded in the callback URL on successful auth", async () => {
+    mockNavigate.mockReset();
+
+    onAuthStateChangeMock.mockImplementation((cb) => {
+      queueMicrotask(() => cb("SIGNED_IN", { user: { id: "user_test" } }));
+      return { data: { subscription: { unsubscribe: vi.fn() } } };
+    });
+
+    renderWithProviders(<AuthCallback />, {
+      route: "/auth/callback?redirect=%2Fevent%2Ftest-event",
     });
 
     await waitFor(() => {

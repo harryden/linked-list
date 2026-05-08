@@ -117,7 +117,7 @@ describe("AttendButton contract", () => {
       name: TEXT.event.attendButton.checkInLinkedIn,
     });
 
-    expect(link).toHaveAttribute("href", "/auth?redirect=%2F");
+    expect(link).toHaveAttribute("href", "/auth?next=%2F");
   });
 
   it("invokes the supplied check-in handler when the user is authenticated", async () => {

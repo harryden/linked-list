@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, ArrowRight } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { cn, isSafeRedirect } from "@/lib/utils";
 import { TEXT } from "@/constants/text";
 
 interface AttendButtonProps {
@@ -118,8 +118,8 @@ const AttendButton = ({
   );
 
   if (!currentUserId) {
-    const safeRedirectPath = redirectPath?.startsWith("/") ? redirectPath : "/";
-    const authLink = `/auth?redirect=${encodeURIComponent(safeRedirectPath)}`;
+    const safeRedirectPath = isSafeRedirect(redirectPath) ? redirectPath : "/";
+    const authLink = `/auth?next=${encodeURIComponent(safeRedirectPath)}`;
     return <Link to={authLink}>{button}</Link>;
   }
 
