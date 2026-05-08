@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, MessageSquare } from "lucide-react";
 import { FeedbackDialog } from "@/components/FeedbackDialog";
+import { canReloadForChunkError, isChunkLoadError } from "@/lib/chunkReload";
 
 interface Props {
   children: ReactNode;
@@ -10,18 +11,28 @@ interface Props {
 
 interface State {
   hasError: boolean;
+  shouldReload: boolean;
 }
 
 class ErrorBoundary extends Component<Props, State> {
   public state: State = {
     hasError: false,
+    shouldReload: false,
   };
 
-  public static getDerivedStateFromError(_: Error): State {
-    return { hasError: true };
+  public static getDerivedStateFromError(): State {
+    return { hasError: true, shouldReload: false };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    if (isChunkLoadError(error)) {
+      if (canReloadForChunkError()) {
+        this.setState({ hasError: true, shouldReload: true });
+        window.location.reload();
+      }
+      return;
+    }
+
     logger.error(error, {
       category: "UI",
       extra: { componentStack: errorInfo.componentStack },
@@ -33,6 +44,10 @@ class ErrorBoundary extends Component<Props, State> {
   };
 
   public render() {
+    if (this.state.shouldReload) {
+      return null;
+    }
+
     if (this.state.hasError) {
       return (
         <div className="min-h-screen flex items-center justify-center p-4 bg-background">

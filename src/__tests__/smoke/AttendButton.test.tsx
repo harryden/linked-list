@@ -57,9 +57,6 @@ describe("AttendButton smoke", () => {
       name: /check in with linkedin/i,
     });
 
-    expect(link).toHaveAttribute(
-      "href",
-      "/auth?redirect=%2Fevent%2Ftest-event",
-    );
+    expect(link).toHaveAttribute("href", "/auth?next=%2Fevent%2Ftest-event");
   });
 });
